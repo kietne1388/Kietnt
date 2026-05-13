@@ -1,0 +1,160 @@
+@model FastFood.Models.User.UserProfileModel
+@{
+    ViewData["Title"] = "Chi Tiết Người Dùng";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin">
+        <h2><i class="fas fa-user me-2"></i>Chi Tiết Người Dùng</h2>
+        <a asp-area="Admin" asp-controller="User" asp-action="Index" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="admin-card text-center">
+                <div class="user-avatar-large-admin">
+                    @Model.FullName.Substring(0, 1).ToUpper()
+                </div>
+                <h4 class="mt-3">@Model.FullName</h4>
+                <p class="text-muted">@Model.Email</p>
+
+                @if (Model.IsAdmin)
+                {
+                    <span class="badge-custom warning d-inline-block mb-3">Admin</span>
+                }
+                else
+                {
+                    <span class="badge-custom info d-inline-block mb-3">User</span>
+                }
+
+                @if (Model.IsActive)
+                {
+                    <span class="badge-custom success d-block">Hoạt động</span>
+                }
+                else
+                {
+                    <span class="badge-custom danger d-block">Đã khóa</span>
+                }
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <h5 class="section-title mb-4">Thông Tin Cá Nhân</h5>
+
+                <div class="detail-grid">
+                    <div class="detail-row">
+                        <span class="label">Họ và tên:</span>
+                        <strong>@Model.FullName</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Email:</span>
+                        <strong>@Model.Email</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Số điện thoại:</span>
+                        <strong>@Model.Phone</strong>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Địa chỉ:</span>
+                        <strong>@Model.Address</strong>
+                    </div>
+                </div>
+
+                <h5 class="section-title mt-4 mb-4">Thống Kê</h5>
+
+                <div class="stats-grid-admin">
+                    <div class="stat-card">
+                        <div class="stat-icon bg-blue-100 text-blue-600">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>@Model.OrderCount</h3>
+                            <p>Đơn hàng</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-green-100 text-green-600">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>@Model.TotalSpent.ToString("N0")đ</h3>
+                            <p>Tổng chi tiêu</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon bg-purple-100 text-purple-600">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div class="stat-details">
+                            <h3>@Model.VoucherUsedCount</h3>
+                            <p>Voucher đã dùng</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.user-avatar-large-admin {
+    width: 120px;
+    height: 120px;
+    background: var(--gradient-red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+}
+
+.detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 12px;
+}
+
+.detail-row .label {
+    color: var(--gray-600);
+}
+
+.stats-grid-admin {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.stat-box {
+    background: var(--gray-50);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--primary-red);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+}
+</style>

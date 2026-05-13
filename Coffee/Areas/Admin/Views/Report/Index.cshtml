@@ -1,0 +1,225 @@
+@{
+    ViewData["Title"] = "Thống Kê Doanh Thu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-dashboard">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Báo Cáo <span class="text-gradient">& Thống Kê</span></h1>
+            <p class="text-muted mb-0">Theo dõi hiệu quả kinh doanh theo khoảng thời gian tùy chọn.</p>
+        </div>
+    </div>
+
+    <!-- Filter Card -->
+    <div class="dashboard-card mb-4">
+        <div class="row align-items-end g-3">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Từ ngày</label>
+                <input type="date" id="startDate" class="form-control" value="@DateTime.Now.AddDays(-7).ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Đến ngày</label>
+                <input type="date" id="endDate" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+            </div>
+            <div class="col-md-4">
+                <button type="button" onclick="fetchStatistics()" class="btn btn-primary w-100 py-2 fw-bold">
+                    <i class="fas fa-sync-alt me-2"></i> Lấy Thống Kê
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Chart Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <h5 class="card-title">📉 Biểu đồ Doanh Thu</h5>
+                <div style="height: 350px;">
+                    <canvas id="revenueLineChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="dashboard-card">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="card-title mb-0">🏆 Top 5 Đồ Uống & Combo Bán Chạy</h5>
+                    <span id="reportRangeText" class="badge bg-light text-dark"></span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Ảnh</th>
+                                <th>Tên Sản Phẩm / Combo</th>
+                                <th class="text-center">Đã Bán</th>
+                                <th class="text-end">Doanh Thu</th>
+                            </tr>
+                        </thead>
+                        <tbody id="topItemsBody">
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .admin-dashboard { padding: 2rem; }
+    .dashboard-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    }
+    .card-title { font-size: 1.25rem; font-weight: 800; color: var(--gray-900); }
+    .table-premium th { background: var(--gray-50); padding: 1.2rem 1rem; border: none; }
+    .table-premium td { padding: 1rem; vertical-align: middle; border-bottom: 1px solid var(--gray-100); }
+    .product-img-report { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; border: 1px solid #eee; }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let revenueChart = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchStatistics();
+        });
+
+        async function fetchStatistics() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!startDate || !endDate) {
+                alert("Vui lòng chọn đầy đủ ngày bắt đầu và kết thúc.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`/Admin/Report/GetCustomRangeReport?startDate=${startDate}&endDate=${endDate}`);
+                const data = await response.json();
+
+                renderRevenueChart(data.revenueByDate);
+                renderTopItems(data.topProducts);
+                
+                document.getElementById('reportRangeText').innerText = `${startDate} đến ${endDate}`;
+            } catch (error) {
+                console.error("Error fetching report:", error);
+                alert("Đã có lỗi xảy ra khi lấy dữ liệu báo cáo.");
+            }
+        }
+
+        function renderRevenueChart(revenueData) {
+            const ctx = document.getElementById('revenueLineChart').getContext('2d');
+            
+            // Sort keys to ensure chronological order
+            const labels = Object.keys(revenueData).sort();
+            const values = labels.map(label => revenueData[label]);
+
+            if (revenueChart) {
+                revenueChart.destroy();
+            }
+
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: values,
+                        borderColor: '#DC2626',
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#DC2626'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ' ' + context.parsed.y.toLocaleString('vi-VN') + ' đ';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('vi-VN') + ' đ';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function renderTopItems(items) {
+            const tbody = document.getElementById('topItemsBody');
+            tbody.innerHTML = '';
+
+            if (items.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-4 text-muted">Không có dữ liệu trong khoảng thời gian này</td></tr>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                let imgPath = item.imageUrl;
+                
+                // Safe path logic
+                if (imgPath) {
+                    if (!imgPath.startsWith("/") && !imgPath.startsWith("http")) {
+                        if (!imgPath.includes("images/")) {
+                            imgPath = "/images/" + imgPath;
+                        } else {
+                            imgPath = "/" + imgPath;
+                        }
+                    }
+                } else {
+                    imgPath = '/images/products/Coffee.jpg';
+                }
+                
+                tr.innerHTML = `
+                    <td class="fw-bold text-muted">${index + 1}</td>
+                    <td>
+                        <img src="${imgPath}" class="product-img-report" alt="${item.productName}" onerror="this.src='/images/products/Coffee.jpg'">
+                    </td>
+                    <td>
+                        <div class="fw-bold text-dark">${item.productName}</div>
+                    </td>
+                    <td class="text-center">
+                        <span class="badge bg-info text-dark" style="font-size: 0.9rem;">${item.totalSold}</span>
+                    </td>
+                    <td class="text-end fw-bold text-danger">
+                        ${item.revenue.toLocaleString('vi-VN')} đ
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    </script>
+}

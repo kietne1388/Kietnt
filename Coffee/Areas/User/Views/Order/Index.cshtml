@@ -1,0 +1,309 @@
+@model List<FastFood.Models.Order.OrderModel>
+
+@{
+    ViewData["Title"] = "Đơn Hàng Của Tôi";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <partial name="_UserSidebar" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="profile-main-card">
+                <div class="profile-card-header">
+                    <h3 class="m-0">Đơn Hàng <span class="text-gradient">Của Tôi</span></h3>
+                </div>
+
+                <div class="p-4">
+                    <!-- Status Filter -->
+                    <div class="order-filters mb-4">
+                        <a href="@Url.Action("Index")" class="filter-tab @(string.IsNullOrEmpty(Context.Request.Query["status"]) ? "active" : "")">
+                            <i class="fas fa-list"></i> Tất cả
+                        </a>
+                        <a href="@Url.Action("Index", new { status = "Pending" })" class="filter-tab">
+                            <i class="fas fa-clock"></i> Chờ
+                        </a>
+                        <a href="@Url.Action("Index", new { status = "Confirmed" })" class="filter-tab">
+                            <i class="fas fa-check-circle"></i> Xác nhận
+                        </a>
+                        <a href="@Url.Action("Index", new { status = "Shipping" })" class="filter-tab">
+                            <i class="fas fa-shipping-fast"></i> Đang giao
+                        </a>
+                        <a href="@Url.Action("Index", new { status = "Completed" })" class="filter-tab">
+                            <i class="fas fa-check-double"></i> Hoàn thành
+                        </a>
+                        <a href="@Url.Action("Index", new { status = "Cancelled" })" class="filter-tab">
+                            <i class="fas fa-times-circle"></i> Đã hủy
+                        </a>
+                    </div>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="orders-list">
+                            @foreach (var order in Model)
+                            {
+                                <div class="order-card-premium">
+                                    <div class="order-header">
+                                        <div class="order-id">
+                                            <i class="fas fa-receipt"></i>
+                                            Đơn hàng #@order.Id
+                                        </div>
+                                        <span class="order-status status-@order.Status.ToLower()">
+                                            @order.Status
+                                        </span>
+                                    </div>
+
+                                    <div class="order-body">
+                                        <div class="order-info-grid">
+                                            <div class="info-col">
+                                                <i class="fas fa-calendar"></i>
+                                                <div>
+                                                    <small>Ngày đặt</small>
+                                                    <strong>@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</strong>
+                                                </div>
+                                            </div>
+                                            <div class="info-col">
+                                                <i class="fas fa-map-marker-alt"></i>
+                                                <div>
+                                                    <small>Địa chỉ</small>
+                                                    <strong>@order.Address</strong>
+                                                </div>
+                                            </div>
+                                            <div class="info-col">
+                                                <i class="fas fa-shopping-bag"></i>
+                                                <div>
+                                                    <small>Số sản phẩm</small>
+                                                    <strong>@(order.Items?.Count ?? 0) món</strong>
+                                                </div>
+                                            </div>
+                                            <div class="info-col">
+                                                <i class="fas fa-money-bill-wave"></i>
+                                                <div>
+                                                    <small>Tổng tiền</small>
+                                                    <strong class="text-coffee">@order.TotalAmount.ToString("N0")đ</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="order-footer">
+                                        <a asp-area="User" asp-controller="Order" asp-action="Detail" asp-route-id="@order.Id" 
+                                           class="btn btn-outline-coffee">
+                                            <i class="fas fa-eye me-2"></i>Xem Chi Tiết
+                                        </a>
+                                        
+                                        @if (order.Status == "Pending")
+                                        {
+                                            <button class="btn btn-danger" onclick="cancelOrder(@order.Id)">
+                                                <i class="fas fa-times me-2"></i>Hủy Đơn
+                                            </button>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state-premium" style="padding: 4rem 2rem; text-align: center;">
+                            <i class="fas fa-receipt fa-5x mb-4" style="color: #C4956A;"></i>
+                            <h4 style="color: #4A2E1A; font-weight: 700;">Chưa có đơn hàng nào</h4>
+                            <p class="text-muted mb-4">Hãy đặt món ngay để thưởng thức!</p>
+                            <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-coffee">
+                                <i class="fas fa-utensils me-2"></i>Đặt Món Ngay
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.btn-coffee {
+    background: #6F4E37;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.btn-coffee:hover { background: #4A2E1A; color: white; transform: translateY(-2px); }
+.btn-outline-coffee {
+    border: 2px solid #6F4E37;
+    color: #6F4E37;
+    border-radius: 12px;
+    padding: 0.6rem 1.25rem;
+    font-weight: 600;
+    background: transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+.btn-outline-coffee:hover { background: #6F4E37; color: white; }
+.text-coffee { color: #6F4E37 !important; font-weight: 700; }
+
+.order-filters {
+    background: #FAF7F2;
+    padding: 0.75rem;
+    border-radius: 16px;
+    border: 1px solid #F0E8DF;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #6B5744;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+    background: #6F4E37;
+    color: white;
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.order-card-premium {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #F0E8DF;
+    transition: all 0.3s ease;
+}
+
+.order-card-premium:hover {
+    border-color: #C4956A;
+    box-shadow: 0 10px 25px rgba(111, 78, 55, 0.1);
+}
+
+.order-header {
+    background: #FAF7F2;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #F0E8DF;
+}
+
+.order-id {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #2A1C14;
+}
+.order-id i { color: #6F4E37; }
+
+.order-status {
+    padding: 0.35rem 0.9rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.82rem;
+}
+
+.status-pending { background: #FEF3C7; color: #92400E; }
+.status-confirmed { background: #DBEAFE; color: #1E40AF; }
+.status-shipping { background: #E0E7FF; color: #3730A3; }
+.status-completed { background: #D1FAE5; color: #065F46; }
+.status-cancelled { background: #FEE2E2; color: #991B1B; }
+
+.order-body { padding: 1.5rem; }
+
+.order-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.info-col {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+}
+
+.info-col i {
+    font-size: 1.1rem;
+    color: #C4956A;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+}
+
+.info-col small {
+    display: block;
+    color: #9C8B7E;
+    font-size: 0.75rem;
+    margin-bottom: 0.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-col strong { color: #2A1C14; font-weight: 600; font-size: 0.95rem; }
+
+.order-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #F0E8DF;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    background: #FDFAF7;
+}
+
+@@media (max-width: 992px) {
+    .order-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@@media (max-width: 576px) {
+    .order-info-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .order-footer {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+async function cancelOrder(orderId) {
+    if (!confirm('Bạn có chắc muốn hủy đơn hàng này?')) return;
+
+    try {
+        const response = await fetch('/User/Order/Cancel', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ orderId })
+        });
+
+        if (response.ok) {
+            location.reload();
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+</script>

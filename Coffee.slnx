@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="Coffee.API/Coffee.API.csproj" Id="44662dfe-c857-43f2-9e27-27f3e2fd6c7a" />
+  <Project Path="Coffee.Application/Coffee.Application.csproj" Id="2816752a-5e98-4d1c-b5ec-a7b195b3f7dc" />
+  <Project Path="Coffee.Common/Coffee.Common.csproj" Id="601b85d3-5a7f-4bec-95bf-a56b9cafcc87" />
+  <Project Path="Coffee.Domain/Coffee.Domain.csproj" Id="cc53ea47-77dc-49e5-a9ac-b86b7b31142c" />
+  <Project Path="Coffee.Infrastructure/Coffee.Infrastructure.csproj" Id="3c074a0e-478c-4d3d-af6b-11c339fd795e" />
+  <Project Path="Coffee/Coffee.csproj" />
+</Solution>
+

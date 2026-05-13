@@ -1,0 +1,148 @@
+@model FastFood.Models.Order.OrderDetailModel
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin">
+        <h2><i class="fas fa-receipt me-2"></i>Chi Tiết Đơn Hàng #@Model.Id</h2>
+        <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-outline-primary">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="admin-card">
+                <div class="order-header-admin mb-4">
+                    <div>
+                        <h4>Đơn hàng #@Model.Id</h4>
+                        <p class="text-muted mb-0">@Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</p>
+                    </div>
+                    <span class="order-status status-@Model.Status.ToLower()">@Model.Status</span>
+                </div>
+
+                <h5 class="section-title mb-3">Sản Phẩm</h5>
+                @if (Model.Items != null && Model.Items.Any())
+                {
+                    <div class="order-items-admin">
+                        @foreach (var item in Model.Items)
+                        {
+                            <div class="order-item-admin">
+                                <div class="item-info-admin">
+                                    <strong>@item.ProductName</strong>
+                                    <span class="text-muted">x@item.Quantity</span>
+                                </div>
+                                <strong>@((item.Price * item.Quantity).ToString("N0"))đ</strong>
+                            </div>
+                        }
+
+                        <div class="order-total-admin">
+                            <span>Tổng cộng:</span>
+                            <strong class="text-red">@Model.TotalAmount.ToString("N0")đ</strong>
+                        </div>
+                    </div>
+                }
+
+                <h5 class="section-title mt-4 mb-3">Thông Tin</h5>
+                <div class="info-grid-admin">
+                    <div class="info-row-admin">
+                        <span>Khách hàng:</span>
+                        <strong>@Model.UserName</strong>
+                    </div>
+                    <div class="info-row-admin">
+                        <span>Địa chỉ:</span>
+                        <strong>@Model.Address</strong>
+                    </div>
+                    <div class="info-row-admin">
+                        <span>Ghi chú:</span>
+                        <strong>@(string.IsNullOrEmpty(Model.Note) ? "Không có" : Model.Note)</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="admin-card">
+                <h5 class="section-title mb-3">Cập Nhật Trạng Thái</h5>
+
+                <form asp-area="Admin" asp-controller="Order" asp-action="UpdateStatus" method="post">
+                    <input type="hidden" name="orderId" value="@Model.Id">
+
+                    <div class="form-group-premium">
+                        <select name="status" class="form-select">
+                            <option value="Pending" selected="@(Model.Status == "Pending")">Chờ xác nhận</option>
+                            <option value="Confirmed" selected="@(Model.Status == "Confirmed")">Đã xác nhận</option>
+                            <option value="Shipping" selected="@(Model.Status == "Shipping")">Đang giao</option>
+                            <option value="Completed" selected="@(Model.Status == "Completed")">Hoàn thành</option>
+                            <option value="Cancelled" selected="@(Model.Status == "Cancelled")">Đã hủy</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-save me-2"></i>Cập Nhật
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.order-header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.order-items-admin {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.order-item-admin {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.order-item-admin:last-of-type {
+    border-bottom: none;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+}
+
+.item-info-admin {
+    display: flex;
+    gap: 1rem;
+}
+
+.order-total-admin {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 2px solid var(--gray-400);
+    font-size: 1.25rem;
+}
+
+.info-grid-admin {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.info-row-admin {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-300);
+}
+
+.info-row-admin:last-child {
+    border-bottom: none;
+}
+</style>

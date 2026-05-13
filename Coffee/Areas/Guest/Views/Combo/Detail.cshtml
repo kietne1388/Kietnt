@@ -1,0 +1,669 @@
+@model FastFood.Models.Combo.ComboDetailModel
+
+@{
+    ViewData["Title"] = Model.Name;
+    Layout = "~/Areas/Guest/Views/Shared/_Layout.cshtml";
+}
+
+<section class="py-5">
+    <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb breadcrumb-custom">
+                <li class="breadcrumb-item"><a asp-area="Guest" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a asp-area="Guest" asp-controller="Combo" asp-action="Index">Combo</a></li>
+                <li class="breadcrumb-item active">@Model.Name</li>
+            </ol>
+        </nav>
+
+        <div class="row g-5">
+            <div class="col-lg-8">
+                <div class="combo-detail-card">
+                    <div class="combo-badge-large">
+                        Tiết kiệm @((Model.OriginalPrice - Model.ComboPrice).ToString("N0"))đ
+                    </div>
+
+                    <h1 class="combo-detail-title">@Model.Name</h1>
+                    <p class="combo-detail-description">@Model.Description</p>
+
+                    <div class="combo-items-section">
+                        <h4 class="section-title-small">Bao gồm</h4>
+                        @if (Model.Items != null && Model.Items.Any())
+                        {
+                            <div class="items-list-premium">
+                                @foreach (var item in Model.Items)
+                                {
+                                    <div class="combo-item-detail">
+                                        @{
+                                            var prodImg = item.ProductImageUrl;
+                                            if (!string.IsNullOrEmpty(prodImg) && !prodImg.StartsWith("/") && !prodImg.StartsWith("http"))
+                                            {
+                                                prodImg = "/images/" + prodImg;
+                                            }
+                                        }
+                                        <img src="@prodImg" alt="@item.ProductName" class="combo-item-img" onerror="this.src='/images/placeholder-coffee.jpg'">
+                                        <div class="item-quantity-badge">@item.Quantity</div>
+                                        <div class="item-info">
+                                            <h6>@item.ProductName</h6>
+                                            <p class="text-muted">@item.ProductPrice.ToString("N0")đ/món</p>
+                                            @* Add Note Input *@
+                                            <div class="mt-2">
+                                                <input type="text" 
+                                                       class="form-control form-control-sm item-note" 
+                                                       data-product-id="@item.ProductId"
+                                                       placeholder="Ghi chú (VD: Thêm tương, không đá...)"
+                                                       style="border-radius: 8px; font-size: 0.9rem;">
+                                            </div>
+                                        </div>
+                                        <div class="item-total">
+                                            @((item.Quantity * item.ProductPrice).ToString("N0"))đ
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="combo-summary-sticky">
+                    <div class="pricing-section">
+                        <div class="price-row">
+                            <span>Giá gốc:</span>
+                            <strong class="original">@Model.OriginalPrice.ToString("N0")đ</strong>
+                        </div>
+                        <div class="price-row">
+                            <span>Giá combo:</span>
+                            <strong class="current">@Model.ComboPrice.ToString("N0")đ</strong>
+                        </div>
+                        <div class="savings-badge">
+                            <i class="fas fa-tag"></i>
+                            Tiết kiệm @((Model.OriginalPrice - Model.ComboPrice).ToString("N0"))đ
+                        </div>
+                    </div>
+
+                    <div class="quantity-section mb-3">
+                        <label class="form-label d-block mb-2">Số lượng:</label>
+                        <div class="quantity-selector-premium">
+                            <button type="button" class="qty-btn" onclick="changeQty(-1)">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <input type="number" id="comboQuantity" value="1" min="1" class="qty-input" readonly>
+                            <button type="button" class="qty-btn" onclick="changeQty(1)">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    @if (Context.Session.GetInt32("UserId").HasValue)
+                    {
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-primary btn-lg flex-fill" onclick="addComboToCartDetail(@Model.Id)" style="border: 2px solid #6F4E37; color: #6F4E37; background: transparent;" onmouseover="this.style.background='#6F4E37'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='#6F4E37';">
+                                <i class="fas fa-cart-plus me-2"></i>Vào Giỏ
+                            </button>
+                            <button class="btn btn-primary btn-lg flex-fill" onclick="buyComboNowDetail(@Model.Id)">
+                                <i class="fas fa-bolt me-2"></i>Mua Ngay
+                            </button>
+                        </div>
+                    }
+                    else
+                    {
+                        <a asp-area="Guest" asp-controller="Auth" asp-action="Login" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-sign-in-alt me-2"></i>Đăng Nhập Để Mua
+                        </a>
+                    }
+
+                    <div class="features-list mt-4">
+                        <div class="feature-item-small">
+                            <i class="fas fa-shipping-fast"></i>
+                            <span>Giao hàng trước khi đá tan (30 phút)</span>
+                        </div>
+                        <div class="feature-item-small">
+                            <i class="fas fa-gift"></i>
+                            <span>Ưu đãi tối đa cho nhóm & gia đình</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- Reviews Section -->
+        <div class="reviews-section mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="section-title-premium mb-0">Đánh Giá <span class="text-gradient">Combo</span></h3>
+                @if (Context.Session.GetInt32("UserId").HasValue)
+                {
+                    <button class="btn btn-coffee" type="button" data-bs-toggle="collapse" data-bs-target="#reviewForm">
+                        <i class="fas fa-edit me-2"></i>Viết đánh giá
+                    </button>
+                }
+            </div>
+
+            <!-- Add Review Form -->
+            <div class="collapse mb-4" id="reviewForm">
+                <div class="card card-body border-0 shadow-sm rounded-4" style="background: #FAF7F2; border: 1px solid #E8D8C8 !important;">
+                    <form asp-area="Guest" asp-controller="Comment" asp-action="Create" method="post">
+                        <input type="hidden" name="ComboId" value="@Model.Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color:#2A1C14;">Đánh giá của bạn</label>
+                            <div class="star-rating-input">
+                                @for (int i = 5; i >= 1; i--)
+                                {
+                                    <input type="radio" id="star@i" name="Rating" value="@i" required />
+                                    <label for="star@i"><i class="fas fa-star"></i></label>
+                                }
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold" style="color:#2A1C14;">Nội dung</label>
+                            <textarea name="Content" class="form-control" rows="3" required placeholder="Chia sẻ cảm nhận của bạn về combo này..." style="border-radius:12px; border:1px solid #E8D8C8; outline:none;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-coffee"><i class="fas fa-paper-plane me-2"></i>Gửi đánh giá</button>
+                    </form>
+                </div>
+            </div>
+
+            @if (Model.Comments != null && Model.Comments.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var comment in Model.Comments)
+                    {
+                        <div class="col-12">
+                            <div class="review-card">
+                                <div class="review-header">
+                                    <div class="reviewer-info">
+                                        <div class="reviewer-avatar">
+                                            @comment.UserName.Substring(0, 1).ToUpper()
+                                        </div>
+                                        <div>
+                                            <h6 class="reviewer-name">@comment.UserName</h6>
+                                            <div class="review-rating">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="fas fa-star @(i <= comment.Rating ? "filled" : "")"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="review-date">@comment.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                </div>
+                                <p class="review-content">@comment.Content</p>
+                                
+                                <div class="review-actions mt-3">
+                                    @if (Context.Session.GetInt32("UserId").HasValue)
+                                    {
+                                        <button class="btn btn-link btn-sm text-coffee p-0 text-decoration-none fw-bold" 
+                                                onclick="toggleReplyForm(@comment.Id)">
+                                            <i class="fas fa-reply me-1"></i>Phản hồi
+                                        </button>
+                                    }
+                                </div>
+
+                                <!-- Reply Form -->
+                                <div id="replyForm-@comment.Id" class="reply-form mt-3" style="display:none;">
+                                    <form asp-area="Guest" asp-controller="Comment" asp-action="Create" method="post">
+                                        <input type="hidden" name="ComboId" value="@Model.Id" />
+                                        <input type="hidden" name="ParentId" value="@comment.Id" />
+                                        <input type="hidden" name="Rating" value="5" />
+                                        <div class="input-group">
+                                            <input type="text" name="Content" class="form-control" placeholder="Viết phản hồi..." required style="border-radius: 12px 0 0 12px; border: 1px solid #E8D8C8;">
+                                            <button class="btn btn-coffee" style="border-radius: 0 12px 12px 0;" type="submit">Gửi</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <!-- Replies -->
+                                @if (comment.Replies.Any())
+                                {
+                                    <div class="replies-list mt-3 ms-5 ps-3 border-start border-2 border-coffee-light">
+                                        @foreach (var reply in comment.Replies)
+                                        {
+                                            <div class="reply-item mb-3">
+                                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar-xs me-2">@reply.UserName.Substring(0,1).ToUpper()</div>
+                                                        <span class="fw-bold small">@reply.UserName</span>
+                                                    </div>
+                                                    <small class="text-muted">@reply.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                                </div>
+                                                <p class="mb-0 small text-gray-700">@reply.Content</p>
+                                            </div>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-reviews">
+                    <i class="fas fa-comment-slash fa-3x text-muted mb-3"></i>
+                    <p>Chưa có đánh giá nào. Hãy là người đầu tiên!</p>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<style>
+.combo-detail-card {
+    background: white;
+    border-radius: 25px;
+    padding: 3rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.combo-badge-large {
+    background: linear-gradient(135deg, #D4A853, #C4956A);
+    color: #1A120A;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 5px 20px rgba(212, 168, 83, 0.4);
+}
+
+.combo-detail-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+}
+
+.combo-detail-description {
+    font-size: 1.1rem;
+    color: var(--gray-600);
+    margin-bottom: 2rem;
+}
+
+.section-title-small {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.items-list-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.combo-item-detail {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.combo-item-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.item-quantity-badge {
+    width: 50px;
+    height: 50px;
+    background: #FDF6EE;
+    color: #6F4E37;
+    border: 1.5px solid #E8D5C0;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 900;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.item-info {
+    flex-grow: 1;
+}
+
+.item-info h6 {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.item-total {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #6F4E37;
+    white-space: nowrap; /* Prevent wrapping */
+}
+
+.combo-summary-sticky {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.pricing-section {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.price-row:last-child {
+    margin-bottom: 0;
+}
+
+.price-row .original {
+    text-decoration: line-through;
+    color: var(--gray-500);
+}
+
+.price-row .current {
+    font-size: 2rem;
+    color: #6F4E37;
+}
+
+.savings-badge {
+    background: linear-gradient(135deg, #D4A853, #C4956A);
+    color: #1A120A;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+.feature-item-small {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.feature-item-small:last-child {
+    border-bottom: none;
+}
+
+.feature-item-small i {
+    color: #6F4E37;
+    font-size: 1.25rem;
+}
+.quantity-selector-premium {
+    display: flex;
+    align-items: center;
+    background: #f3f4f6;
+    border-radius: 12px;
+    padding: 5px;
+    width: fit-content;
+}
+.quantity-selector-premium .qty-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: white;
+    color: #6F4E37;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+.quantity-selector-premium .qty-btn:hover {
+    background: #6F4E37;
+    color: white;
+}
+.quantity-selector-premium .qty-input {
+    width: 60px;
+    text-align: center;
+    border: none;
+    background: transparent;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Reviews */
+.review-card {
+    background: #FAF7F2;
+    padding: 2rem;
+    border-radius: 20px;
+    border: 2px solid #F0E8DF;
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    border-color: #6F4E37;
+    box-shadow: 0 10px 30px rgba(111, 78, 55, 0.1);
+    transform: translateY(-2px);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1.25rem;
+}
+
+.reviewer-info {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.reviewer-avatar {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #6F4E37, #C4956A);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(111, 78, 55, 0.2);
+}
+
+.reviewer-name {
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+    color: #2A1C14;
+    font-size: 1.05rem;
+}
+
+.review-rating i.filled { color: #D4A853; }
+.review-rating i:not(.filled) { color: #E8D8C8; }
+
+.review-date {
+    color: #9C8B7E;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.review-content {
+    color: #4A3B32;
+    line-height: 1.7;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.empty-reviews {
+    text-align: center;
+    padding: 3rem;
+    color: #9C8B7E;
+}
+
+.border-coffee-light { border-color: #E8D8C8 !important; }
+
+/* Star Rating Input */
+.star-rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.star-rating-input input { display: none; }
+
+.star-rating-input label {
+    font-size: 1.75rem;
+    color: #E8D8C8;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.star-rating-input input:checked ~ label,
+.star-rating-input label:hover,
+.star-rating-input label:hover ~ label {
+    color: #D4A853;
+}
+.star-rating-input label:hover { transform: scale(1.1); }
+
+.avatar-xs {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #6F4E37, #C4956A);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+</style>
+
+<script>
+    function changeQty(delta) {
+        const input = document.getElementById('comboQuantity');
+        let val = parseInt(input.value) + delta;
+        if (val < 1) val = 1;
+        input.value = val;
+    }
+
+    function toggleReplyForm(commentId) {
+        const form = document.getElementById(`replyForm-${commentId}`);
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function addComboToCartDetail(comboId) {
+        const quantity = parseInt(document.getElementById('comboQuantity').value);
+        // Collect notes
+        const notes = {};
+        document.querySelectorAll('.item-note').forEach(input => {
+            const productId = input.getAttribute('data-product-id');
+            const noteContent = input.value.trim();
+            if (noteContent) {
+                notes[productId] = noteContent;
+            }
+        });
+
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang thêm...';
+
+        fetch('/Guest/Cart/AddComboToCart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                comboId: comboId, 
+                quantity: quantity,
+                notes: notes 
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                // Update cart badge immediately using global function from _Layout
+                if (typeof updateCartBadge === 'function' && data.cartCount) {
+                    updateCartBadge(data.cartCount);
+                }
+                
+                btn.innerHTML = '<i class="fas fa-check-circle me-2"></i>Đã thêm!';
+                btn.classList.replace('btn-primary', 'btn-success');
+
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.classList.replace('btn-success', 'btn-primary');
+                    btn.disabled = false;
+                }, 2000);
+
+                // Show notification if function exists
+                if (typeof showNotification === 'function') {
+                    showNotification(data.message, 'success');
+                }
+            } else {
+                alert(data.message);
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        });
+    }
+
+    function buyComboNowDetail(comboId) {
+        const quantity = parseInt(document.getElementById('comboQuantity').value);
+        // Collect notes
+        const notes = {};
+        document.querySelectorAll('.item-note').forEach(input => {
+            const productId = input.getAttribute('data-product-id');
+            const noteContent = input.value.trim();
+            if (noteContent) {
+                notes[productId] = noteContent;
+            }
+        });
+
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang xử lý...';
+
+        fetch('/Guest/Cart/AddComboToCart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                comboId: comboId, 
+                quantity: quantity,
+                notes: notes 
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '/Guest/Checkout/Index';
+            } else {
+                alert(data.message);
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            btn.innerHTML = originalHTML;
+            btn.disabled = false;
+        });
+    }
+</script>

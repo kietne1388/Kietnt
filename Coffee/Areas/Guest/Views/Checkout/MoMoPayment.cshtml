@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Thanh Toán MoMo";
+    var orderId = ViewBag.OrderId;
+}
+
+<section class="page-header-premium">
+    <div class="container">
+        <h1 class="page-title">
+            <i class="fas fa-wallet me-3"></i>Thanh Toán MoMo
+        </h1>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb-premium">
+                <li><a asp-area="Guest" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="active">Thanh toán MoMo</li>
+            </ol>
+        </nav>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="payment-card text-center">
+                    <div class="logo-container mb-4">
+                        <img src="/images/momo-logo.png" alt="MoMo Logo" style="height: 60px;">
+                    </div>
+                    <h3 class="mb-4">Thanh Toán Qua Ví MoMo</h3>
+                    <p class="text-muted mb-4">Mã đơn hàng: #@orderId</p>
+                    <p>Vui lòng mở ứng dụng MoMo và quét mã QR bên dưới</p>
+                    
+                    <div class="qr-container-momo mb-4">
+                        <img src="/images/payment/momo-qr-placeholder.jpg" alt="MoMo QR Code" class="img-fluid qr-code">
+                    </div>
+
+                    <div class="amount-info mb-4">
+                        <span class="d-block text-muted">Tổng thanh toán</span>
+                        <h2 class="text-primary">@ViewBag.TotalAmount?.ToString("N0")đ</h2>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-action="OrderSuccess" class="btn btn-momo btn-lg w-100">
+                            <i class="fas fa-check me-2"></i>Tôi Đã Thanh Toán
+                        </a>
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary w-100 mt-2">
+                            Để sau (Về trang chủ)
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.payment-card {
+    background: white;
+    border-radius: 20px;
+    padding: 3rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.qr-container-momo {
+    border: 2px solid #a50064;
+    padding: 1rem;
+    border-radius: 15px;
+    display: inline-block;
+    background: white;
+}
+
+.qr-code {
+    max-width: 250px;
+    border-radius: 10px;
+}
+
+.btn-momo {
+    background-color: #a50064;
+    color: white;
+    font-weight: 700;
+}
+
+.btn-momo:hover {
+    background-color: #8a0053;
+    color: white;
+}
+</style>

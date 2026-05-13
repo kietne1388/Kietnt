@@ -1,0 +1,270 @@
+@model List<FastFood.Models.Voucher.VoucherModel>
+
+@{
+    ViewData["Title"] = "Quản Lý Voucher";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Voucher</span></h1>
+            <p class="text-muted mb-0">Danh sách mã giảm giá của CaféLux</p>
+        </div>
+        <a asp-area="Admin" asp-controller="Voucher" asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm Voucher
+        </a>
+    </div>
+
+    <div class="admin-filters-bar mb-4">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-6">
+                <label class="form-label small fw-bold text-uppercase text-muted">Tìm kiếm mã voucher</label>
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Nhập mã voucher..." value="@ViewBag.SearchTerm">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-filter w-100">
+                    <i class="fas fa-filter me-2"></i>Lọc
+                </button>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="Index" class="btn btn-light w-100">Xóa lọc</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Mã</th>
+                        <th>Mô tả</th>
+                        <th>Giảm giá</th>
+                        <th>Số lượng</th>
+                        <th>HSD</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var voucher in Model)
+                        {
+                            <tr>
+                                <td>@voucher.Id</td>
+                                <td><span class="voucher-code-pill">@voucher.Code</span></td>
+                                <td class="text-wrap" style="max-width: 250px;">@voucher.Description</td>
+                                <td>
+                                    @if (voucher.DiscountPercent.HasValue && voucher.DiscountPercent.Value > 0)
+                                    {
+                                        <span class="discount-badge percent">
+                                            <i class="fas fa-percentage"></i> @voucher.DiscountPercent%
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="discount-badge amount">
+                                            @voucher.DiscountAmount.ToString("N0")đ
+                                        </span>
+                                    }
+                                </td>
+                                <td><span class="fw-bold">@voucher.Quantity</span></td>
+                                <td>@voucher.ExpiredAt.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (voucher.IsActive && voucher.ExpiredAt > DateTime.Now)
+                                    {
+                                        <span class="badge-custom success">
+                                            <i class="fas fa-check-circle me-1"></i>Hoạt động
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom danger">
+                                            <i class="fas fa-clock me-1"></i>Hết hạn
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-area="Admin" asp-controller="Voucher" asp-action="Edit" asp-route-id="@voucher.Id" 
+                                           class="btn-action edit" title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="deleteVoucher(@voucher.Id)" class="btn-action delete" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-5 text-muted">
+                                <i class="fas fa-ticket-alt d-block mb-2 fs-2 opacity-25"></i>
+                                Chưa có voucher nào phù hợp
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-page {
+    padding: 2rem;
+}
+
+.page-header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin: 0 0 0.25rem 0;
+}
+
+.text-gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.admin-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.admin-filters-bar {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--gray-400);
+}
+
+.search-input-wrapper input {
+    padding-left: 3rem;
+    border-radius: 12px;
+    border: 1.5px solid #F3F4F6;
+    height: 48px;
+    transition: all 0.3s ease;
+}
+
+.btn-premium-filter {
+    height: 48px;
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+}
+
+.voucher-code-pill {
+    font-family: 'JetBrains Mono', 'Courier New', monospace;
+    background: #FEF2F2;
+    color: #DC2626;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 700;
+    border: 1px dashed #F87171;
+}
+
+.discount-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 0.9rem;
+}
+
+.discount-badge.percent {
+    background: #EEF2FF;
+    color: #4338CA;
+}
+
+.discount-badge.amount {
+    background: #ECFDF5;
+    color: #047857;
+}
+
+.badge-custom {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-custom.success {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-custom.danger {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.btn-action.delete {
+    background: #FEF2F2;
+    color: #DC2626;
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-action.delete:hover {
+    background: #DC2626;
+    color: white;
+}
+</style>
+
+<script>
+async function deleteVoucher(id) {
+    if (!confirm('Bạn có chắc muốn xóa voucher này?')) return;
+
+    try {
+        const response = await fetch(`/Admin/Voucher/Delete/${id}`, {
+            method: 'POST'
+        });
+
+        if (response.ok || response.redirected) {
+            location.reload();
+        } else {
+            alert('Có lỗi xảy ra khi xóa voucher!');
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+</script>

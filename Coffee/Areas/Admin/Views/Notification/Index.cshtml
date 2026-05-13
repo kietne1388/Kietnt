@@ -1,0 +1,45 @@
+@{
+    ViewData["Title"] = "Gửi Thông Báo";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Gửi <span class="text-gradient">Thông Báo</span></h1>
+            <p class="text-muted mb-0">Phát thông báo hệ thống đến toàn bộ khách hàng</p>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <form asp-action="SendBroadcast" method="post">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Tiêu đề thông báo</label>
+                        <input name="title" class="form-control" required placeholder="Ví dụ: Khuyến mãi cuối tuần!">
+                    </div>
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Nội dung thông báo</label>
+                        <textarea name="message" class="form-control" rows="5" required placeholder="Nhập nội dung chi tiết thông báo..."></textarea>
+                    </div>
+                    <input type="hidden" name="url" value="/Guest/Home/Index" />
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary px-5 py-3">
+                            <i class="fas fa-paper-plane me-2"></i>Gửi Thông Báo Ngay
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="alert alert-info border-0 shadow-sm">
+                        <h5><i class="fas fa-info-circle me-2"></i>Lưu ý:</h5>
+                        <ul class="mb-0 ps-3">
+                            <li>Thông báo này sẽ hiển thị với <strong>tất cả</strong> khách hàng.</li>
+                            <li>Nên sử dụng nội dung ngắn gọn, súc tích.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

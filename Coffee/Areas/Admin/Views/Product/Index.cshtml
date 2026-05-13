@@ -1,0 +1,439 @@
+@model List<FastFood.Models.Product.ProductModel>
+
+@{
+    ViewData["Title"] = "Quản Lý Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Sản Phẩm</span></h1>
+            <p class="text-muted mb-0">Danh sách sản phẩm của CaféLux</p>
+        </div>
+        <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm Sản Phẩm
+        </a>
+    </div>
+
+    <div class="admin-filters-bar mb-4">
+        <form method="get" id="filterForm" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label small fw-bold text-uppercase text-muted">Tìm kiếm</label>
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" name="searchTerm" class="form-control" placeholder="Nhập tên sản phẩm..." value="@ViewBag.SearchTerm">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-uppercase text-muted">Danh mục</label>
+                <select name="categoryId" class="form-select">
+                    <option value="">Tất cả danh mục</option>
+                    <option value="1">Burger</option>
+                    <option value="2">Pizza</option>
+                    <option value="3">Gà rán</option>
+                    <option value="4">Đồ uống</option>
+                    <option value="5">Món phụ</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-premium-filter w-100" onclick="document.getElementById('hfPage').value=1;">
+                    <i class="fas fa-filter me-2"></i>Lọc
+                </button>
+                <input type="hidden" name="page" id="hfPage" value="@(ViewBag.CurrentPage ?? 1)" />
+            </div>
+            <div class="col-md-2">
+                <a asp-action="Index" class="btn btn-light w-100">Xóa lọc</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Giá</th>
+                        <th>Trạng thái</th>
+                        <th>Đánh giá</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@product.Id</td>
+                                <td>
+                                    @{
+                                        var adminImgUrl = product.ImageUrl;
+                                        if (!string.IsNullOrEmpty(adminImgUrl) && !adminImgUrl.StartsWith("/") && !adminImgUrl.StartsWith("http"))
+                                        {
+                                            adminImgUrl = "/images/" + adminImgUrl;
+                                        }
+                                    }
+                                    <img src="@(string.IsNullOrEmpty(adminImgUrl) ? "https://via.placeholder.com/60" : adminImgUrl)" 
+                                         class="table-img" alt="@product.Name">
+                                </td>
+                                <td>
+                                    <strong>@product.Name</strong>
+                                </td>
+                                <td>@product.CategoryName</td>
+                                <td><strong class="text-red">@product.Price.ToString("N0")đ</strong></td>
+                                <td>
+                                    @if (product.IsActive)
+                                    {
+                                        <span class="badge-custom success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom danger">Tắt</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (product.AverageRating > 0)
+                                    {
+                                        <span class="rating-badge">
+                                            <i class="fas fa-star"></i> @product.AverageRating.ToString("0.0")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">Chưa có</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" 
+                                           class="btn-action edit" title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-area="Admin" asp-controller="Product" asp-action="Comments" asp-route-id="@product.Id" 
+                                           class="btn-action comments" style="background:#E0E7FF;color:#3730A3;" title="Xem bình luận">
+                                            <i class="fas fa-comments"></i>
+                                        </a>
+                                        <button onclick="toggleProduct(@product.Id, @product.IsActive.ToString().ToLower())" 
+                                                class="btn-action @(product.IsActive ? "hide" : "show")" 
+                                                title="@(product.IsActive ? "Ẩn sản phẩm" : "Hiện sản phẩm")">
+                                            <i class="fas @(product.IsActive ? "fa-eye-slash" : "fa-eye")"></i>
+                                        </button>
+                                        <form asp-action="Delete" asp-route-id="@product.Id" method="post" 
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');" style="display:inline;">
+                                            <button type="submit" class="btn-action delete" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="8" class="text-center py-4 text-muted">Chưa có sản phẩm nào</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+        {
+            <div class="pagination-wrapper mt-4 d-flex justify-content-end">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-rounded mb-0">
+                        <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="javascript:void(0)" onclick="goToPage(@(ViewBag.CurrentPage - 1))">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        @{
+                            var totalPages = ViewBag.TotalPages ?? 1;
+                            var currentPage = ViewBag.CurrentPage ?? 1;
+                            var startPage = Math.Max(1, currentPage - 2);
+                            var endPage = Math.Min(totalPages, currentPage + 2);
+
+                            if (startPage > 1)
+                            {
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage(1)">1</a></li>
+                                if (startPage > 2)
+                                {
+                                    <li class="page-item disabled"><span class="page-link bg-transparent border-0 text-muted">...</span></li>
+                                }
+                            }
+
+                            for (int i = startPage; i <= endPage; i++)
+                            {
+                                <li class="page-item @(i == currentPage ? "active" : "")">
+                                    <a class="page-link" href="javascript:void(0)" onclick="goToPage(@i)">@i</a>
+                                </li>
+                            }
+
+                            if (endPage < totalPages)
+                            {
+                                if (endPage < totalPages - 1)
+                                {
+                                    <li class="page-item disabled"><span class="page-link bg-transparent border-0 text-muted">...</span></li>
+                                }
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage(@totalPages)">@totalPages</a></li>
+                            }
+                        }
+                        <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="javascript:void(0)" onclick="goToPage(@(ViewBag.CurrentPage + 1))">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+.admin-page {
+    padding: 2rem;
+}
+
+.page-header-admin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin: 0 0 0.25rem 0;
+}
+
+.text-gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.admin-card {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.admin-filters-bar {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-input-wrapper i {
+    position: absolute;
+    left: 1.25rem;
+    color: var(--gray-400);
+}
+
+.search-input-wrapper input {
+    padding-left: 3rem;
+    border-radius: 12px;
+    border: 1.5px solid #F3F4F6;
+    height: 48px;
+    transition: all 0.3s ease;
+}
+
+.search-input-wrapper input:focus {
+    border-color: var(--primary-red);
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.btn-premium-filter {
+    height: 48px;
+    background: var(--primary-red);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+
+.btn-premium-filter:hover {
+    background: var(--primary-red-dark);
+    box-shadow: 0 8px 15px rgba(220, 38, 38, 0.2);
+    transform: translateY(-2px);
+}
+
+.form-select {
+    height: 48px;
+    border-radius: 12px;
+    border: 1.5px solid #F3F4F6;
+}
+
+.table-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.badge-custom {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-custom.success {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-custom.danger {
+    background: var(--primary-red-lightest);
+    color: var(--primary-red-dark);
+}
+
+.rating-badge {
+    background: #FEF3C7;
+    color: #92400E;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    width: 38px;
+    height: 38px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-action.edit {
+    background: #DBEAFE;
+    color: #1E40AF;
+}
+
+.btn-action.edit:hover {
+    background: #3B82F6;
+    color: white;
+}
+
+.btn-action.delete {
+    background: var(--primary-red-lightest);
+    color: var(--primary-red);
+}
+
+.btn-action.delete:hover {
+    background: var(--primary-red);
+    color: white;
+}
+</style>
+
+<style>
+.btn-action.hide {
+    background: #FEF3C7;
+    color: #92400E;
+}
+.btn-action.hide:hover {
+    background: #F59E0B;
+    color: white;
+}
+.btn-action.show {
+    background: #D1FAE5;
+    color: #065F46;
+}
+.btn-action.show:hover {
+    background: #10B981;
+    color: white;
+}
+
+/* Pagination */
+.pagination-rounded .page-link {
+    border-radius: 50%;
+    margin: 0 4px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: var(--gray-700);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination-rounded .page-item.active .page-link {
+    background: var(--gradient-red);
+    color: white;
+    box-shadow: 0 5px 15px rgba(220, 38, 38, 0.3);
+}
+
+.pagination-rounded .page-link:hover:not(.active) {
+    background: var(--gray-200);
+}
+</style>
+
+<script>
+// Auto-submit on filter change
+document.querySelectorAll('#filterForm select').forEach(element => {
+    element.addEventListener('change', function() {
+        document.getElementById('hfPage').value = 1;
+        document.getElementById('filterForm').submit();
+    });
+});
+
+function goToPage(page) {
+    document.getElementById('hfPage').value = page;
+    document.getElementById('filterForm').submit();
+}
+
+async function toggleProduct(id, isActive) {
+    const action = isActive ? 'Ẩn' : 'Hiện';
+    if (!confirm(`Bạn có chắc muốn ${action} sản phẩm này?`)) return;
+
+    try {
+        const response = await fetch(`/Admin/Product/ToggleActive/${id}`, {
+            method: 'POST',
+            headers: { 'RequestVerificationToken': document.querySelector('[name="__RequestVerificationToken"]')?.value || '' }
+        });
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Có lỗi xảy ra!');
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+</script>

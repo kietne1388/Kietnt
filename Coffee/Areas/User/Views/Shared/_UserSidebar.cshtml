@@ -1,0 +1,129 @@
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+    var userName = Context.Session.GetString("UserName") ?? "User";
+    var userEmail = Context.Session.GetString("UserEmail") ?? "No Email";
+    var userChar = !string.IsNullOrEmpty(userName) ? userName.Substring(0, 1).ToUpper() : "U";
+}
+
+<div class="user-sidebar">
+    <div class="user-profile-header">
+        <div class="user-avatar-large">
+            @userChar
+        </div>
+        <h5 class="user-name">@userName</h5>
+        <p class="user-email">@userEmail</p>
+    </div>
+
+    <nav class="user-nav">
+        <a asp-area="User" asp-controller="Profile" asp-action="Index" class="user-nav-item @(currentController == "Profile" ? "active" : "")">
+            <i class="fas fa-user"></i>
+            <span>Thông tin cá nhân</span>
+        </a>
+        <a asp-area="User" asp-controller="Order" asp-action="Index" class="user-nav-item @(currentController == "Order" ? "active" : "")">
+            <i class="fas fa-receipt"></i>
+            <span>Đơn hàng</span>
+        </a>
+        <a asp-area="User" asp-controller="Voucher" asp-action="MyVouchers" class="user-nav-item @(currentController == "Voucher" ? "active" : "")">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Voucher của tôi</span>
+        </a>
+        <a asp-area="User" asp-controller="Comment" asp-action="MyComments" class="user-nav-item @(currentController == "Comment" ? "active" : "")">
+            <i class="fas fa-comments"></i>
+            <span>Đánh giá của tôi</span>
+        </a>
+        <a asp-area="Guest" asp-controller="Auth" asp-action="Logout" class="user-nav-item logout">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Đăng xuất</span>
+        </a>
+    </nav>
+</div>
+
+<style>
+/* User Sidebar */
+.user-sidebar {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+    margin-bottom: 2rem;
+}
+
+.user-profile-header {
+    text-align: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #6F4E37, #C4956A);
+    border-radius: 20px 20px 0 0;
+    color: white;
+}
+
+.user-avatar-large {
+    width: 80px;
+    height: 80px;
+    background: white;
+    color: #6F4E37;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 900;
+    margin: 0 auto 1rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.user-name {
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.user-email {
+    opacity: 0.9;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.user-nav {
+    padding: 1rem;
+}
+
+.user-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    color: var(--gray-700);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
+}
+
+.user-nav-item:hover,
+.user-nav-item.active {
+    background: #FDF6EE;
+    color: #6F4E37;
+    font-weight: bold;
+}
+
+.user-nav-item i {
+    font-size: 1.25rem;
+    width: 24px;
+}
+
+.user-nav-item.logout {
+    color: #DC2626;
+}
+
+.user-nav-item.logout:hover {
+    background: #FEE2E2;
+}
+
+@@media (max-width: 992px) {
+    .user-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+}
+</style>

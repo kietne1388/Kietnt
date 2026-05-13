@@ -1,0 +1,206 @@
+﻿@model List<FastFood.Models.Comment.CommentModel>
+
+@{
+    ViewData["Title"] = "Đánh Giá Sản Phẩm";
+    var productId = Context.Request.Query["productId"].ToString();
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h2 class="section-title-premium mb-5">Đánh Giá <span class="text-gradient">Sản Phẩm</span></h2>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="comments-list">
+                    @foreach (var comment in Model)
+                    {
+                        <div class="comment-item-full">
+                            <div class="comment-header-full">
+                                <div class="user-info-comment">
+                                    <div class="user-avatar-comment">
+                                        @comment.UserName.Substring(0, 1).ToUpper()
+                                    </div>
+                                    <div>
+                                        <h6>@comment.UserName</h6>
+                                        <div class="rating-stars-comment">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="fas fa-star @(i <= comment.Rating ? "filled" : "")"></i>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="comment-date-full">
+                                    @comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                            </div>
+
+                            <p class="comment-text-full">@comment.Content</p>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-cart">
+                    <i class="fas fa-comment-slash fa-5x text-muted mb-4"></i>
+                    <h4>Chưa có đánh giá nào</h4>
+                    <p class="text-muted">Hãy là người đầu tiên đánh giá sản phẩm này!</p>
+                </div>
+            }
+
+            <!-- Add Comment Form for logged in users -->
+            @if (Context.Session.GetInt32("UserId").HasValue && !string.IsNullOrEmpty(productId))
+            {
+                <div class="add-comment-section mt-5">
+                    <h5 class="section-title-small">Viết Đánh Giá</h5>
+                    <form asp-area="User" asp-controller="Comment" asp-action="Create" method="post">
+                        <input type="hidden" name="ProductId" value="@productId">
+
+                        <div class="form-group-premium">
+                            <label class="form-label">Đánh giá của bạn *</label>
+                            <div class="rating-input">
+                                <input type="radio" name="Rating" value="5" id="star5" required>
+                                <label for="star5"><i class="fas fa-star"></i></label>
+
+                                <input type="radio" name="Rating" value="4" id="star4">
+                                <label for="star4"><i class="fas fa-star"></i></label>
+
+                                <input type="radio" name="Rating" value="3" id="star3">
+                                <label for="star3"><i class="fas fa-star"></i></label>
+
+                                <input type="radio" name="Rating" value="2" id="star2">
+                                <label for="star2"><i class="fas fa-star"></i></label>
+
+                                <input type="radio" name="Rating" value="1" id="star1">
+                                <label for="star1"><i class="fas fa-star"></i></label>
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium">
+                            <label class="form-label">Nội dung *</label>
+                            <textarea name="Content" class="form-control" rows="5" 
+                                      placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm..." required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-paper-plane me-2"></i>Gửi Đánh Giá
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comment-item-full {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.comment-item-full:hover {
+    border-color: var(--primary-red);
+}
+
+.comment-header-full {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.user-info-comment {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.user-avatar-comment {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 900;
+}
+
+.user-info-comment h6 {
+    margin-bottom: 0.25rem;
+    font-weight: 700;
+}
+
+.rating-stars-comment {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.rating-stars-comment i.filled {
+    color: #F59E0B;
+}
+
+.rating-stars-comment i:not(.filled) {
+    color: var(--gray-300);
+}
+
+.comment-date-full {
+    color: var(--gray-500);
+    font-size: 0.9rem;
+}
+
+.comment-text-full {
+    color: var(--gray-700);
+    line-height: 1.8;
+    margin: 0;
+}
+
+.add-comment-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.rating-input input[type="radio"] {
+    display: none;
+}
+
+.rating-input label {
+    cursor: pointer;
+    font-size: 2rem;
+    color: var(--gray-300);
+    transition: all 0.2s ease;
+    margin: 0;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label {
+    color: #F59E0B;
+}
+
+.rating-input input[type="radio"]:checked ~ label {
+    color: #F59E0B;
+}
+</style>

@@ -1,0 +1,11 @@
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Release\net10.0\FastFood.Common.deps.json
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Release\net10.0\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Release\net10.0\FastFood.Common.pdb
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.AssemblyInfoInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.AssemblyInfo.cs
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.csproj.CoreCompileInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\refint\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\FastFood.Common.pdb
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Release\net10.0\ref\FastFood.Common.dll

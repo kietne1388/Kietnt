@@ -1,0 +1,22 @@
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net9.0\FastFood.Common.deps.json
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net9.0\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net9.0\FastFood.Common.pdb
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.AssemblyInfoInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.AssemblyInfo.cs
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.csproj.CoreCompileInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\refint\FastFood.Common.dll
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\FastFood.Common.pdb
+D:\Assignment\FastFoodNew\FastFood.Common\obj\Debug\net9.0\ref\FastFood.Common.dll
+D:\Assignment - Coffee\Coffee\FastFood.Common\bin\Debug\net9.0\FastFood.Common.deps.json
+D:\Assignment - Coffee\Coffee\FastFood.Common\bin\Debug\net9.0\FastFood.Common.dll
+D:\Assignment - Coffee\Coffee\FastFood.Common\bin\Debug\net9.0\FastFood.Common.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.AssemblyInfoInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.AssemblyInfo.cs
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.csproj.CoreCompileInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.dll
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\refint\FastFood.Common.dll
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\FastFood.Common.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Common\obj\Debug\net9.0\ref\FastFood.Common.dll

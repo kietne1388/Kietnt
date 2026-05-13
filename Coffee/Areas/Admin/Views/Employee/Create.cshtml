@@ -1,0 +1,112 @@
+@using FastFood.Areas.Admin.Controllers
+@model EmployeeModel
+@{
+    ViewData["Title"] = "Thêm Nhân Viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Thêm <span class="text-gradient">Nhân Viên</span></h1>
+            <p class="text-muted mb-0">Nhập thông tin nhân viên mới của CoffeeLux</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div class="row g-4">
+            <!-- LEFT MAIN COLUMN -->
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-user-tie me-2"></i>Thông Tin Cá Nhân
+                    </div>
+                    <div class="form-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="field-label">Họ và Tên <span class="text-danger">*</span></label>
+                                <input asp-for="HoTen" class="form-control field-input" placeholder="VD: Nguyễn Văn An" required />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="field-label">Chức Vụ <span class="text-danger">*</span></label>
+                                <select asp-for="ChucVu" class="form-select field-input" required>
+                                    <option value="">-- Chọn chức vụ --</option>
+                                    <option>Pha chế</option>
+                                    <option>Thu ngân</option>
+                                    <option>Phục vụ</option>
+                                    <option>Quản lý ca</option>
+                                    <option>Bảo vệ</option>
+                                    <option>Vệ sinh</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input asp-for="Email" class="form-control field-input border-start-0 ps-0" type="email" placeholder="email@coffeelux.vn" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Số Điện Thoại</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-phone text-muted"></i></span>
+                                    <input asp-for="SoDienThoai" class="form-control field-input border-start-0 ps-0" placeholder="09xxxxxxxx" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-card mt-4">
+                    <div class="form-card-header">
+                        <i class="fas fa-lock me-2"></i>Tài Khoản Hệ Thống
+                    </div>
+                    <div class="form-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="field-label">Tên Tài Khoản (Username) <span class="text-danger">*</span></label>
+                                <input name="username" class="form-control field-input" placeholder="VD: an_pha_che" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Mật Khẩu <span class="text-danger">*</span></label>
+                                <input name="password" type="password" class="form-control field-input" placeholder="••••••••" required />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE COLUMN -->
+            <div class="col-lg-4">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-briefcase me-2"></i>Thông Tin Công Việc
+                    </div>
+                    <div class="form-card-body">
+                        <div class="mb-3">
+                            <label class="field-label">Lương Cơ Bản</label>
+                            <div class="input-group">
+                                <input asp-for="LuongCoBan" class="form-control field-input text-end" type="number" min="0" step="100000" placeholder="6,000,000" />
+                                <span class="input-group-text bg-light">₫</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="field-label">Ngày Vào Làm</label>
+                            <input asp-for="NgayVaoLam" class="form-control field-input" type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <hr class="my-3">
+                        <button type="submit" class="btn btn-primary w-100 btn-action-submit">
+                            <i class="fas fa-user-plus me-2"></i>Thêm Nhân Viên
+                        </button>
+                        <a asp-action="Index" class="btn btn-light w-100 mt-2">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_FormStyles")

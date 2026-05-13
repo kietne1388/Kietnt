@@ -1,0 +1,17 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  FastFood.Common -> D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net10.0\FastFood.Common.dll
+  FastFood.Domain -> D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net10.0\FastFood.Domain.dll
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\CommentRepository.cs(10,66): error CS0246: The type or namespace name 'ICommentRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\CategoryRepository.cs(10,68): error CS0246: The type or namespace name 'ICategoryRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\UserVoucherRepository.cs(30,27): warning CS0114: 'UserVoucherRepository.AddAsync(UserVoucher)' hides inherited member 'GenericRepository<UserVoucher>.AddAsync(UserVoucher)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword. [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+
+Build FAILED.
+
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\UserVoucherRepository.cs(30,27): warning CS0114: 'UserVoucherRepository.AddAsync(UserVoucher)' hides inherited member 'GenericRepository<UserVoucher>.AddAsync(UserVoucher)'. To make the current member override that implementation, add the override keyword. Otherwise add the new keyword. [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\CommentRepository.cs(10,66): error CS0246: The type or namespace name 'ICommentRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+D:\Assignment\FastFoodNew\FastFood.Infrastructure\Repositories\CategoryRepository.cs(10,68): error CS0246: The type or namespace name 'ICategoryRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+    1 Warning(s)
+    2 Error(s)
+
+Time Elapsed 00:00:03.57

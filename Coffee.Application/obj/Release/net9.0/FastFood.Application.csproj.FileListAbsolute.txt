@@ -1,0 +1,17 @@
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Application.deps.json
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Application.dll
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Application.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Domain.dll
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Infrastructure.dll
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Domain.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Release\net9.0\FastFood.Infrastructure.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.csproj.AssemblyReference.cache
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.AssemblyInfoInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.AssemblyInfo.cs
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.csproj.CoreCompileInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.C827ABF9.Up2Date
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.dll
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\refint\FastFood.Application.dll
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\FastFood.Application.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Application\obj\Release\net9.0\ref\FastFood.Application.dll

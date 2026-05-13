@@ -1,0 +1,495 @@
+@model FastFood.Models.Admin.Dashboard.DashboardViewModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-dashboard">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Tổng Quan <span class="text-gradient">Dashboard</span></h1>
+            <p class="text-muted mb-0">Chào mừng trở lại, CaféLux Admin!</p>
+        </div>
+    </div>
+    <!-- Stats Grid -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-3 col-md-6 d-flex">
+            <div class="stat-card-admin h-100 w-100">
+                <div class="stat-icon revenue">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-content">
+                    <h6>Doanh Thu Hôm Nay</h6>
+                    <h3>@Model.Today.Revenue.ToString("N0")đ</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 d-flex">
+            <div class="stat-card-admin h-100 w-100">
+                <div class="stat-icon orders">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-content">
+                    <h6>Đơn Hàng Chờ</h6>
+                    <h3>@Model.PendingOrders</h3>
+                    <span class="stat-trend">Tổng: @Model.TotalOrders đơn</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 d-flex">
+            <div class="stat-card-admin h-100 w-100">
+                <div class="stat-icon users">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-content">
+                    <h6>Khách Hàng</h6>
+                    <h3>@Model.TotalUsers</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-3 col-md-6 d-flex">
+            <div class="stat-card-admin h-100 w-100">
+                <div class="stat-icon products">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-content">
+                    <h6>Sản Phẩm</h6>
+                    <h3>@Model.TotalProducts</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-lg-4 d-flex">
+            <div class="dashboard-card text-center h-100 w-100 d-flex flex-column justify-content-center">
+                <h5 class="card-title">💰 Doanh Thu Tháng</h5>
+                <h2 style="color: var(--primary-red); font-weight: 900;">@Model.Month.Revenue.ToString("N0")đ</h2>
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex">
+            <div class="dashboard-card text-center h-100 w-100 d-flex flex-column justify-content-center">
+                <h5 class="card-title">📊 Doanh Thu Năm</h5>
+                <h2 style="color: #10B981; font-weight: 900;">@Model.Year.Revenue.ToString("N0")đ</h2>
+            </div>
+        </div>
+        <div class="col-lg-4 d-flex">
+            <div class="dashboard-card text-center h-100 w-100 d-flex flex-column justify-content-center">
+                <h5 class="card-title">📦 Xuất Dữ Liệu</h5>
+                <div class="d-flex gap-2 justify-content-center mt-2">
+                    <a href="/Admin/ExcelExport/ExportOrders" class="btn btn-success btn-lg">
+                        <i class="fas fa-file-excel me-2"></i>Xuất Excel
+                    </a>
+                    <a href="/Admin/ExcelExport/ExportWord" class="btn btn-primary btn-lg">
+                        <i class="fas fa-file-word me-2"></i>Xuất Word
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tables Row -->
+    <div class="row g-4">
+        <div class="col-lg-8 d-flex">
+            <div class="dashboard-card flex-fill">
+                <h5 class="card-title">Đơn Hàng Gần Đây</h5>
+                <div class="table-responsive">
+                    <table class="table-premium">
+                        <thead>
+                            <tr>
+                                <th>Mã ĐH</th>
+                                <th>Khách hàng</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Ngày</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.RecentOrders.Any())
+                            {
+                                @foreach (var order in Model.RecentOrders)
+                                {
+                                    <tr>
+                                        <td><strong>@order.OrderCode</strong></td>
+                                        <td>@order.UserName</td>
+                                        <td class="text-danger fw-bold">@order.TotalAmount.ToString("N0")đ</td>
+                                        <td>
+                                            <span class="badge-status @GetStatusClass(order.Status)">@order.Status</span>
+                                        </td>
+                                        <td>@order.CreatedAt.ToString("dd/MM HH:mm")</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted py-4">Chưa có đơn hàng</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-4 d-flex">
+            <div class="dashboard-card flex-fill">
+                <h5 class="card-title">🏆 Sản Phẩm Bán Chạy</h5>
+                <div class="product-list-mini">
+                    @if (Model.TopProducts.Any())
+                    {
+                        @foreach (var product in Model.TopProducts)
+                        {
+                            <div class="top-product-item">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="product-img-mini">
+                                        @{
+                                            var imgUrl = product.ImageUrl;
+                                            if (string.IsNullOrEmpty(imgUrl))
+                                            {
+                                                imgUrl = "/images/products/Coffee.jpg";
+                                            }
+                                            else if (!imgUrl.StartsWith("http") && !imgUrl.StartsWith("/"))
+                                            {
+                                                if (!imgUrl.Contains("images/")) {
+                                                    imgUrl = "/images/" + imgUrl;
+                                                } else {
+                                                    imgUrl = "/" + imgUrl;
+                                                }
+                                            }
+                                        }
+                                        <img src="@imgUrl" 
+                                             alt="@product.ProductName" 
+                                             style="width: 50px; height: 50px; border-radius: 10px; object-fit: cover; border: 1px solid var(--gray-200);" 
+                                             onerror="this.src='/images/products/Coffee.jpg'" />
+                                    </div>
+                                    <div>
+                                        <strong>@product.ProductName</strong>
+                                        <small class="text-muted d-block">Đã bán: @product.TotalSold</small>
+                                    </div>
+                                </div>
+                                <span class="text-danger fw-bold">@product.Revenue.ToString("N0")đ</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">Chưa có dữ liệu</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-dashboard {
+    padding: 2rem;
+}
+
+.stat-card-admin {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    gap: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.stat-card-admin:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.stat-icon.revenue { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
+.stat-icon.orders { background: var(--gradient-red); }
+.stat-icon.users { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
+.stat-icon.products { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); }
+
+.stat-content {
+    flex-grow: 1;
+}
+
+.stat-content h6 {
+    color: var(--gray-600);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.stat-content h3 {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--gray-900);
+    margin-bottom: 0.5rem;
+}
+
+.stat-trend {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--gray-500);
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+}
+
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: var(--gray-900);
+}
+
+.table-premium {
+    width: 100%;
+}
+
+.table-premium thead {
+    background: var(--gray-50);
+}
+
+.table-premium th {
+    padding: 1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    border: none;
+}
+
+.table-premium td {
+    padding: 1rem;
+    color: var(--gray-700);
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.badge-status {
+    padding: 0.35rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.badge-status.status-pending {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.badge-status.status-completed {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.badge-status.status-cancelled {
+    background: #FEE2E2;
+    color: #991B1B;
+}
+
+.badge-status.status-processing {
+    background: #DBEAFE;
+    color: #1E40AF;
+}
+
+.top-product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.top-product-item:last-child {
+    border-bottom: none;
+}
+
+.chart-container {
+    position: relative;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--gray-700);
+    background: var(--gray-50);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+}
+
+.legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.chart-toggle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    border: 1.5px solid #F3F4F6;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--gray-800);
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.chart-toggle-header:hover {
+    border-color: var(--primary-red);
+    box-shadow: 0 6px 20px rgba(220,38,38,0.08);
+}
+
+#chartToggleIcon {
+    transition: transform 0.3s ease;
+}
+
+#chartsSection {
+    overflow: hidden;
+    transition: opacity 0.3s ease;
+}
+</style>
+
+@functions {
+    string GetStatusClass(string status)
+    {
+        return status?.ToLower() switch
+        {
+            "pending" => "status-pending",
+            "completed" => "status-completed",
+            "cancelled" => "status-cancelled",
+            "processing" => "status-processing",
+            _ => "status-pending"
+        };
+    }
+}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+    const COLORS = [
+        '#DC2626','#F59E0B','#10B981','#3B82F6','#8B5CF6',
+        '#EC4899','#14B8A6','#F97316','#6366F1','#84CC16'
+    ];
+    const HIDDEN_COLOR = '#CBD5E1';
+
+    function buildChart(canvasId, legendId, items) {
+        const canvas = document.getElementById(canvasId);
+        const legendEl = document.getElementById(legendId);
+        if (!canvas) return;
+
+        if (!items || items.length === 0) {
+            canvas.parentElement.innerHTML = '<div class="text-center text-muted py-5">Chưa có dữ liệu</div>';
+            return;
+        }
+
+        const labels = items.map(i => i.name);
+        const data   = items.map(i => i.totalSold === 0 ? 1 : i.totalSold); // show 1 segment even if 0
+        const colors = items.map((i, idx) => i.isActive ? (COLORS[idx % COLORS.length]) : HIDDEN_COLOR);
+
+        new Chart(canvas, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{ data, backgroundColor: colors, borderWidth: 2, borderColor: '#fff' }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => {
+                                const item = items[ctx.dataIndex];
+                                const status = item.isActive ? '' : ' (Ẩn)';
+                                return ` ${item.name}${status}: ${item.totalSold} đơn`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Build custom legend
+        legendEl.innerHTML = items.map((item, idx) => {
+            const color = item.isActive ? (COLORS[idx % COLORS.length]) : HIDDEN_COLOR;
+            const status = item.isActive ? '' : ' <span class="text-muted">(Án)</span>';
+            return `<div class="legend-item">
+                <div class="legend-dot" style="background:${color}"></div>
+                <span>${item.name}${status}: <strong>${item.totalSold}</strong></span>
+            </div>`;
+        }).join('');
+    }
+
+    @{
+        var productJson = System.Text.Json.JsonSerializer.Serialize(ViewBag.ProductStats ?? new System.Collections.Generic.List<object>(), new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+        var comboJson = System.Text.Json.JsonSerializer.Serialize(ViewBag.ComboStats ?? new System.Collections.Generic.List<object>(), new System.Text.Json.JsonSerializerOptions { PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase });
+    }
+
+    const productStats = @Html.Raw(productJson);
+    const comboStats   = @Html.Raw(comboJson);
+
+    // Filter: only show IsActive = true items in charts
+    const activeProducts = productStats.filter(i => i.isActive === true);
+    const activeCombos   = comboStats.filter(i => i.isActive === true);
+
+    document.addEventListener('DOMContentLoaded', function() {
+        buildChart('productChart', 'productLegend', activeProducts);
+        buildChart('comboChart',   'comboLegend',   activeCombos);
+    });
+
+    // Collapsible charts section
+    let chartsVisible = true;
+    function toggleCharts() {
+        const section = document.getElementById('chartsSection');
+        const icon    = document.getElementById('chartToggleIcon');
+        chartsVisible = !chartsVisible;
+        if (chartsVisible) {
+            section.style.display = '';
+            setTimeout(() => section.style.opacity = '1', 10);
+            icon.style.transform = 'rotate(0deg)';
+        } else {
+            section.style.opacity = '0';
+            setTimeout(() => section.style.display = 'none', 300);
+            icon.style.transform = 'rotate(-90deg)';
+        }
+    }
+    window.toggleCharts = toggleCharts;
+})();
+</script>

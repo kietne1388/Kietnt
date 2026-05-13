@@ -1,0 +1,6 @@
+@FastFood.API_HostAddress = http://localhost:5098
+
+GET {{FastFood.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

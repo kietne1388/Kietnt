@@ -1,0 +1,380 @@
+﻿@model FastFood.Models.Cart.CartViewModel
+
+@{
+    ViewData["Title"] = "Giỏ Hàng";
+}
+
+<div class="container py-5">
+    <h2 class="section-title-premium mb-5">Giỏ Hàng <span class="text-gradient">Của Bạn</span></h2>
+
+    @if (Model != null && Model.Items != null && Model.Items.Any())
+    {
+        <div class="row g-4">
+            <!-- Cart Items -->
+            <div class="col-lg-8">
+                <div class="cart-items-wrapper">
+                    @foreach (var item in Model.Items)
+                    {
+                        var uniqueId = item.ComboId.HasValue && item.ComboId > 0 
+                            ? $"combo-{item.ComboId}" 
+                            : $"product-{item.ProductId}";
+                        var itemType = item.ComboId.HasValue && item.ComboId > 0 ? "combo" : "product";
+                        
+                        <div class="cart-item-card" 
+                             data-unique-id="@uniqueId"
+                             data-product-id="@item.ProductId" 
+                             data-combo-id="@(item.ComboId ?? 0)"
+                             data-item-type="@itemType">
+                            <div class="cart-item-image">
+                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/150" : item.ImageUrl)" alt="@item.ProductName">
+                            </div>
+                            <div class="cart-item-info">
+                                <h5 class="cart-item-name">
+                                    @if (item.ComboId.HasValue && item.ComboId > 0)
+                                    {
+                                        <span class="badge bg-success me-2" style="font-size: 0.7rem;">COMBO</span>
+                                    }
+                                    @item.ProductName
+                                </h5>
+                                <p class="cart-item-price">@item.Price.ToString("N0")đ</p>
+                                @if (item.ComboItemNotes != null && item.ComboItemNotes.Any())
+                                {
+                                    <div class="mt-2 text-muted small">
+                                        <i class="fas fa-edit me-1"></i>Ghi chú:
+                                        <ul class="mb-0 ps-3">
+                                            @foreach (var note in item.ComboItemNotes)
+                                            {
+                                                if (!string.IsNullOrEmpty(note.Value))
+                                                {
+                                                    <li>@note.Value</li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                            <div class="cart-item-quantity">
+                                <div class="quantity-selector">
+                                    <button type="button" class="qty-btn" onclick="updateQuantity('@uniqueId', @item.ProductId, @(item.ComboId ?? 0), @(item.Quantity - 1))">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <input type="number" value="@item.Quantity" class="qty-input" readonly>
+                                    <button type="button" class="qty-btn" onclick="updateQuantity('@uniqueId', @item.ProductId, @(item.ComboId ?? 0), @(item.Quantity + 1))">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="cart-item-total">
+                                <strong>@((item.Price * item.Quantity).ToString("N0"))đ</strong>
+                            </div>
+                            <button type="button" class="cart-item-remove" onclick="removeItem('@uniqueId', @item.ProductId, @(item.ComboId ?? 0))">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Cart Summary -->
+            <div class="col-lg-4">
+                <div class="cart-summary">
+                    <h5 class="summary-title">Tóm Tắt Đơn Hàng</h5>
+
+                    <div class="summary-row">
+                        <span>Tổng sản phẩm:</span>
+                        <strong>@Model.TotalItems</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <strong>@Model.TotalAmount.ToString("N0") đ</strong>
+                    </div>
+
+                    @if (Model.DiscountAmount.HasValue && Model.DiscountAmount > 0)
+                    {
+                        <div class="summary-row discount">
+                            <span>Giảm giá:</span>
+                            <strong>-@(Model.DiscountAmount ?? 0).ToString("N0") đ</strong>
+                        </div>
+                    }
+
+                    <div class="summary-divider"></div>
+
+                    <div class="summary-row total">
+                        <span>Tổng cộng:</span>
+                        <strong>@((Model.TotalAmount - (Model.DiscountAmount ?? 0)).ToString("N0")) đ</strong>
+                    </div>
+
+                    <!-- Voucher Input -->
+                    <div class="voucher-section">
+                        <label>Mã giảm giá</label>
+                        <div class="voucher-input-group">
+                            <input type="text" id="voucherCode" class="form-control" placeholder="Nhập mã...">
+                            <button type="button" class="btn btn-outline-primary" onclick="applyVoucher()">
+                                <i class="fas fa-check"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <a asp-area="User" asp-controller="Cart" asp-action="Checkout" class="btn btn-primary btn-lg w-100 checkout-btn">
+                        <i class="fas fa-shopping-bag me-2"></i>Tiến Hành Thanh Toán
+                    </a>
+
+                    <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-outline-primary w-100 mt-3">
+                        <i class="fas fa-arrow-left me-2"></i>Tiếp Tục Mua Sắm
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+            <h4>Giỏ hàng trống</h4>
+            <p class="text-muted mb-4">Hãy thêm sản phẩm vào giỏ hàng để tiếp tục!</p>
+            <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg">
+                <i class="fas fa-utensils me-2"></i>Khám Phá Sản Phẩm
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+/* Cart Items */
+.cart-items-wrapper {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.cart-item-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 15px;
+    border: 2px solid var(--gray-200);
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.cart-item-card:hover {
+    border-color: var(--primary-red);
+    box-shadow: 0 5px 15px rgba(220, 38, 38, 0.1);
+}
+
+.cart-item-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.cart-item-info {
+    flex-grow: 1;
+}
+
+.cart-item-name {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.cart-item-price {
+    color: var(--primary-red);
+    font-weight: 600;
+    margin: 0;
+}
+
+.cart-item-total {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+}
+
+.cart-item-remove {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--gray-100);
+    color: var(--error);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cart-item-remove:hover {
+    background: var(--primary-red-lightest);
+    transform: scale(1.1);
+}
+
+/* Cart Summary */
+.cart-summary {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.summary-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: var(--gray-700);
+}
+
+.summary-row.discount strong {
+    color: var(--success);
+}
+
+.summary-row.total {
+    font-size: 1.25rem;
+    color: var(--gray-900);
+}
+
+.summary-row.total strong {
+    color: var(--primary-red);
+}
+
+.summary-divider {
+    height: 1px;
+    background: var(--gray-300);
+    margin: 1.5rem 0;
+}
+
+.voucher-section {
+    margin: 1.5rem 0;
+}
+
+.voucher-section label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.voucher-input-group {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.voucher-input-group .form-control {
+    border-radius: 12px;
+}
+
+.voucher-input-group .btn {
+    border-radius: 12px;
+}
+
+.checkout-btn {
+    margin-top: 1.5rem;
+}
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+@@media (max-width: 992px) {
+    .cart-summary {
+        position: static;
+        margin-top: 2rem;
+    }
+
+    .cart-item-card {
+        flex-wrap: wrap;
+    }
+
+    .cart-item-quantity,
+    .cart-item-total {
+        width: 100%;
+        margin-top: 1rem;
+    }
+}
+</style>
+
+<script>
+async function updateQuantity(uniqueId, productId, comboId, newQuantity) {
+    if (newQuantity < 1) return;
+
+    try {
+        const response = await fetch('/User/Cart/UpdateQuantity', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                productId, 
+                comboId: comboId > 0 ? comboId : null,
+                quantity: newQuantity 
+            })
+        });
+
+        if (response.ok) {
+            location.reload();
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+
+async function removeItem(uniqueId, productId, comboId) {
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
+
+    try {
+        const response = await fetch('/User/Cart/RemoveFromCart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                productId,
+                comboId: comboId > 0 ? comboId : null
+            })
+        });
+
+        if(response.ok) {
+            location.reload();
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+
+async function applyVoucher() {
+    const code = document.getElementById('voucherCode').value.trim();
+    if (!code) {
+        alert('Vui lòng nhập mã giảm giá!');
+        return;
+    }
+
+    try {
+        const response = await fetch('/User/Cart/ApplyVoucher', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ code })
+        });
+
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert('Mã giảm giá không hợp lệ!');
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+</script>

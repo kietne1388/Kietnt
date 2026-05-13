@@ -1,0 +1,98 @@
+@model List<FastFood.Models.Comment.CommentModel>
+@{
+    ViewData["Title"] = "Đánh giá sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <a asp-action="Index" class="btn btn-sm btn-light mb-2">
+                <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+            </a>
+            <h1 class="page-title">Bình luận cho: <span class="text-gradient">@ViewBag.ProductName</span></h1>
+            <p class="text-muted mb-0">Tổng cộng <strong>@Model.Count</strong> lượt đánh giá</p>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table table-premium align-middle">
+                <thead>
+                    <tr>
+                        <th>Người dùng</th>
+                        <th>Đánh giá</th>
+                        <th>Nội dung</th>
+                        <th>Thời gian</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var comment in Model.OrderByDescending(c => c.CreatedAt))
+                        {
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">@comment.UserName</div>
+                                    <small class="text-muted">ID: @comment.UserId</small>
+                                </td>
+                                <td>
+                                    <span class="rating-badge">
+                                        <i class="fas fa-star text-warning"></i> @comment.Rating
+                                    </span>
+                                </td>
+                                <td class="text-wrap" style="max-width: 400px;">
+                                    @comment.Content
+                                </td>
+                                <td>@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (comment.IsHidden)
+                                    {
+                                        <span class="badge bg-danger-light text-danger">Bị ẩn</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-light text-success">Hiển thị</span>
+                                    }
+                                </td>
+                                <td>
+                                    <form asp-action="ToggleCommentHide" method="post">
+                                        <input type="hidden" name="id" value="@comment.Id" />
+                                        <input type="hidden" name="productId" value="@ViewBag.ProductId" />
+                                        <button type="submit" class="btn btn-sm @(comment.IsHidden ? "btn-outline-success" : "btn-outline-danger")">
+                                            <i class="fas @(comment.IsHidden ? "fa-eye" : "fa-eye-slash")"></i>
+                                            @(comment.IsHidden ? "Hiện" : "Ẩn")
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-comment-slash d-block mb-3 fs-1 opacity-25"></i>
+                                Sản phẩm này chưa có bình luận nào
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.rating-badge {
+    background: #FEF3C7;
+    color: #92400E;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-weight: 700;
+}
+.bg-success-light { background: #D1FAE5; }
+.bg-danger-light { background: #FEE2E2; }
+</style>

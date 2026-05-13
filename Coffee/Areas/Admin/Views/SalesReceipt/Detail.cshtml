@@ -1,0 +1,179 @@
+@using FastFood.Areas.Admin.Controllers
+@model SalesReceiptModel
+@{
+    ViewData["Title"] = $"Phiếu Bán #{Model.Id}";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var details = ViewBag.Details as List<SalesReceiptDetailModel> ?? new List<SalesReceiptDetailModel>();
+}
+
+<div class="admin-page" style="padding: 2rem;">
+    <div class="page-header-admin mb-4 d-flex justify-content-between align-items-center">
+        <div>
+            <h1 class="page-title" style="font-size: 2rem; font-weight: 800; margin-bottom: 0.25rem; color: #111827;">
+                Chi Tiết <span class="text-gradient" style="background: linear-gradient(135deg,#DC2626,#991B1B); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Phiếu Bán</span>
+            </h1>
+            <p class="text-muted mb-0">Hóa đơn số: <strong>#@Model.Id</strong></p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4" style="border-radius: 12px; font-weight: 600;">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <!-- Thông tin hóa đơn (Trái) -->
+        <div class="col-lg-5">
+            <div class="receipt-card h-100">
+                <div class="receipt-card-header">
+                    <i class="fas fa-file-invoice me-2"></i>Thông Tin Hóa Đơn
+                </div>
+                <div class="receipt-card-body">
+                    <div class="info-row">
+                        <span class="info-label">Mã Số</span>
+                        <span class="info-value fw-bold text-dark">#@Model.Id</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Ngày Lập</span>
+                        <span class="info-value"><i class="far fa-clock me-1 text-muted"></i>@Model.NgayLap.ToString("dd/MM/yyyy HH:mm")</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Nhân Viên</span>
+                        <span class="info-value fw-semibold">@Model.TenNhanVien</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Khách Hàng</span>
+                        <span class="info-value fw-semibold text-primary">@Model.TenKhachHang</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Trạng Thái</span>
+                        <span class="info-value">
+                            @if (Model.TrangThai == "Hoàn Thành")
+                            { <span class="badge rounded-pill bg-success px-3 py-2"><i class="fas fa-check-circle me-1"></i>Hoàn thành</span> }
+                            else
+                            { <span class="badge rounded-pill bg-warning text-dark px-3 py-2"><i class="fas fa-clock me-1"></i>@Model.TrangThai</span> }
+                        </span>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.GhiChu))
+                    {
+                        <div class="info-row flex-column align-items-start border-bottom-0 pb-0">
+                            <span class="info-label mb-2">Ghi Chú:</span>
+                            <div class="alert alert-light w-100 border text-muted fst-italic mb-0">
+                                "@Model.GhiChu"
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Chi tiết sản phẩm (Phải) -->
+        <div class="col-lg-7">
+            <div class="receipt-card h-100">
+                <div class="receipt-card-header bg-light-red">
+                    <i class="fas fa-coffee me-2 text-danger"></i>Món Đã Gọi
+                </div>
+                <div class="receipt-card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0 receipt-table">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4 py-3">Tên Món</th>
+                                    <th class="text-center py-3">SL</th>
+                                    <th class="text-end py-3">Đơn Giá</th>
+                                    <th class="text-end pe-4 py-3">Thành Tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var d in details)
+                                {
+                                    <tr>
+                                        <td class="ps-4 fw-semibold text-dark">@d.TenSanPham</td>
+                                        <td class="text-center">
+                                            <span class="badge bg-light text-dark border px-2 py-1 fs-6">@d.SoLuong</span>
+                                        </td>
+                                        <td class="text-end text-muted">@d.DonGia.ToString("N0")<span class="small ms-1">₫</span></td>
+                                        <td class="text-end pe-4 fw-bold text-danger">@d.ThanhTien.ToString("N0")<span class="small ms-1">₫</span></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="bg-light">
+                                <tr>
+                                    <td colspan="3" class="text-end py-4 fw-bold text-uppercase" style="letter-spacing: 1px;">Tổng Cộng:</td>
+                                    <td class="text-end pe-4 py-4 fw-900 text-danger fs-4">@Model.TongTien.ToString("N0")<span class="fs-6 ms-1 text-muted fw-bold">₫</span></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Reusable styling cho receipt-card */
+.receipt-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.03);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.receipt-card:hover {
+    box-shadow: 0 15px 50px rgba(0,0,0,0.09);
+}
+
+.receipt-card-header {
+    background: #F9FAFB;
+    padding: 1.25rem 1.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #374151;
+    border-bottom: 2px solid #F3F4F6;
+}
+.receipt-card-header.bg-light-red {
+    background: #FEF2F2;
+    border-bottom-color: #FCA5A5;
+}
+
+.receipt-card-body {
+    padding: 1.5rem;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px dashed #E5E7EB;
+}
+.info-row:last-child {
+    border-bottom: none;
+}
+.info-label {
+    font-size: 0.9rem;
+    color: #6B7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.info-value {
+    font-size: 1rem;
+    color: #111827;
+}
+
+.receipt-table th {
+    font-weight: 600;
+    color: #6B7280;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #E5E7EB;
+}
+.receipt-table td {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #F3F4F6;
+}
+.fw-900 { font-weight: 900; }
+</style>

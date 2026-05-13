@@ -1,0 +1,21 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  FastFood.Common -> D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net10.0\FastFood.Common.dll
+  FastFood.Domain -> D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net10.0\FastFood.Domain.dll
+  FastFood.Infrastructure -> D:\Assignment\FastFoodNew\FastFood.Infrastructure\bin\Debug\net10.0\FastFood.Infrastructure.dll
+  FastFood.Application -> D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Application.dll
+D:\Assignment\FastFoodNew\FastFood\Program.cs(27,46): error CS0246: The type or namespace name 'Notification' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(216,23): warning CS8618: Non-nullable property 'ImageUrl' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(109,35): warning CS8602: Dereference of a possibly null reference. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(180,20): warning CS8603: Possible null reference return. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+
+Build FAILED.
+
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(216,23): warning CS8618: Non-nullable property 'ImageUrl' must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring the property as nullable. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(109,35): warning CS8602: Dereference of a possibly null reference. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Areas\Guest\Controllers\CartController.cs(180,20): warning CS8603: Possible null reference return. [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+D:\Assignment\FastFoodNew\FastFood\Program.cs(27,46): error CS0246: The type or namespace name 'Notification' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood\FastFood.csproj]
+    3 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:05.82

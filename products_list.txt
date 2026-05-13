@@ -1,0 +1,22 @@
+Id          Name                                                                                                                                                  
+----------- ------------------------------------------------------------------------------------------------------------------------------------------------------
+       1760 Espresso                                                                                                                                              
+       1761 Americano                                                                                                                                             
+       1762 Cappuccino                                                                                                                                            
+       1763 Latte                                                                                                                                                 
+       1764 Cold Brew                                                                                                                                             
+       1765 Cà phê s?a ðá                                                                                                                                         
+       1766 Trà Ô Long S?a                                                                                                                                        
+       1767 Trà S?a Matcha                                                                                                                                        
+       1768 Trà Chanh Týõi                                                                                                                                        
+       1769 H?ng Trà Ðào                                                                                                                                          
+       1770 Sinh T? Dâu                                                                                                                                           
+       1771 Ðá Xay Cà Phê                                                                                                                                         
+       1772 Ðá Xay Matcha                                                                                                                                         
+       1773 Sinh T? Bõ                                                                                                                                            
+       1774 S?a Týõi Trân Châu                                                                                                                                    
+       1775 Ný?c ép Cam Týõi                                                                                                                                      
+       1776 Croissant Bõ                                                                                                                                          
+       1777 Bánh Muffin Vi?t Qu?t                                                                                                                                 
+
+(18 rows affected)

@@ -1,0 +1,17 @@
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Application.deps.json
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Application.dll
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Application.pdb
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Domain.dll
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Infrastructure.dll
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Domain.pdb
+D:\Assignment\FastFoodNew\FastFood.Application\bin\Debug\net10.0\FastFood.Infrastructure.pdb
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.csproj.AssemblyReference.cache
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.AssemblyInfoInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.AssemblyInfo.cs
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.csproj.CoreCompileInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.C827ABF9.Up2Date
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.dll
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\refint\FastFood.Application.dll
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\FastFood.Application.pdb
+D:\Assignment\FastFoodNew\FastFood.Application\obj\Debug\net10.0\ref\FastFood.Application.dll

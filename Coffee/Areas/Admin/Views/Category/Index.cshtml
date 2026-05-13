@@ -1,0 +1,321 @@
+@model List<FastFood.Models.Category.CategoryModel>
+
+@{
+    ViewData["Title"] = "Quản Lý Danh Mục";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Danh Mục</span></h1>
+            <p class="text-muted mb-0">Danh sách danh mục sản phẩm của CoffeeLux</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary px-4">
+            <i class="fas fa-plus me-2"></i>Thêm Danh Mục
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium" id="categoryTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên danh mục</th>
+                        <th>Mô tả</th>
+                        <th>Số sản phẩm</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="categoryBody">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var category in Model)
+                        {
+                            <tr>
+                                <td>@category.Id</td>
+                                <td><strong>@category.Name</strong></td>
+                                <td>@category.Description</td>
+                                <td>@category.ProductCount</td>
+                                <td>
+                                    @if (category.IsActive)
+                                    {
+                                        <span class="badge-custom success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom danger">Tắt</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-action="Edit" asp-route-id="@category.Id" class="btn-action edit" title="Sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form asp-action="Delete" asp-route-id="@category.Id" method="post"
+                                              onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');" style="display:inline;">
+                                            <button type="submit" class="btn-action delete" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Chưa có danh mục nào</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+        {
+            <div class="pagination-wrapper mt-4 d-flex justify-content-end">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-rounded mb-0">
+                        <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage - 1)">
+                                <i class="fas fa-chevron-left"></i>
+                            </a>
+                        </li>
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                            </li>
+                        }
+                        <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                            <a class="page-link" asp-action="Index" asp-route-page="@(ViewBag.CurrentPage + 1)">
+                                <i class="fas fa-chevron-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- ===== MODAL THÊM DANH MỤC ===== -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-premium">
+            <div class="modal-header border-0 pb-0">
+                <div>
+                    <h5 class="modal-title fw-800" id="createModalLabel">
+                        <i class="fas fa-plus-circle me-2 text-primary"></i>Thêm Danh Mục Mới
+                    </h5>
+                    <p class="text-muted small mb-0">Điền thông tin danh mục sản phẩm</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div id="createError" class="alert alert-danger d-none"></div>
+                <form id="createForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tên danh mục <span class="text-danger">*</span></label>
+                        <input type="text" id="createName" class="form-control modal-input"
+                               placeholder="VD: Cà phê, Trà sữa..." required maxlength="100" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mô tả</label>
+                        <textarea id="createDesc" class="form-control modal-input" rows="3"
+                                  placeholder="Mô tả ngắn về danh mục..." maxlength="500"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary px-4" id="createBtn" onclick="submitCreate()">
+                    <i class="fas fa-plus me-2"></i>Thêm Danh Mục
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL SỬA DANH MỤC ===== -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-premium">
+            <div class="modal-header border-0 pb-0">
+                <div>
+                    <h5 class="modal-title fw-800" id="editModalLabel">
+                        <i class="fas fa-edit me-2 text-warning"></i>Chỉnh Sửa Danh Mục
+                    </h5>
+                    <p class="text-muted small mb-0">Cập nhật thông tin danh mục</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body pt-3">
+                <div id="editError" class="alert alert-danger d-none"></div>
+                <form id="editForm">
+                    <input type="hidden" id="editId" />
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tên danh mục <span class="text-danger">*</span></label>
+                        <input type="text" id="editName" class="form-control modal-input"
+                               placeholder="VD: Cà phê, Trà sữa..." required maxlength="100" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mô tả</label>
+                        <textarea id="editDesc" class="form-control modal-input" rows="3"
+                                  placeholder="Mô tả ngắn về danh mục..." maxlength="500"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-warning px-4 text-white" id="editBtn" onclick="submitEdit()">
+                    <i class="fas fa-save me-2"></i>Lưu Thay Đổi
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-page { padding: 2rem; }
+.page-header-admin { display: flex; justify-content: space-between; align-items: center; }
+.page-title { font-size: 2rem; font-weight: 800; color: var(--gray-900); margin: 0 0 0.25rem 0; }
+.text-gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.admin-card { background: white; border-radius: 24px; padding: 2rem; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.02); }
+.badge-custom { padding: 0.5rem 1rem; border-radius: 50px; font-size: 0.85rem; font-weight: 600; }
+.badge-custom.success { background: #D1FAE5; color: #065F46; }
+.badge-custom.danger { background: var(--primary-red-lightest); color: var(--primary-red-dark); }
+.action-buttons { display: flex; gap: 0.5rem; }
+.btn-action { width: 38px; height: 38px; border: none; border-radius: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; text-decoration: none; }
+.btn-action.edit { background: #DBEAFE; color: #1E40AF; }
+.btn-action.edit:hover { background: #3B82F6; color: white; }
+.btn-action.delete { background: var(--primary-red-lightest); color: var(--primary-red); }
+.btn-action.delete:hover { background: var(--primary-red); color: white; }
+.pagination-rounded .page-link { border-radius: 50%; margin: 0 4px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: none; color: var(--gray-700); font-weight: 600; transition: all 0.3s ease; }
+.pagination-rounded .page-item.active .page-link { background: var(--gradient-red); color: white; box-shadow: 0 5px 15px rgba(220,38,38,0.3); }
+
+/* Modal Styles */
+.modal-premium { border: none; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.15); overflow: hidden; }
+.modal-premium .modal-header { padding: 1.5rem 1.75rem 1rem; }
+.modal-premium .modal-body { padding: 0.5rem 1.75rem 1rem; }
+.modal-premium .modal-footer { padding: 0.5rem 1.75rem 1.5rem; }
+.modal-input { border-radius: 12px; border: 1.5px solid #E5E7EB; padding: 0.7rem 1rem; font-size: 0.95rem; transition: all 0.3s ease; }
+.modal-input:focus { border-color: var(--primary-red, #DC2626); box-shadow: 0 0 0 4px rgba(220,38,38,0.08); }
+.fw-800 { font-weight: 800; }
+</style>
+
+<script>
+const createModal = new bootstrap.Modal(document.getElementById('createModal'));
+const editModal   = new bootstrap.Modal(document.getElementById('editModal'));
+
+function openCreateModal() {
+    document.getElementById('createName').value = '';
+    document.getElementById('createDesc').value = '';
+    document.getElementById('createError').classList.add('d-none');
+    createModal.show();
+}
+
+function openEditModal(id, name, desc) {
+    document.getElementById('editId').value   = id;
+    document.getElementById('editName').value = name;
+    document.getElementById('editDesc').value = desc;
+    document.getElementById('editError').classList.add('d-none');
+    editModal.show();
+}
+
+async function submitCreate() {
+    const name = document.getElementById('createName').value.trim();
+    const desc = document.getElementById('createDesc').value.trim();
+    const errEl = document.getElementById('createError');
+    const btn   = document.getElementById('createBtn');
+
+    if (!name) { showErr(errEl, 'Vui lòng nhập tên danh mục.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang thêm...';
+
+    try {
+        const res = await fetch('@Url.Action("CreateJson", "Category", new { area = "Admin" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, description: desc })
+        });
+        const data = await res.json();
+        if (data.success) {
+            createModal.hide();
+            showToast('Thêm danh mục thành công!', 'success');
+            setTimeout(() => location.reload(), 800);
+        } else {
+            showErr(errEl, data.message || 'Không thể thêm danh mục.');
+        }
+    } catch {
+        showErr(errEl, 'Lỗi kết nối. Vui lòng thử lại.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-plus me-2"></i>Thêm Danh Mục';
+    }
+}
+
+async function submitEdit() {
+    const id   = document.getElementById('editId').value;
+    const name = document.getElementById('editName').value.trim();
+    const desc = document.getElementById('editDesc').value.trim();
+    const errEl = document.getElementById('editError');
+    const btn   = document.getElementById('editBtn');
+
+    if (!name) { showErr(errEl, 'Vui lòng nhập tên danh mục.'); return; }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang lưu...';
+
+    try {
+        const res = await fetch('@Url.Action("EditJson", "Category", new { area = "Admin" })', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: parseInt(id), name, description: desc })
+        });
+        const data = await res.json();
+        if (data.success) {
+            editModal.hide();
+            showToast('Cập nhật danh mục thành công!', 'success');
+            setTimeout(() => location.reload(), 800);
+        } else {
+            showErr(errEl, data.message || 'Không thể cập nhật danh mục.');
+        }
+    } catch {
+        showErr(errEl, 'Lỗi kết nối. Vui lòng thử lại.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-save me-2"></i>Lưu Thay Đổi';
+    }
+}
+
+function showErr(el, msg) {
+    el.textContent = msg;
+    el.classList.remove('d-none');
+}
+</script>

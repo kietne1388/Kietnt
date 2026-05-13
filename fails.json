@@ -1,0 +1,18 @@
+[
+  {
+    "title": "TC-AUTH-011: [Pass] Đăng xuất thành công → Không thể truy cập Admin Dashboard",
+    "err": "TimeoutError: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('a[href*=\"Logout\"], button:has-text(\"Đăng xuất\"), a:has-text(\"Đăng xuất\"), a:has-text(\"Logout\")').first()\u001b[22m\n\u001b[2m    - locator resolved to <a class=\"dropdown-item\" href=\"/Guest/Auth/Logout\">…</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    19 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-002: [Pass] Thêm sản phẩm vào giỏ hàng qua API JSON (AddToCart)",
+    "err": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+  },
+  {
+    "title": "TC-GUEST-011: [Pass] Chi tiết sản phẩm ID=1 hiển thị thông tin sản phẩm",
+    "err": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m100\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
+  },
+  {
+    "title": "TC-POS-006: [Pass] API lấy danh sách sản phẩm POS trả về dữ liệu",
+    "err": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+  }
+]

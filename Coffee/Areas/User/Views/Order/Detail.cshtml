@@ -1,0 +1,223 @@
+@model FastFood.Models.Order.OrderDetailModel
+
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <partial name="_UserSidebar" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="profile-main-card">
+                <div class="profile-card-header">
+                    <div>
+                        <h3 class="m-0">Đơn Hàng <span class="text-gradient">#@Model.Id</span></h3>
+                        <small class="text-muted">Ngày đặt: @Model.CreatedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                    </div>
+                    <span class="order-status-badge status-@Model.Status.ToLower()">
+                        @Model.Status
+                    </span>
+                </div>
+
+                <div class="p-4">
+                    <!-- Order Timeline -->
+                    <div class="order-timeline mb-4">
+                        <div class="timeline-step @(Model.Status == "Pending" || Model.Status == "Confirmed" || Model.Status == "Shipping" || Model.Status == "Completed" ? "done" : "")">
+                            <div class="step-icon"><i class="fas fa-check"></i></div>
+                            <div class="step-label"><h6>Đã đặt hàng</h6><small>@Model.CreatedAt.ToString("dd/MM HH:mm")</small></div>
+                        </div>
+                        <div class="timeline-step @(Model.Status == "Confirmed" || Model.Status == "Shipping" || Model.Status == "Completed" ? "done" : "")">
+                            <div class="step-icon"><i class="fas fa-clipboard-check"></i></div>
+                            <div class="step-label"><h6>Đã xác nhận</h6><small>Chờ xác nhận</small></div>
+                        </div>
+                        <div class="timeline-step @(Model.Status == "Shipping" || Model.Status == "Completed" ? "done" : "")">
+                            <div class="step-icon"><i class="fas fa-shipping-fast"></i></div>
+                            <div class="step-label"><h6>Đang giao</h6><small>Chờ giao hàng</small></div>
+                        </div>
+                        <div class="timeline-step @(Model.Status == "Completed" ? "done" : "")">
+                            <div class="step-icon"><i class="fas fa-check-double"></i></div>
+                            <div class="step-label"><h6>Hoàn thành</h6><small>Chờ hoàn thành</small></div>
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="order-section">
+                        <h5 class="section-title-small mb-3"><i class="fas fa-utensils me-2" style="color:#C4956A;"></i>Sản Phẩm Đã Đặt</h5>
+                        @if (Model.Items != null && Model.Items.Any())
+                        {
+                            <div class="order-items-list">
+                                @foreach (var item in Model.Items)
+                                {
+                                    <div class="order-item-row">
+                                        <div class="item-name">
+                                            <strong>@item.ProductName</strong>
+                                            <span class="text-muted">x@item.Quantity</span>
+                                        </div>
+                                        <div class="item-price text-coffee">
+                                            @((item.Price * item.Quantity).ToString("N0"))đ
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Order Info -->
+                    <div class="order-section">
+                        <h5 class="section-title-small mb-3"><i class="fas fa-info-circle me-2" style="color:#C4956A;"></i>Thông Tin Đơn Hàng</h5>
+                        <div class="info-grid-order">
+                            <div class="info-row">
+                                <span>Địa chỉ giao hàng:</span>
+                                <strong>@Model.Address</strong>
+                            </div>
+                            <div class="info-row">
+                                <span>Ghi chú:</span>
+                                <strong>@(string.IsNullOrEmpty(Model.Note) ? "Không có" : Model.Note)</strong>
+                            </div>
+                            <div class="info-row total">
+                                <span>Tổng cộng:</span>
+                                <strong class="text-coffee fs-5">@Model.TotalAmount.ToString("N0")đ</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-3">
+                        <a asp-area="User" asp-controller="Order" asp-action="Index" class="btn-outline-coffee" style="padding:0.6rem 1.5rem; border-radius:12px;">
+                            <i class="fas fa-arrow-left me-2"></i>Quay lại danh sách
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.btn-outline-coffee {
+    border: 2px solid #6F4E37;
+    color: #6F4E37;
+    font-weight: 600;
+    background: transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+}
+.btn-outline-coffee:hover { background: #6F4E37; color: white; }
+.text-coffee { color: #6F4E37 !important; font-weight: 700; }
+.section-title-small { font-weight: 700; color: #2A1C14; font-size: 1.05rem; }
+
+.order-status-badge {
+    padding: 0.4rem 1rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+.status-pending { background: #FEF3C7; color: #92400E; }
+.status-confirmed { background: #DBEAFE; color: #1E40AF; }
+.status-shipping { background: #E0E7FF; color: #3730A3; }
+.status-completed { background: #D1FAE5; color: #065F46; }
+.status-cancelled { background: #FEE2E2; color: #991B1B; }
+
+/* Timeline */
+.order-timeline {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    padding: 1.5rem 0;
+    background: #FAF7F2;
+    border-radius: 16px;
+    padding: 1.5rem 2rem;
+}
+.order-timeline::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    left: 60px;
+    right: 60px;
+    height: 3px;
+    background: #E8D8C8;
+    z-index: 0;
+}
+.timeline-step {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+.step-icon {
+    width: 52px;
+    height: 52px;
+    background: #E8D8C8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 0.75rem;
+    color: #9C8B7E;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+.timeline-step.done .step-icon {
+    background: linear-gradient(135deg, #6F4E37, #C4956A);
+    color: white;
+    box-shadow: 0 5px 15px rgba(111, 78, 55, 0.3);
+}
+.step-label h6 { font-weight: 700; margin-bottom: 0.25rem; font-size: 0.85rem; color: #2A1C14; }
+.step-label small { color: #9C8B7E; font-size: 0.75rem; }
+
+.order-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #F0E8DF;
+}
+.order-section:last-of-type { border-bottom: none; margin-bottom: 0; }
+
+.order-items-list {
+    background: #FAF7F2;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #F0E8DF;
+}
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px dashed #E8D8C8;
+}
+.order-item-row:last-child { border-bottom: none; }
+.item-name { display: flex; gap: 0.75rem; align-items: center; }
+
+.info-grid-order {
+    background: #FAF7F2;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    border: 1px solid #F0E8DF;
+}
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px dashed #E8D8C8;
+    color: #6B5744;
+}
+.info-row:last-child { border-bottom: none; }
+.info-row.total {
+    font-size: 1.1rem;
+    padding-top: 1rem;
+    border-top: 2px solid #C4956A;
+    border-bottom: none;
+}
+
+@@media (max-width: 768px) {
+    .order-timeline { flex-wrap: wrap; gap: 1rem; }
+    .order-timeline::before { display: none; }
+}
+</style>
+
+

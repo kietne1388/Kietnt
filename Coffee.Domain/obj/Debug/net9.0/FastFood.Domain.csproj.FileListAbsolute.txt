@@ -1,0 +1,28 @@
+D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.deps.json
+D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.runtimeconfig.json
+D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.dll
+D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.pdb
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.csproj.AssemblyReference.cache
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.AssemblyInfoInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.AssemblyInfo.cs
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.csproj.CoreCompileInputs.cache
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.dll
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\refint\FastFood.Domain.dll
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.pdb
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.genruntimeconfig.cache
+D:\Assignment\FastFoodNew\FastFood.Domain\obj\Debug\net9.0\ref\FastFood.Domain.dll
+D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.deps.json
+D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.runtimeconfig.json
+D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.dll
+D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.csproj.AssemblyReference.cache
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.AssemblyInfoInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.AssemblyInfo.cs
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.csproj.CoreCompileInputs.cache
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.dll
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\refint\FastFood.Domain.dll
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.pdb
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\FastFood.Domain.genruntimeconfig.cache
+D:\Assignment - Coffee\Coffee\FastFood.Domain\obj\Debug\net9.0\ref\FastFood.Domain.dll

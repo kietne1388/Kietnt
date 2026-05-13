@@ -1,0 +1,164 @@
+@model List<FastFood.Models.Voucher.UserVoucherModel>
+
+@{
+    ViewData["Title"] = "Voucher Của Tôi";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <partial name="_UserSidebar" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="profile-main-card">
+                <div class="profile-card-header">
+                    <h3 class="m-0">Voucher <span class="text-gradient">Của Tôi</span></h3>
+                </div>
+                
+                <div class="p-4">
+                    @if (Model != null && Model.Any())
+                    {
+                        <div class="row g-4">
+                            @foreach (var voucher in Model)
+                            {
+                                <div class="col-xl-4 col-md-6">
+                                    <div class="my-voucher-card @(voucher.IsUsed ? "used" : "")">
+                                        @if (voucher.IsUsed)
+                                        {
+                                            <div class="used-stamp">Đã dùng</div>
+                                        }
+
+                                        <div class="voucher-header">
+                                            <div class="voucher-icon">
+                                                <i class="fas fa-ticket-alt"></i>
+                                            </div>
+                                            <h5 class="voucher-code">@voucher.VoucherCode</h5>
+                                        </div>
+
+                                        <div class="voucher-body">
+                                            <p class="voucher-description">@voucher.Description</p>
+
+                                            <div class="voucher-info">
+                                                @if (voucher.IsUsed && voucher.UsedAt.HasValue)
+                                                {
+                                                    <div class="voucher-used-info">
+                                                        <span>Dùng: @voucher.UsedAt.Value.ToString("dd/MM/yyyy")</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        </div>
+
+                                        @if (!voucher.IsUsed)
+                                        {
+                                            <div class="voucher-footer">
+                                                <button class="btn btn-primary btn-sm w-100" onclick="copyVoucherCode('@voucher.VoucherCode')">
+                                                    <i class="fas fa-copy me-2"></i>Sao Chép Mã
+                                                </button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-state-premium">
+                            <i class="fas fa-ticket-alt fa-5x mb-4" style="color: #C4956A;"></i>
+                            <h4 style="color: #4A2E1A; font-weight: 700;">Chưa có voucher</h4>
+                            <p class="text-muted mb-4">Nhận voucher để được giảm giá!</p>
+                            <a asp-area="Guest" asp-controller="Voucher" asp-action="Index" class="btn btn-premium-sm" style="padding: 1rem 2rem; background: #6F4E37; color: white;">
+                                <i class="fas fa-gift me-2"></i>Xem Voucher Hệ Thống
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.my-voucher-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+    border: 2px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.my-voucher-card.used {
+    opacity: 0.6;
+    filter: grayscale(0.5);
+}
+
+.my-voucher-card:not(.used):hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(111, 78, 55, 0.15);
+    border-color: #6F4E37;
+}
+
+.used-stamp {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    background: var(--gray-900);
+    color: white;
+    padding: 1rem 3rem;
+    font-size: 2rem;
+    font-weight: 900;
+    opacity: 0.8;
+    z-index: 10;
+    border-radius: 10px;
+}
+
+.info-small {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--gray-600);
+    margin-bottom: 0.5rem;
+}
+
+.info-small:last-child {
+    margin-bottom: 0;
+}
+
+.info-small i {
+    color: #6F4E37;
+}
+
+.empty-state-premium {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+</style>
+
+<script>
+function copyVoucherCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+
+        btn.innerHTML = '<i class="fas fa-check me-2"></i>Đã Sao Chép!';
+        btn.classList.add('btn-success');
+        btn.classList.remove('btn-primary');
+
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-primary');
+        }, 2000);
+    });
+}
+</script>

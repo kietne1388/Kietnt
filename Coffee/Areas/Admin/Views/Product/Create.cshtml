@@ -1,0 +1,213 @@
+@model FastFood.Models.Admin.Product.CreateProductModel
+
+@{
+    ViewData["Title"] = "Thêm Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Thêm <span class="text-gradient">Sản Phẩm</span></h1>
+            <p class="text-muted mb-0">Thêm đồ uống mới vào thực đơn CoffeeLux</p>
+        </div>
+        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quảy Lại
+        </a>
+    </div>
+
+    <div class="admin-card">
+        <form asp-area="Admin" asp-controller="Product" asp-action="Create" method="post" enctype="multipart/form-data">
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="form-section">
+                        <h5 class="section-title">Thông Tin Sản Phẩm</h5>
+
+                        <div class="form-group-premium mb-3">
+                            <label class="form-label">Tên sản phẩm *</label>
+                            <input asp-for="Name" class="form-control" placeholder="VD: Burger Bò Phô Mai Special" required>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group-premium mb-3">
+                            <label class="form-label">Danh mục *</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories" required>
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label class="form-label">Giá *</label>
+                                    <div class="input-group">
+                                        <input asp-for="Price" type="number" class="form-control" placeholder="50000">
+                                        <span class="input-group-text">đ</span>
+                                    </div>
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium">
+                            <label class="form-label">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control" rows="5" 
+                                      placeholder="Mô tả chi tiết về sản phẩm..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group-premium">
+                            <label class="form-check-label-custom">
+                                <input asp-for="IsActive" type="checkbox" checked>
+                                <span class="checkmark-custom"></span>
+                                Kích hoạt sản phẩm ngay
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-section">
+                        <h5 class="section-title">Hình Ảnh</h5>
+
+                        <div class="image-upload-area">
+                            <input asp-for="ImageFile" type="file" id="imageInput" accept="image/*" hidden>
+                            <label for="imageInput" class="upload-label">
+                                <div class="upload-placeholder" id="uploadPlaceholder">
+                                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                                    <p>Nhấn để chọn hình ảnh</p>
+                                    <small>PNG, JPG (Max 2MB)</small>
+                                </div>
+                                <div class="premium-image-container" id="imagePreviewContainer" style="display:none;">
+                                    <img id="imagePreview" class="premium-image-square">
+                                </div>
+                            </label>
+                            <span asp-validation-for="ImageFile" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 pt-3 border-top mt-3">
+                <button type="submit" class="btn btn-primary btn-lg px-5">
+                    <i class="fas fa-save me-2"></i>Lưu Sản Phẩm
+                </button>
+                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-light btn-lg px-4">
+                    Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.form-section {
+    background: var(--gray-50);
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 1.5rem;
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--gray-900);
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid var(--primary-red);
+}
+
+.form-check-label-custom {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.form-check-label-custom input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark-custom {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--gray-300);
+    border-radius: 6px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.form-check-label-custom input:checked ~ .checkmark-custom {
+    background: var(--gradient-red);
+    border-color: var(--primary-red);
+}
+
+.form-check-label-custom input:checked ~ .checkmark-custom::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 0.85rem;
+}
+
+.image-upload-area {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.upload-label {
+    display: block;
+    cursor: pointer;
+}
+
+.upload-placeholder {
+    padding: 3rem;
+   text-align: center;
+    color: var(--gray-600);
+    border: 3px dashed var(--gray-300);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.upload-label:hover .upload-placeholder {
+    border-color: var(--primary-red);
+    background: var(--primary-red-lightest);
+}
+
+.image-preview {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--gray-200);
+}
+</style>
+
+<script>
+document.getElementById('imageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('uploadPlaceholder').style.display = 'none';
+            const preview = document.getElementById('imagePreview');
+            const container = document.getElementById('imagePreviewContainer');
+            preview.src = e.target.result;
+            container.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>

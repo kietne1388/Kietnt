@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoffeeLux</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/premium-design.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="/Coffee.ico">
+    <!-- Hotwire Turbo SPA -->
+    <script type="module">
+        import hotwiredTurbo from 'https://cdn.skypack.dev/@@hotwired/turbo';
+    </script>
+</head>
+<body>
+    <!-- User Navigation -->
+    <nav class="navbar-premium navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand-premium" asp-area="Guest" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-hamburger"></i>
+                <span>CoffeeLux</span>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home me-1"></i>Trang Chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Product" asp-action="Index">
+                            <i class="fas fa-utensils me-1"></i>Sản Phẩm
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Combo" asp-action="Index">
+                            <i class="fas fa-box-open me-1"></i>Combo
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="User" asp-controller="Cart" asp-action="Index">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="cart-badge" id="cartBadge">0</span>
+                        </a>
+                    </li>
+
+                    <!-- Notification Bell -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link-premium dropdown-toggle position-relative" href="#" data-bs-toggle="dropdown" id="notifDropdown">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge d-none" id="notifBadge"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end notification-dropdown p-0 border-0 shadow-lg" id="notifList">
+                            <li class="p-3 border-bottom d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold">Thông báo</h6>
+                                <a href="#" class="small text-decoration-none" id="markAllRead">Đánh dấu đã đọc</a>
+                            </li>
+                            <div class="notification-items" style="max-height: 350px; overflow-y: auto;">
+                                <!-- Items will be loaded via JS -->
+                                <li class="p-4 text-center text-muted small">Đang tải thông báo...</li>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown ms-lg-3">
+                        <a class="nav-link-premium dropdown-toggle user-nav-trigger" href="#" data-bs-toggle="dropdown">
+                            <div class="user-avatar-xs me-2">
+                                @(Context.Session.GetString("UserName")?[0].ToString().ToUpper() ?? "U")
+                            </div>
+                            <span>@Context.Session.GetString("UserName")</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end premium-dropdown">
+                            <li><a class="dropdown-item" asp-area="User" asp-controller="Profile" asp-action="Index"><i class="fas fa-user-circle me-2"></i>Hồ Sơ</a></li>
+                            <li><a class="dropdown-item" asp-area="User" asp-controller="Order" asp-action="Index"><i class="fas fa-receipt me-2"></i>Đơn Hàng</a></li>
+                            <li><a class="dropdown-item" asp-area="User" asp-controller="Voucher" asp-action="MyVouchers"><i class="fas fa-ticket-alt me-2"></i>Voucher</a></li>
+                            <li><a class="dropdown-item" asp-area="User" asp-controller="Comment" asp-action="MyComments"><i class="fas fa-comment-alt me-2"></i>Đánh Giá</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" asp-area="Guest" asp-controller="Auth" asp-action="Logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer-premium">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4">
+                    <div class="footer-brand">
+                        <h4><i class="fas fa-coffee me-2"></i>CoffeeLux</h4>
+                        <p>Hương vị tuyệt vời, phục vụ nhanh chóng!</p>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="footer-title">Liên Hệ</h6>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-phone me-2"></i>1900 1234</li>
+                        <li><i class="fas fa-envelope me-2"></i>info@coffeelux.vn</li>
+                    </ul>
+                </div>
+                <div class="col-lg-4">
+                    <h6 class="footer-title">Theo Dõi</h6>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 CoffeeLux. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const userId = '@Context.Session.GetInt32("UserId")';
+        
+        async function fetchNotifications() {
+            if (!userId) return;
+            try {
+                const response = await fetch(`/api/notification/user/${userId}`);
+                if (response.ok) {
+                    const notifications = await response.json();
+                    const unreadCount = notifications.filter(n => !n.isRead).length;
+                    
+                    const badge = document.getElementById('notifBadge');
+                    if (unreadCount > 0) {
+                        badge.innerText = unreadCount;
+                        badge.classList.remove('d-none');
+                    } else {
+                        badge.classList.add('d-none');
+                    }
+
+                    const itemsContainer = document.querySelector('.notification-items');
+                    if (notifications.length === 0) {
+                        itemsContainer.innerHTML = '<li class="p-4 text-center text-muted small">Không có thông báo nào</li>';
+                    } else {
+                        itemsContainer.innerHTML = notifications.map(n => `
+                            <li class="notification-item p-3 border-bottom ${n.isRead ? '' : 'unread'}" onclick="markRead(${n.id})">
+                                <div class="d-flex gap-3">
+                                    <div class="notif-icon-circle ${n.type}">
+                                        <i class="fas fa-info"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-1 fw-bold small">${n.title}</h6>
+                                        <p class="mb-1 extra-small text-muted">${n.message}</p>
+                                        <small class="text-primary smaller">${n.createdAt}</small>
+                                    </div>
+                                </div>
+                            </li>
+                        `).join('');
+                    }
+                }
+            } catch (e) {}
+        }
+
+        async function markRead(id) {
+            await fetch(`/api/notification/mark-read/${id}`, { method: 'POST' });
+            fetchNotifications();
+        }
+
+        document.getElementById('notifDropdown')?.addEventListener('show.bs.dropdown', fetchNotifications);
+        fetchNotifications();
+        if (window.notifIntervalUser) clearInterval(window.notifIntervalUser);
+        window.notifIntervalUser = setInterval(fetchNotifications, 30000); // Polling every 30s
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<style>
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--primary-red);
+    color: white;
+    font-size: 0.65rem;
+    padding: 2px 5px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+
+.notification-dropdown {
+    width: 320px;
+    border-radius: 15px;
+}
+
+.notification-item {
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.notification-item:hover {
+    background: #F9FAFB;
+}
+
+.notification-item.unread {
+    background: #FFF5F5;
+}
+
+.notif-icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--primary-red-lightest);
+    color: var(--primary-red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.extra-small {
+    font-size: 0.8rem;
+    line-height: 1.2;
+}
+
+.smaller {
+    font-size: 0.7rem;
+}
+
+.user-nav-trigger {
+    display: flex !important;
+    align-items: center;
+    padding: 0.5rem 1rem !important;
+    background: #F3F4F6;
+    border-radius: 50px;
+}
+
+.user-avatar-xs {
+    width: 28px;
+    height: 28px;
+    background: var(--gradient-red);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.8rem;
+}
+</style>

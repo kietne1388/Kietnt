@@ -1,0 +1,68 @@
+@model FastFood.Models.User.UpdateProfileModel
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Hồ Sơ";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="dashboard-card">
+                <h3 class="card-title-premium mb-4">Chỉnh Sửa <span class="text-gradient">Thông Tin</span></h3>
+
+                <form asp-area="User" asp-controller="Profile" asp-action="Edit" method="post">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Họ và tên *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input asp-for="FullName" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Email *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input asp-for="Email" type="email" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Số điện thoại *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input asp-for="PhoneNumber" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Địa chỉ *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input asp-for="Address" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i>Lưu Thay Đổi
+                        </button>
+                        <a asp-area="User" asp-controller="Profile" asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-times me-2"></i>Hủy
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

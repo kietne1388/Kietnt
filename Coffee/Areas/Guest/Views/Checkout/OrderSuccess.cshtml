@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Đặt Hàng Thành Công";
+    Layout = "~/Areas/Guest/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container py-5 text-center">
+    <div class="success-card py-5">
+        <div class="success-icon mb-4">
+            <i class="fas fa-check-circle fa-5x text-success"></i>
+        </div>
+        <h2 class="mb-3">Đặt Hàng Thành Công!</h2>
+        <p class="text-muted mb-4">
+            Cảm ơn bạn đã tin dùng sản phẩm của FastFood.<br>
+            Chúng tôi sẽ sớm liên hệ để xác nhận đơn hàng của bạn.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+            <a asp-area="Guest" asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg">
+                <i class="fas fa-home me-2"></i>Về Trang Chủ
+            </a>
+            <a asp-area="User" asp-controller="Order" asp-action="Index" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-receipt me-2"></i>Xem Đơn Hàng
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+.success-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
+    max-width: 600px;
+    margin: 0 auto;
+}
+.success-icon i {
+    animation: bounceIn 0.8s ease;
+}
+@@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); }
+    70% { transform: scale(0.9); }
+    100% { transform: scale(1); opacity: 1; }
+}
+</style>

@@ -1,0 +1,206 @@
+@model List<FastFood.Models.User.UserProfileModel>
+@{
+    ViewData["Title"] = "Quản Lý Người Dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Người Dùng</span></h1>
+            <p class="text-muted mb-0">Tổng cộng <strong>@Model.Count</strong> tài khoản trên hệ thống</p>
+        </div>
+    </div>
+
+    <!-- Search & Filter Bar -->
+    <div class="admin-filters-bar mb-4">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label small fw-bold text-uppercase text-muted">Tìm kiếm</label>
+                <div class="search-input-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="userSearch" class="form-control" placeholder="Tên, email, số điện thoại...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small fw-bold text-uppercase text-muted">Vai trò</label>
+                <select id="roleFilter" class="form-select" style="border-radius:12px;height:48px;">
+                    <option value="">Tất cả</option>
+                    <option value="Admin">Admin</option>
+                    <option value="User">User</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small fw-bold text-uppercase text-muted">Trạng thái</label>
+                <select id="statusFilter" class="form-select" style="border-radius:12px;height:48px;">
+                    <option value="">Tất cả</option>
+                    <option value="active">Hoạt động</option>
+                    <option value="locked">Bị khóa</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button onclick="clearFilters()" class="btn btn-light w-100" style="height:48px;border-radius:12px;">
+                    <i class="fas fa-times me-2"></i>Xóa lọc
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium" id="userTable">
+                <thead>
+                    <tr>
+                        <th>Tên Người Dùng</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Hạng Thành Viên</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in Model)
+                    {
+                        <tr data-name="@(user.FullName?.ToLower()) @(user.Username?.ToLower())"
+                            data-email="@(user.Email?.ToLower())"
+                            data-phone="@(user.PhoneNumber?.ToLower())"
+                            data-role="@user.Role"
+                            data-status="@(user.IsActive ? "active" : "locked")">
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="avatar-sm me-3 bg-primary-light text-primary rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold">@user.FullName</div>
+                                        <small class="text-muted">@user.Username</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>@user.PhoneNumber</td>
+                            <td>
+                                    <form asp-action="UpdateTier" method="post" class="d-inline-block">
+                                        <input type="hidden" name="id" value="@user.Id" />
+                                        <select name="tier" onchange="this.form.submit()" class="form-select form-select-sm d-inline-block w-auto" style="border-radius:8px;">
+                                            <option value="Normal" selected="@(user.MembershipTier == "Normal")">Thường</option>
+                                            <option value="Loyal" selected="@(user.MembershipTier == "Loyal")">Thân thiết</option>
+                                            <option value="VIP" selected="@(user.MembershipTier == "VIP")">VIP</option>
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    <span class="badge-custom @(user.Role == "Admin" ? "danger" : "warning")">
+                                        @user.Role
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge-custom success">Hoạt động</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom danger">Bị khóa</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <a asp-action="Detail" asp-route-id="@user.Id" class="btn-action edit" title="Chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @if (user.Role != "Admin")
+                                        {
+                                            <form asp-action="ToggleStatus" asp-route-id="@user.Id" method="post" class="d-inline">
+                                                <button type="submit" class="btn-action @(user.IsActive ? "delete" : "edit")" title="@(user.IsActive ? "Khóa" : "Mở khóa")">
+                                                    <i class="fas @(user.IsActive ? "fa-ban" : "fa-unlock")"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div id="noResultsMsg" class="text-center py-4 text-muted d-none">
+                <i class="fas fa-search fa-2x mb-3 d-block"></i>Không tìm thấy người dùng phù hợp
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-filters-bar {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.search-input-wrapper i {
+    position: absolute;
+    left: 1.25rem;
+    color: #9CA3AF;
+}
+.search-input-wrapper input {
+    padding-left: 3rem;
+    border-radius: 12px;
+    border: 1.5px solid #F3F4F6;
+    height: 48px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+.search-input-wrapper input:focus {
+    border-color: #DC2626;
+    box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+</style>
+
+<script>
+const userSearch = document.getElementById('userSearch');
+const roleFilter = document.getElementById('roleFilter');
+const statusFilter = document.getElementById('statusFilter');
+
+function applyFilters() {
+    const search = userSearch.value.toLowerCase();
+    const role = roleFilter.value;
+    const status = statusFilter.value;
+    const rows = document.querySelectorAll('#userTable tbody tr');
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+        const nameMatch  = (row.dataset.name  || '').includes(search);
+        const emailMatch = (row.dataset.email || '').includes(search);
+        const phoneMatch = (row.dataset.phone || '').includes(search);
+        const textMatch  = !search || nameMatch || emailMatch || phoneMatch;
+        const roleMatch  = !role   || row.dataset.role   === role;
+        const statusMatch = !status || row.dataset.status === status;
+
+        const visible = textMatch && roleMatch && statusMatch;
+        row.style.display = visible ? '' : 'none';
+        if (visible) visibleCount++;
+    });
+
+    document.getElementById('noResultsMsg').classList.toggle('d-none', visibleCount > 0);
+}
+
+function clearFilters() {
+    userSearch.value = '';
+    roleFilter.value = '';
+    statusFilter.value = '';
+    applyFilters();
+}
+
+userSearch.addEventListener('input', applyFilters);
+roleFilter.addEventListener('change', applyFilters);
+statusFilter.addEventListener('change', applyFilters);
+</script>

@@ -1,0 +1,84 @@
+@using FastFood.Areas.Admin.Controllers
+@model IngredientModel
+@{
+    ViewData["Title"] = "Thêm Nguyên Liệu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Thêm <span class="text-gradient">Nguyên Liệu</span></h1>
+            <p class="text-muted mb-0">Nhập thông tin nguyên liệu mới cho CoffeeLux</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-box-open me-2"></i>Thông Tin Nguyên Liệu
+                    </div>
+                    <div class="form-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label class="field-label">Tên Nguyên Liệu <span class="text-danger">*</span></label>
+                                <input asp-for="TenNguyenLieu" class="form-control field-input" placeholder="VD: Cà phê nguyên hạt" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="field-label">Đơn Vị <span class="text-danger">*</span></label>
+                                <select asp-for="DonVi" class="form-select field-input" required>
+                                    <option value="">-- Chọn --</option>
+                                    <option>kg</option>
+                                    <option>lít</option>
+                                    <option>gram</option>
+                                    <option>ml</option>
+                                    <option>hộp</option>
+                                    <option>túi</option>
+                                    <option>chai</option>
+                                    <option>gói</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="field-label">Mô Tả</label>
+                                <textarea asp-for="MoTa" class="form-control field-input" rows="3" placeholder="Thông tin chi tiết..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-cubes me-2"></i>Kho & Nhập Hàng
+                    </div>
+                    <div class="form-card-body">
+                        <div class="mb-3">
+                            <label class="field-label">Số Lượng Tồn</label>
+                            <input asp-for="SoLuongTon" class="form-control field-input text-end" type="number" min="0" step="0.1" placeholder="0" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="field-label">Giá Nhập</label>
+                            <div class="input-group">
+                                <input asp-for="GiaNhap" class="form-control field-input text-end" type="number" min="0" step="1000" placeholder="0" />
+                                <span class="input-group-text bg-light">₫</span>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <button type="submit" class="btn btn-primary w-100 btn-action-submit">
+                            <i class="fas fa-save me-2"></i>Thêm Nguyên Liệu
+                        </button>
+                        <a asp-action="Index" class="btn btn-light w-100 mt-2">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_FormStyles")

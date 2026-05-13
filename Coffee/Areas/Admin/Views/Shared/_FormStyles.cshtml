@@ -1,0 +1,96 @@
+<style>
+/* ===== SHARED ADMIN FORM STYLES ===== */
+.admin-page { padding: 2rem; }
+
+.page-header-admin { display: flex; justify-content: space-between; align-items: center; }
+.page-title { font-size: 2rem; font-weight: 800; color: var(--gray-900, #111827); margin: 0 0 0.25rem 0; }
+.text-gradient {
+    background: var(--gradient-hero, linear-gradient(135deg,#DC2626,#991B1B));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Card */
+.form-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.07);
+    border: 1px solid rgba(0,0,0,0.04);
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+}
+.form-card:last-child { margin-bottom: 0; }
+
+.form-card-header {
+    padding: 1.1rem 1.5rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, #FFF5F5 0%, #FEF2F2 100%);
+    border-bottom: 2px solid #FCA5A5;
+    color: #DC2626;
+    letter-spacing: 0.3px;
+}
+
+.form-card-body { padding: 1.5rem; }
+
+/* Fields */
+.field-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #374151;
+    margin-bottom: 0.4rem;
+}
+
+.field-input {
+    border-radius: 10px !important;
+    border: 1.5px solid #E5E7EB;
+    font-size: 0.93rem;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+.field-input:focus {
+    border-color: #DC2626 !important;
+    box-shadow: 0 0 0 4px rgba(220,38,38,0.08) !important;
+}
+.input-group .field-input { border-radius: 0 10px 10px 0 !important; }
+.input-group .input-group-text { border-radius: 10px 0 0 10px !important; border-color: #E5E7EB; }
+
+/* Status toggle card */
+.status-toggle-card {
+    padding: 0.85rem 1rem;
+    border-radius: 12px;
+    border: 2px solid #E5E7EB;
+    transition: all 0.3s ease;
+}
+.status-toggle-card.active { background: #ECFDF5; border-color: #6EE7B7; }
+.status-toggle-card.inactive { background: #FEF2F2; border-color: #FCA5A5; }
+
+/* Submit Button */
+.btn-action-submit {
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 12px;
+    letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+}
+.btn-action-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(220,38,38,0.3); }
+
+/* Form section (used in Product) */
+.form-section {
+    background: #FAFAFA;
+    padding: 1.5rem;
+    border-radius: 16px;
+    margin-bottom: 1.25rem;
+    border: 1px solid #F3F4F6;
+}
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #DC2626;
+    margin-bottom: 1.25rem;
+}
+</style>

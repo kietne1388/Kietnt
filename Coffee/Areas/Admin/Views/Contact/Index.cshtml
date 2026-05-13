@@ -1,0 +1,123 @@
+@model List<FastFood.Models.Contact.ContactModel>
+@{
+    ViewData["Title"] = "Phản Hồi Từ Người Dùng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Tin Nhắn <span class="text-gradient">Phản Hồi</span></h1>
+            <p class="text-muted mb-0">Bạn có <strong>@Model.Count(c => !c.IsRead)</strong> tin nhắn chưa đọc</p>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium align-middle">
+                <thead>
+                    <tr>
+                        <th>Người gửi</th>
+                        <th>Chủ đề</th>
+                        <th>Nội dung</th>
+                        <th>Thời gian</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var contact in Model.OrderByDescending(c => c.CreatedAt))
+                        {
+                            <tr class="@(contact.IsRead ? "" : "unread-row")" id="row-@contact.Id">
+                                <td>
+                                    <div class="fw-bold">@contact.Name</div>
+                                    <small class="text-muted">@contact.Email</small>
+                                </td>
+                                <td><span class="fw-bold">@contact.Subject</span></td>
+                                <td class="text-wrap" style="max-width: 300px;">
+                                    @contact.Message
+                                </td>
+                                <td>@contact.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (contact.IsRead)
+                                    {
+                                        <span class="badge-custom success">Đã xem</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge-custom danger pulse">Mới</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="action-buttons text-start justify-content-start">
+                                        @if (!contact.IsRead)
+                                        {
+                                            <button onclick="markAsRead(@contact.Id)" class="btn-action edit" title="Đánh dấu đã đọc" style="background:#D1FAE5;color:#065F46;">
+                                                <i class="fas fa-check"></i>
+                                            </button>
+                                        }
+                                        <form asp-action="Delete" asp-route-id="@contact.Id" method="post" onsubmit="return confirm('Xóa phản hồi này?')" class="d-inline">
+                                            <button type="submit" class="btn-action delete" title="Xóa">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <i class="fas fa-envelope-open d-block mb-3 fs-1 opacity-25"></i>
+                                Chưa có phản hồi nào từ người dùng
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.unread-row {
+    background-color: rgba(220, 38, 38, 0.02);
+}
+
+.unread-row td {
+    font-weight: 500;
+}
+
+.pulse {
+    animation: pulse-animation 2s infinite;
+}
+
+@@keyframes pulse-animation {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.bg-success-light { background: #D1FAE5; }
+.bg-danger-light { background: #FEE2E2; }
+</style>
+
+<script>
+async function markAsRead(id) {
+    try {
+        const response = await fetch(`/Admin/Contact/MarkAsRead/${id}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        if (data.success) {
+            location.reload();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+</script>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CaféLux</title>
+    <!-- Google Fonts: Playfair Display + Lato -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Fonts: Using Times New Roman (system font) -->
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    
+    <!-- Premium Design System -->
+    <link rel="stylesheet" href="~/css/premium-design.css" asp-append-version="true" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/Coffee.ico">
+    
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <!-- Premium Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-premium sticky-top">
+        <div class="container">
+            <a class="navbar-brand-premium" asp-area="Guest" asp-controller="Home" asp-action="Index">
+                <i class="fas fa-coffee"></i>
+                <span>Café<span class="brand-accent">Lux</span></span>
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Home" asp-action="Index">
+                            <i class="fas fa-home"></i> Trang chủ
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Product" asp-action="Index">
+                            <i class="fas fa-mug-hot"></i> Thực đơn
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Combo" asp-action="Index">
+                            <i class="fas fa-box-open"></i> Ưu đãi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Home" asp-action="About">
+                            <i class="fas fa-leaf"></i> Về chúng tôi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-premium" asp-area="Guest" asp-controller="Home" asp-action="Contact">
+                            <i class="fas fa-map-marker-alt"></i> Liên hệ
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="navbar-actions">
+                    @{
+                        var userId = Context.Session.GetInt32("UserId");
+                        var userName = Context.Session.GetString("UserName");
+                        var cartCount = Context.Session.GetInt32("CartCount") ?? 0;
+                    }
+                    
+                    <!-- Notification Bell - For all users -->
+                    <div class="dropdown notification-dropdown">
+                        <button class="btn-icon-premium notification-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="notificationBell">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge" id="notificationCount" style="display: none;">0</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-notifications">
+                            <li class="dropdown-header">
+                                <strong><i class="fas fa-bell me-2"></i>Thông Báo</strong>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li id="notificationList">
+                                <div class="text-center p-3 text-muted">
+                                    <i class="fas fa-bell-slash"></i> Không có thông báo mới
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Cart Icon - For all users -->
+                    <a asp-area="Guest" asp-controller="Cart" asp-action="Index" class="btn-icon-premium cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-badge" id="cartBadgeGlobal" style="@(cartCount > 0 ? "" : "display: none;")">@cartCount</span>
+                    </a>
+                    
+                    @if (userId.HasValue)
+                    {
+                        var userRole = Context.Session.GetString("UserRole") ?? "Customer";
+
+                        <!-- User Dropdown -->
+                        <div class="dropdown user-dropdown">
+                            <button class="btn-user-premium dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i>
+                                <span>@userName</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-premium">
+                                @if (userRole == "Admin")
+                                {
+                                    <li>
+                                        <a class="dropdown-item text-warning fw-semibold" asp-area="Admin" asp-controller="DashBoard" asp-action="Index">
+                                            <i class="fas fa-shield-alt"></i> Quản Trị
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <a class="dropdown-item" asp-area="User" asp-controller="Profile" asp-action="Index">
+                                            <i class="fas fa-user"></i> Tài khoản
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="User" asp-controller="Order" asp-action="Index">
+                                            <i class="fas fa-receipt"></i> Đơn hàng
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="User" asp-controller="Voucher" asp-action="MyVouchers">
+                                            <i class="fas fa-ticket-alt"></i> Voucher
+                                        </a>
+                                    </li>
+                                }
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item text-danger" asp-area="Guest" asp-controller="Auth" asp-action="Logout">
+                                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+
+                    else
+                    {
+                        <a asp-area="Guest" asp-controller="Auth" asp-action="Login" class="btn btn-outline-primary">
+                            <i class="fas fa-sign-in-alt"></i> Đăng nhập
+                        </a>
+                        <a asp-area="Guest" asp-controller="Auth" asp-action="Register" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Đăng ký
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Premium Footer -->
+    <footer class="footer-premium">
+        <div class="footer-top">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-lg-3 col-md-6">
+                        <div class="footer-brand">
+                            <h3><i class="fas fa-coffee"></i> Café<span>Lux</span></h3>
+                            <p class="mt-3">Không gian cà phê tinh tế – nơi mỗi tách cà phê là một hành trình khám phá hương vị đặc sắc.</p>
+                            <div class="social-links mt-4">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-tiktok"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-title">Liên kết nhanh</h5>
+                        <ul class="footer-links">
+                            <li><a asp-area="Guest" asp-controller="Home" asp-action="About">Về chúng tôi</a></li>
+                            <li><a asp-area="Guest" asp-controller="Product" asp-action="Index">Thực đơn đồ uống</a></li>
+                            <li><a asp-area="Guest" asp-controller="Combo" asp-action="Index">Combo ưu đãi</a></li>
+                            <li><a asp-area="Guest" asp-controller="Home" asp-action="Contact">Liên hệ</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-title">Chính sách</h5>
+                        <ul class="footer-links">
+                            <li><a asp-area="Guest" asp-controller="Home" asp-action="Privacy">Chính sách bảo mật</a></li>
+                            <li><a href="#">Điều khoản sử dụng</a></li>
+                            <li><a href="#">Chính sách đổi trả</a></li>
+                            <li><a href="#">Hướng dẫn đặt hàng</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-6">
+                        <h5 class="footer-title">Tìm chúng tôi</h5>
+                        <ul class="footer-contact">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>123 Đường Nguyễn Huệ, Q.1, TP.HCM</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <span>1900 6868</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>hello@cafelux.vn</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-clock"></i>
+                                <span>7:00 - 23:00 (Hàng ngày)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start">
+                        <p class="mb-0">&copy; 2026 CaféLux. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="payment-methods">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Welcome Gift Modal -->
+    @if (TempData["ShowWelcomeGift"] != null && Context.Session.GetInt32("UserId").HasValue)
+    {
+        var newUserId = Context.Session.GetInt32("UserId");
+        <div class="modal fade" id="welcomeGiftModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 bg-transparent shadow-none">
+                    <div class="welcome-gift-container text-center">
+                        <div class="gift-box-animation" onclick="openWelcomeGift(@newUserId)">
+                            <img src="/images/GiftBox.png" id="giftBoxImg" alt="Gift Box" class="img-fluid gift-shake" style="cursor: pointer; max-width: 200px;" />
+                            <h3 class="text-white mt-3 text-shadow" id="giftPromptText">Nhấn để mở quà chào mừng!</h3>
+                        </div>
+                        
+                        <div id="welcomeVouchersResult" class="card card-body rounded-4 shadow-lg p-4 mt-3" style="display: none; background: #fff; border: 2px solid #C4956A;">
+                            <div class="text-end">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <h4 class="text-gradient fw-bold mb-3"><i class="fas fa-gift me-2"></i>Quà Tặng Của Bạn</h4>
+                            <div id="vouchersListContainer" class="vouchers-grid text-start">
+                                <!-- Vouchers will be loaded here via JS -->
+                                <div class="text-center py-3"><div class="spinner-border text-primary" role="status"></div></div>
+                            </div>
+                            <div class="mt-4">
+                                <a asp-area="User" asp-controller="Voucher" asp-action="MyVouchers" class="btn-coffee-primary w-100"> Xem Ví Voucher Của Tôi</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                var giftModal = new bootstrap.Modal(document.getElementById('welcomeGiftModal'));
+                giftModal.show();
+            });
+
+            function openWelcomeGift(userId) {
+                var img = document.getElementById('giftBoxImg');
+                img.classList.remove('gift-shake');
+                img.style.transform = 'scale(1.2)';
+                img.style.transition = 'transform 0.5s ease';
+                document.getElementById('giftPromptText').style.display = 'none';
+                
+                setTimeout(() => {
+                    img.style.display = 'none';
+                    document.getElementById('welcomeVouchersResult').style.display = 'block';
+                    
+                    // Fetch vouchers using the MVC proxy
+                    fetch('/Guest/Home/GetWelcomeVouchers/' + userId)
+                        .then(r => r.json())
+                        .then(data => {
+                            let html = '';
+                            if (data && data.length > 0) {
+                                // Show first 3 vouchers representing the welcome pack
+                                data.slice(0, 3).forEach(v => {
+                                    html += `<div class="voucher-mini-card mb-2 p-2 border rounded" style="background:#FAF7F4;border-color:#E8D5C0!important">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="fs-2 me-3" style="color:#D4A853"><i class="fas fa-ticket-alt"></i></div>
+                                                    <div>
+                                                        <h6 class="mb-0 fw-bold" style="color:#2C1A0E">${v.voucherCode}</h6>
+                                                        <small class="text-muted">Giảm ${v.discountPercent}% - HSD: ${new Date(v.expiredAt).toLocaleDateString('vi-VN')}</small>
+                                                    </div>
+                                                </div>
+                                            </div>`;
+                                });
+                            } else {
+                                html = '<p class="text-muted text-center">Đang tải quà tặng...</p>';
+                            }
+                            document.getElementById('vouchersListContainer').innerHTML = html;
+                            
+                            // Fire confetti
+                            if (typeof confetti === 'function') {
+                                confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 } });
+                            }
+                        })
+                        .catch(err => {
+                            document.getElementById('vouchersListContainer').innerHTML = '<p class="text-danger">Lỗi tải dữ liệu quà tặng.</p>';
+                        });
+                }, 600);
+            }
+        </script>
+        <style>
+            .welcome-gift-container { position: relative; z-index: 1060; }
+            .text-shadow { text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+            .gift-shake { animation: shake 1.5s infinite; }
+            @@keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(-10deg); } 50% { transform: rotate(10deg); } 75% { transform: rotate(-10deg); } 100% { transform: rotate(0deg); } }
+        </style>
+    }
+
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <!-- Premium Enhancements -->
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar-premium');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Back to top button
+        const backToTop = document.getElementById('backToTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+        
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+    
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+<style>
+/* ===== NAVBAR PREMIUM ===== */
+.navbar-premium {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(111, 78, 55, 0.08);
+    border-bottom: 1px solid #E8D8C8;
+    padding: 1.25rem 0;
+    transition: all 0.3s ease;
+}
+
+.navbar-premium.scrolled {
+    box-shadow: 0 4px 25px rgba(111, 78, 55, 0.15);
+    padding: 0.75rem 0;
+}
+
+.navbar-brand-premium {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: 'Times New Roman', Times, serif;
+    color: var(--gray-900);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand-premium i {
+    color: var(--primary-red);
+    font-size: 1.75rem;
+}
+
+.navbar-brand-premium .brand-accent {
+    color: var(--primary-red);
+}
+
+.navbar-brand-premium:hover {
+    transform: scale(1.05);
+}
+
+.navbar-toggler-premium {
+    border: none;
+    background: none;
+    width: 30px;
+    height: 24px;
+    position: relative;
+    cursor: pointer;
+}
+
+.navbar-toggler-premium span {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background: var(--primary-red);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    position: absolute;
+}
+
+.navbar-toggler-premium span:nth-child(1) { top: 0; }
+.navbar-toggler-premium span:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.navbar-toggler-premium span:nth-child(3) { bottom: 0; }
+
+.nav-link-premium {
+    color: var(--gray-700);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    border-radius: var(--radius-lg);
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.nav-link-premium i {
+    font-size: 0.9rem;
+}
+
+.nav-link-premium:hover,
+.nav-link-premium.active {
+    color: var(--primary-red);
+    background: var(--primary-red-lightest);
+}
+
+.nav-link-premium::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    width: 80%;
+    height: 2px;
+    background: var(--primary-red);
+    transition: transform 0.3s ease;
+}
+
+.nav-link-premium:hover::after {
+    transform: translateX(-50%) scaleX(1);
+}
+
+.navbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-icon-premium {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--gray-100);
+    color: var(--gray-700);
+    transition: all 0.3s ease;
+    position: relative;
+    text-decoration: none;
+}
+
+.btn-icon-premium:hover {
+    background: var(--primary-red);
+    color: white;
+    transform: scale(1.1);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--gradient-red);
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--primary-red);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+    box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
+    animation: pulse 2s infinite;
+}
+
+
+@@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.dropdown-notifications {
+    min-width: 350px;
+    max-height: 400px;
+    overflow-y: auto;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-notifications .dropdown-header {
+    background: var(--gray-100);
+    padding: 1rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.notification-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--gray-100);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: var(--gray-50);
+}
+
+.notification-item.unread {
+    background: var(--primary-red-lightest);
+}
+
+.notification-item .notification-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-red-light);
+    color: white;
+    margin-right: 1rem;
+}
+
+.notification-item .notification-content {
+    flex: 1;
+}
+
+.notification-item .notification-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.notification-item .notification-message {
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.notification-item .notification-time {
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    margin-top: 0.25rem;
+}
+
+.btn-user-premium {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: var(--gray-100);
+    border: none;
+    border-radius: var(--radius-full);
+    color: var(--gray-700);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-user-premium:hover {
+    background: var(--primary-red);
+    color: white;
+}
+
+.dropdown-premium {
+    background: white;
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-xl);
+    border-radius: var(--radius-lg);
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.dropdown-premium .dropdown-item {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dropdown-premium .dropdown-item:hover {
+    background: var(--primary-red-lightest);
+    color: var(--primary-red);
+}
+
+/* ===== FOOTER PREMIUM ===== */
+.footer-premium {
+    background: #2A1C14;
+    color: #E8D8C8;
+    margin-top: 5rem;
+    border-top: 4px solid #6F4E37;
+}
+
+.footer-top {
+    padding: 4rem 0 2rem;
+}
+
+.footer-brand h3 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 0;
+}
+
+.footer-brand h3 i {
+    color: var(--coffee-gold);
+}
+
+.footer-brand h3 span {
+    color: var(--coffee-gold);
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-links a {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: var(--primary-red);
+    transform: translateY(-3px);
+}
+
+.footer-title {
+    color: white;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 0.75rem;
+}
+
+.footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 3px;
+    background: var(--primary-red);
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.75rem;
+}
+
+.footer-links a {
+    color: var(--gray-400);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.footer-links a:hover {
+    color: var(--primary-red);
+    transform: translateX(5px);
+}
+
+.footer-contact {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--gray-400);
+}
+
+.footer-contact i {
+    color: var(--primary-red);
+    margin-top: 3px;
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+}
+
+.payment-methods {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    justify-content: flex-end;
+}
+
+.payment-methods i {
+    font-size: 1.5rem;
+    color: var(--gray-600);
+    transition: all 0.3s ease;
+}
+
+.payment-methods i:hover {
+    color: var(--primary-red);
+    transform: scale(1.2);
+}
+
+/* ===== BACK TO TOP ===== */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-red);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: var(--shadow-red-lg);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(220, 38, 38, 0.5);
+}
+
+@@media (max-width: 991px) {
+    .navbar-nav {
+        margin-top: 1rem;
+    }
+    
+    .navbar-actions {
+        margin-top: 1rem;
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// Load notifications on page load
+document.addEventListener('DOMContentLoaded', function() {
+    loadNotifications();
+    loadCartCount();
+    
+    // Refresh notifications every 30 seconds
+    setInterval(loadNotifications, 30000);
+});
+
+function loadNotifications() {
+    var userId = '@Context.Session.GetInt32("UserId")';
+    if (!userId || userId === '') {
+        // For guests, show general notifications (userId = null)
+        userId = 0;
+    }
+    
+    fetch('/api/notification/user/' + userId)
+        .then(response => {
+            if (!response.ok) throw new Error('API 404');
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.length > 0) {
+                updateNotificationList(data);
+                updateNotificationCount(data.filter(n => !n.isRead).length);
+            }
+        })
+        .catch(err => console.log('Notification API not available yet.'));
+}
+
+function updateNotificationList(notifications) {
+    var listEl = document.getElementById('notificationList');
+    if (!listEl) return;
+    
+    if (notifications.length === 0) {
+        listEl.innerHTML = '<div class="text-center p-3 text-muted"><i class="fas fa-bell-slash"></i> Không có thông báo mới</div>';
+        return;
+    }
+    
+    var html = '';
+    notifications.forEach(function(notif) {
+        var icon = 'fa-bell';
+        if (notif.type === 'NewProduct') icon = 'fa-hamburger';
+        else if (notif.type === 'NewCombo') icon = 'fa-box';
+        else if (notif.type === 'NewVoucher') icon = 'fa-ticket-alt';
+        else if (notif.type === 'VoucherExpiring') icon = 'fa-clock';
+        
+        html += '<li class="notification-item' + (!notif.isRead ? ' unread' : '') + '" onclick="markAsRead(' + notif.id + ', \'' + (notif.url || '#') + '\')">';
+        html += '  <div class="d-flex align-items-start">';
+        html += '    <div class="notification-icon"><i class="fas ' + icon + '"></i></div>';
+        html += '    <div class="notification-content">';
+        html += '      <div class="notification-title">' + notif.title + '</div>';
+        html += '      <div class="notification-message">' + notif.message + '</div>';
+        html += '      <div class="notification-time">' + notif.createdAt + '</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '</li>';
+    });
+    
+    listEl.innerHTML = html;
+}
+
+function updateNotificationCount(count) {
+    var badge = document.getElementById('notificationCount');
+    if (badge) {
+        if (count > 0) {
+            badge.textContent = count > 99 ? '99+' : count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+}
+
+function markAsRead(notificationId, url) {
+    fetch('/api/notification/mark-read/' + notificationId, { method: 'POST' })
+        .then(() => {
+            if (url && url !== '#') {
+                window.location.href = url;
+            } else {
+                loadNotifications();
+            }
+        });
+}
+
+function loadCartCount() {
+    fetch('/Guest/Cart/GetCart')
+        .then(response => {
+            if (!response.ok) throw new Error('Cart API 404');
+            return response.json();
+        })
+        .then(data => {
+            if (data && data.count !== undefined) {
+                updateCartBadge(data.count);
+            }
+        })
+        .catch(err => console.log('Cart count sync skip.'));
+}
+
+function updateCartBadge(count) {
+    var badges = document.querySelectorAll('.cart-badge');
+    badges.forEach(function(badge) {
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    });
+}
+
+// Add to Cart function (to be called from product cards)
+function addToCart(id, quantity, type) {
+    quantity = quantity || 1;
+    type = type || 'product';
+    
+    var url = type === 'combo' ? '/Guest/Cart/AddComboToCart' : '/Guest/Cart/AddToCart';
+    var payload = type === 'combo' ? { comboId: id, quantity: quantity } : { productId: id, quantity: quantity };
+    
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success notification
+            showNotification(data.message, 'success');
+            updateCartBadge(data.cartCount);
+        } else {
+            showNotification(data.message, 'error');
+        }
+    })
+    .catch(err => {
+        showNotification('Có lỗi xảy ra', 'error');
+    });
+}
+
+function buyNow(id, quantity, type) {
+    quantity = quantity || 1;
+    type = type || 'product';
+    
+    var url = type === 'combo' ? '/Guest/Cart/AddComboToCart' : '/Guest/Cart/AddToCart';
+    var payload = type === 'combo' ? { comboId: id, quantity: quantity } : { productId: id, quantity: quantity };
+    
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            window.location.href = '/Guest/Checkout/Index';
+        } else {
+            if (data.message && data.message.indexOf('đăng nhập') >= 0) {
+                window.location.href = '/Guest/Auth/Login';
+            } else {
+                showNotification(data.message, 'error');
+            }
+        }
+    })
+    .catch(err => {
+        showNotification('Có lỗi xảy ra', 'error');
+    });
+}
+
+function showNotification(message, type) {
+    // Create toast notification
+    var toast = document.createElement('div');
+    toast.className = 'toast-notification toast-' + type;
+    toast.innerHTML = '<i class="fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle') + '"></i> ' + message;
+    toast.style.cssText = 'position: fixed; top: 100px; right: 20px; background: ' + (type === 'success' ? '#10b981' : '#ef4444') + '; color: white; padding: 1rem 1.5rem; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 9999; animation: slideIn 0.3s ease;';
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(function() {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(function() { toast.remove(); }, 300);
+    }, 3000);
+}
+</script>
+
+<style>
+@@keyframes slideIn {
+    from { transform: translateX(400px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(400px); opacity: 0; }
+}
+</style>
+

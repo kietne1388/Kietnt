@@ -1,0 +1,173 @@
+@model FastFood.Models.Admin.Product.UpdateProductModel
+
+@{
+    ViewData["Title"] = "Chỉnh Sửa Sản Phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Chỉnh Sửa <span class="text-gradient">Sản Phẩm</span></h1>
+            <p class="text-muted mb-0">Cập nhật thông tin sản phẩm</p>
+        </div>
+        <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quảy Lại
+        </a>
+    </div>
+
+    <div class="admin-card">
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="ImageUrl" />
+            
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="form-section">
+                        <h5 class="section-title">Thông Tin Sản Phẩm</h5>
+
+                        <div class="form-group-premium mb-3">
+                            <label class="form-label">Tên sản phẩm *</label>
+                            <input asp-for="Name" class="form-control" required>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group-premium mb-3">
+                            <label class="form-label">Danh mục *</label>
+                            <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories" required>
+                                <option value="">-- Chọn danh mục --</option>
+                            </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-group-premium">
+                                    <label class="form-label">Giá *</label>
+                                    <div class="input-group">
+                                        <input asp-for="Price" type="number" class="form-control">
+                                        <span class="input-group-text">đ</span>
+                                    </div>
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group-premium">
+                            <label class="form-label">Mô tả</label>
+                            <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                        </div>
+
+                        <div class="form-group-premium">
+                            <label class="form-check-label-custom">
+                                <input asp-for="IsActive" type="checkbox">
+                                <span class="checkmark-custom"></span>
+                                Kích hoạt sản phẩm
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-section">
+                        <h5 class="section-title">Hình Ảnh</h5>
+
+                        <div class="image-upload-area">
+                            @if (!string.IsNullOrEmpty(Model.CurrentImageUrl))
+                            {
+                                <div class="premium-image-container" id="imagePreviewContainer">
+                                    <img src="@Model.CurrentImageUrl" class="premium-image-square" id="imagePreview">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="upload-placeholder" id="uploadPlaceholder">
+                                    <i class="fas fa-cloud-upload-alt fa-3x mb-3"></i>
+                                    <p>Nhấn để chọn hình mới</p>
+                                </div>
+                                <div class="premium-image-container" id="imagePreviewContainer" style="display:none;">
+                                    <img id="imagePreview" class="premium-image-square">
+                                </div>
+                            }
+                            <input asp-for="ImageFile" type="file" id="imageInput" accept="image/*" hidden>
+                            <label for="imageInput" class="upload-label-overlay">
+                                <i class="fas fa-camera"></i> Đổi ảnh
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-3 pt-3 border-top mt-3">
+                <button type="submit" class="btn btn-warning text-white btn-lg px-5">
+                    <i class="fas fa-save me-2"></i>Lưu Thay Đổi
+                </button>
+                <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="btn btn-light btn-lg px-4">
+                    Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.upload-label-overlay {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-red);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 5px 15px rgba(220, 38, 38, 0.4);
+    transition: all 0.3s ease;
+}
+
+.upload-label-overlay:hover {
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 8px 20px rgba(220, 38, 38, 0.5);
+}
+
+.image-upload-area {
+    position: relative;
+}
+</style>
+
+<script>
+document.getElementById('imageInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const placeholder = document.getElementById('uploadPlaceholder');
+            if (placeholder) placeholder.style.display = 'none';
+            
+            let preview = document.getElementById('imagePreview');
+            let container = document.getElementById('imagePreviewContainer');
+            
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'imagePreviewContainer';
+                container.className = 'premium-image-container';
+                
+                preview = document.createElement('img');
+                preview.id = 'imagePreview';
+                preview.className = 'premium-image-square';
+                
+                container.appendChild(preview);
+                document.querySelector('.image-upload-area').prepend(container);
+            }
+            
+            preview.src = e.target.result;
+            container.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>

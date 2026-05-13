@@ -1,0 +1,130 @@
+@using FastFood.Areas.Admin.Controllers
+@model List<IngredientModel>
+@{
+    ViewData["Title"] = "Quản Lý Nguyên Liệu";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Nguyên Liệu</span></h1>
+            <p class="text-muted mb-0">Theo dõi tồn kho nguyên liệu CaféLux</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Thêm Nguyên Liệu
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="admin-stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #6f42c1, #e83e8c);">
+                    <i class="fas fa-box"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>@Model.Count</h3>
+                    <p>Loại Nguyên Liệu</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="admin-stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #28a745, #20c997);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>@Model.Count(i => i.TrangThai)</h3>
+                    <p>Đang Sử Dụng</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="admin-stat-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #D4A853, #B8860B);">
+                    <i class="fas fa-money-bill"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>@Model.Sum(i => i.SoLuongTon * i.GiaNhap).ToString("N0")₫</h3>
+                    <p>Giá Trị Tồn Kho</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tên Nguyên Liệu</th>
+                        <th>Đơn Vị</th>
+                        <th>Số Lượng Tồn</th>
+                        <th>Giá Nhập</th>
+                        <th>Giá Trị</th>
+                        <th>Mô Tả</th>
+                        <th>Trạng Thái</th>
+                        <th>Thao Tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td><span class="badge bg-secondary">@item.Id</span></td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <div style="width:32px;height:32px;background:linear-gradient(135deg,#D4A853,#B8860B);border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                                        <i class="fas fa-leaf text-white" style="font-size:0.8rem;"></i>
+                                    </div>
+                                    <strong>@item.TenNguyenLieu</strong>
+                                </div>
+                            </td>
+                            <td><span class="badge bg-light text-dark border">@item.DonVi</span></td>
+                            <td>
+                                <span class="fw-bold @(item.SoLuongTon < 5 ? "text-danger" : "text-success")">
+                                    @item.SoLuongTon.ToString("N1")
+                                </span>
+                                @if (item.SoLuongTon < 5)
+                                {
+                                    <span class="badge bg-danger ms-1">Sắp hết</span>
+                                }
+                            </td>
+                            <td>@item.GiaNhap.ToString("N0") ₫</td>
+                            <td class="fw-semibold text-primary">@((item.SoLuongTon * item.GiaNhap).ToString("N0")) ₫</td>
+                            <td class="text-muted small">@(string.IsNullOrEmpty(item.MoTa) ? "—" : item.MoTa)</td>
+                            <td>
+                                <span class="badge-custom @(item.TrangThai ? "success" : "danger")">
+                                    @(item.TrangThai ? "Đang dùng" : "Ngừng dùng")
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action edit" title="Sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('Xóa nguyên liệu này?')">
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="btn-action delete" title="Xóa">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

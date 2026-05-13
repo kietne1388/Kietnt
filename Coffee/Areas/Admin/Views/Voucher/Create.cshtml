@@ -1,0 +1,127 @@
+@model FastFood.Models.Admin.Voucher.CreateVoucherModel
+@{
+    ViewData["Title"] = "Tạo Voucher";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Tạo <span class="text-gradient">Voucher Mới</span></h1>
+            <p class="text-muted mb-0">Tạo mã giảm giá mới cho khách hàng CoffeeLux</p>
+        </div>
+        <a asp-area="Admin" asp-controller="Voucher" asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <form asp-area="Admin" asp-controller="Voucher" asp-action="Create" method="post">
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-ticket-alt me-2"></i>Thông Tin Voucher
+                    </div>
+                    <div class="form-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="field-label">Mã Voucher <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-barcode text-muted"></i></span>
+                                    <input asp-for="Code" class="form-control field-input border-start-0 ps-0 fw-bold" placeholder="VD: SUMMER2024" style="text-transform:uppercase;" />
+                                </div>
+                                <span asp-validation-for="Code" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Số Lượng <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-hashtag text-muted"></i></span>
+                                    <input asp-for="Quantity" type="number" class="form-control field-input border-start-0 ps-0" placeholder="100" min="1" />
+                                </div>
+                                <span asp-validation-for="Quantity" class="text-danger small"></span>
+                            </div>
+                            <div class="col-12">
+                                <label class="field-label">Mô Tả</label>
+                                <textarea asp-for="Description" class="form-control field-input" rows="3" placeholder="Nhập mô tả chi tiết về voucher..."></textarea>
+                            </div>
+                            <div class="col-md-5">
+                                <label class="field-label">Loại Giảm Giá</label>
+                                <select class="form-select field-input" id="discountType">
+                                    <option value="percent"><i class="fas fa-percent"></i> Phần trăm (%)</option>
+                                    <option value="amount">Số tiền cố định (₫)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-7">
+                                <label class="field-label">Giá Trị Giảm <span class="text-danger">*</span></label>
+                                <div id="percentInput">
+                                    <div class="input-group">
+                                        <input asp-for="DiscountPercent" type="number" class="form-control field-input" placeholder="VD: 20" min="1" max="100" />
+                                        <span class="input-group-text bg-light fw-bold">%</span>
+                                    </div>
+                                </div>
+                                <div id="amountInput" style="display:none;">
+                                    <div class="input-group">
+                                        <input asp-for="DiscountAmount" type="number" class="form-control field-input" placeholder="VD: 50000" min="0" />
+                                        <span class="input-group-text bg-light fw-bold">₫</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Ngày Hết Hạn <span class="text-danger">*</span></label>
+                                <input asp-for="ExpiredAt" type="date" class="form-control field-input" />
+                                <span asp-validation-for="ExpiredAt" class="text-danger small"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-toggle-on me-2"></i>Trạng Thái & Lưu
+                    </div>
+                    <div class="form-card-body">
+                        <div class="status-toggle-card active mb-3">
+                            <div class="form-check form-switch mb-0">
+                                <input asp-for="IsActive" class="form-check-input" type="checkbox" role="switch" id="activeSwitch" checked />
+                                <label class="form-check-label fw-bold" for="activeSwitch">Kích hoạt ngay</label>
+                            </div>
+                            <small class="text-muted d-block mt-1">Voucher sẽ hiển thị với khách hàng</small>
+                        </div>
+
+                        <div class="voucher-preview mb-3">
+                            <div class="voucher-preview-label">Xem trước mã</div>
+                            <div class="voucher-code-preview" id="codePreview">XXXXXX</div>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn btn-primary w-100 btn-action-submit">
+                            <i class="fas fa-plus me-2"></i>Tạo Voucher
+                        </button>
+                        <a asp-area="Admin" asp-controller="Voucher" asp-action="Index" class="btn btn-light w-100 mt-2">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_FormStyles")
+
+<style>
+.voucher-preview { background: #FFF5F5; border: 2px dashed #FCA5A5; border-radius: 12px; padding: 1rem; text-align: center; }
+.voucher-preview-label { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: #9CA3AF; letter-spacing: 1px; margin-bottom: 0.5rem; }
+.voucher-code-preview { font-family: 'Courier New', monospace; font-size: 1.5rem; font-weight: 900; color: #DC2626; letter-spacing: 3px; }
+</style>
+
+<script>
+document.getElementById('discountType').addEventListener('change', function() {
+    document.getElementById('percentInput').style.display = this.value === 'percent' ? 'block' : 'none';
+    document.getElementById('amountInput').style.display = this.value === 'amount' ? 'block' : 'none';
+    if (this.value === 'percent') document.querySelector('#amountInput input').value = '';
+    else document.querySelector('#percentInput input').value = '';
+});
+document.querySelector('[name="Code"]').addEventListener('input', function() {
+    document.getElementById('codePreview').textContent = this.value.toUpperCase() || 'XXXXXX';
+});
+</script>

@@ -1,0 +1,109 @@
+@using FastFood.Areas.Admin.Controllers
+@model EmployeeModel
+@{
+    ViewData["Title"] = "Sửa Nhân Viên";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Chỉnh Sửa <span class="text-gradient">Nhân Viên</span></h1>
+            <p class="text-muted mb-0">Cập nhật thông tin: <strong>@Model.HoTen</strong></p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary px-4">
+            <i class="fas fa-arrow-left me-2"></i>Quay Lại
+        </a>
+    </div>
+
+    <form asp-action="Edit" method="post">
+        <input asp-for="Id" type="hidden" />
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-user-tie me-2"></i>Thông Tin Cá Nhân
+                    </div>
+                    <div class="form-card-body">
+                        <div class="row g-3">
+                            <div class="col-md-7">
+                                <label class="field-label">Họ và Tên <span class="text-danger">*</span></label>
+                                <input asp-for="HoTen" class="form-control field-input" required />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="field-label">Chức Vụ <span class="text-danger">*</span></label>
+                                <select asp-for="ChucVu" class="form-select field-input" required>
+                                    <option value="">-- Chọn chức vụ --</option>
+                                    <option>Pha chế</option>
+                                    <option>Thu ngân</option>
+                                    <option>Phục vụ</option>
+                                    <option>Quản lý ca</option>
+                                    <option>Bảo vệ</option>
+                                    <option>Vệ sinh</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-envelope text-muted"></i></span>
+                                    <input asp-for="Email" class="form-control field-input border-start-0 ps-0" type="email" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="field-label">Số Điện Thoại</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light border-end-0"><i class="fas fa-phone text-muted"></i></span>
+                                    <input asp-for="SoDienThoai" class="form-control field-input border-start-0 ps-0" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <i class="fas fa-briefcase me-2"></i>Thông Tin Công Việc
+                    </div>
+                    <div class="form-card-body">
+                        <div class="mb-3">
+                            <label class="field-label">Lương Cơ Bản</label>
+                            <div class="input-group">
+                                <input asp-for="LuongCoBan" class="form-control field-input text-end" type="number" min="0" step="100000" />
+                                <span class="input-group-text bg-light">₫</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="col-md-6">
+                                <label class="field-label">Ngày Vào Làm</label>
+                                <input asp-for="NgayVaoLam" class="form-control field-input" type="date" />
+                            </div>
+                            <div class="col-md-12">
+                                <label class="field-label">Mật Khẩu Mới <span class="text-muted">(Bỏ qua nếu không đổi)</span></label>
+                                <input name="newPassword" type="password" class="form-control field-input" placeholder="••••••••" />
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="status-toggle-card @(Model.TrangThai ? "active" : "inactive")">
+                                <div class="form-check form-switch mb-0">
+                                    <input asp-for="TrangThai" class="form-check-input" type="checkbox" role="switch" id="statusSwitch" />
+                                    <label class="form-check-label fw-bold" for="statusSwitch">
+                                        @(Model.TrangThai ? "Đang làm việc" : "Đã nghỉ việc")
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="my-3">
+                        <button type="submit" class="btn btn-warning text-white w-100 btn-action-submit">
+                            <i class="fas fa-save me-2"></i>Lưu Thay Đổi
+                        </button>
+                        <a asp-action="Index" class="btn btn-light w-100 mt-2">Hủy bỏ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@await Html.PartialAsync("_FormStyles")

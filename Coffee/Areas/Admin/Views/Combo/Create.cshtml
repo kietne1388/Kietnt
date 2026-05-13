@@ -1,0 +1,204 @@
+@model FastFood.Models.Combo.ComboModel
+@{
+    ViewData["Title"] = "Thêm Combo Mới";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var products = ViewBag.Products as List<FastFood.Models.Product.ProductModel> ?? new();
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Thêm <span class="text-gradient">Combo Mới</span></h1>
+            <p class="text-muted mb-0">Tạo combo tiết kiệm cho khách hàng</p>
+        </div>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Quay lại
+        </a>
+    </div>
+
+    <div class="admin-card">
+        <form asp-action="Create" method="post" id="comboForm" enctype="multipart/form-data">
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Tên Combo</label>
+                        <input asp-for="Name" class="form-control" required placeholder="Nhập tên combo...">
+                    </div>
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Loại Combo</label>
+                        <select asp-for="ComboType" class="form-select">
+                            <option value="">-- Chọn Loại Combo (Không bắt buộc) --</option>
+                            <option value="1 Người">1 Người</option>
+                            <option value="2 Người">2 Người</option>
+                            <option value="3+ Người">3+ Người</option>
+                            <option value="Gia Đình">Gia Đình</option>
+                            <option value="Sinh Viên">Sinh Viên</option>
+                        </select>
+                    </div>
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập mô tả combo..."></textarea>
+                    </div>
+                    <div class="form-group-premium mb-3">
+                        <label class="form-label">Hình ảnh Combo</label>
+                        <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" id="comboImageInput">
+                        <input type="hidden" asp-for="ImageUrl">
+                        <div class="mt-2" style="max-width: 250px;">
+                             <div class="premium-image-container" id="comboImagePreviewContainer" style="display: @(string.IsNullOrEmpty(Model.ImageUrl) ? "none" : "block");">
+                                  <img id="comboImagePreview" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "" : Model.ImageUrl)" class="premium-image-square">
+                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Combo Items selection -->
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0"><i class="fas fa-list me-2"></i>Sản phẩm trong Combo</h5>
+                            <button type="button" class="btn btn-sm btn-primary" id="addItemBtn">
+                                <i class="fas fa-plus me-1"></i>Thêm món
+                            </button>
+                        </div>
+                        
+                        <div id="comboItemsContainer" class="combo-items-list">
+                            <div class="combo-item-row admin-card p-3 mb-3 border bg-light shadow-sm">
+                                <div class="row g-3 align-items-end">
+                                    <div class="col-md-7">
+                                        <label class="form-label fw-bold">Chọn món ăn</label>
+                                        <select name="productIds" class="form-select select-product" required>
+                                            <option value="">-- Chọn sản phẩm --</option>
+                                            @foreach (var p in products)
+                                            {
+                                                <option value="@p.Id" data-price="@p.Price">@p.Name (@p.Price.ToString("N0")đ)</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label class="form-label fw-bold">Số lượng</label>
+                                        <input type="number" name="quantities" class="form-control quantity-input" value="1" min="1">
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-outline-danger w-100 remove-item" style="display:none;" title="Xóa món này">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="admin-card sticky-top" style="top: 20px;">
+                        <h5 class="mb-3 border-bottom pb-2">Giá & Trạng thái</h5>
+                        
+                        <div class="summary-item mb-2 d-flex justify-content-between">
+                            <span class="text-muted">Tổng giá gốc:</span>
+                            <span id="originalPriceDisplay" class="fw-bold text-muted text-decoration-line-through">0đ</span>
+                        </div>
+                        
+                        <div class="form-group-premium mb-3">
+                            <label class="form-label fw-bold">Giá Combo (VND)</label>
+                            <input asp-for="ComboPrice" type="number" class="form-control form-control-lg text-red fw-bold" required placeholder="0">
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check form-switch mt-4">
+                                <input class="form-check-input" type="checkbox" asp-for="IsActive" checked>
+                                <label class="form-check-label fw-bold">Hiển thị trên Menu</label>
+                            </div>
+                        </div>
+
+                        <hr>
+                        
+                        <button type="submit" class="btn btn-primary w-100 py-3 mb-2">
+                            <i class="fas fa-save me-2"></i>Lưu Combo
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.combo-items-list {
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+.combo-item-row {
+    transition: all 0.2s ease;
+}
+.combo-item-row:hover {
+    border-color: #DC2626 !important;
+}
+.text-red {
+    color: #DC2626;
+}
+</style>
+
+@section Scripts {
+    <script>
+        function updateOriginalPrice() {
+            let total = 0;
+            document.querySelectorAll('.combo-item-row').forEach(row => {
+                const select = row.querySelector('.select-product');
+                const quantity = parseInt(row.querySelector('.quantity-input').value) || 0;
+                const option = select.options[select.selectedIndex];
+                const price = parseFloat(option?.dataset?.price) || 0;
+                total += price * quantity;
+            });
+            document.getElementById('originalPriceDisplay').innerText = total.toLocaleString('vi-VN') + 'đ';
+        }
+
+        document.getElementById('addItemBtn').addEventListener('click', function() {
+            const container = document.getElementById('comboItemsContainer');
+            const rowTemplates = container.querySelectorAll('.combo-item-row');
+            const newRow = rowTemplates[0].cloneNode(true);
+            
+            // Reset values
+            newRow.querySelector('select').value = '';
+            newRow.querySelector('input').value = '1';
+            newRow.querySelector('.remove-item').style.display = 'block';
+            
+            container.appendChild(newRow);
+            
+            // Re-bind events
+            bindRowEvents(newRow);
+            updateOriginalPrice();
+        });
+
+        function bindRowEvents(row) {
+            row.querySelector('.remove-item').addEventListener('click', function() {
+                if (document.querySelectorAll('.combo-item-row').length > 1) {
+                    row.remove();
+                    updateOriginalPrice();
+                } else {
+                    alert('Combo phải có ít nhất 1 món ăn.');
+                }
+            });
+            
+            row.querySelector('select').addEventListener('change', updateOriginalPrice);
+            row.querySelector('input').addEventListener('input', updateOriginalPrice);
+        }
+
+        // Image preview
+        document.getElementById('comboImageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('comboImagePreview');
+                    const container = document.getElementById('comboImagePreviewContainer');
+                    preview.src = e.target.result;
+                    container.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Initial binding
+        document.querySelectorAll('.combo-item-row').forEach(bindRowEvents);
+        updateOriginalPrice();
+    </script>
+}

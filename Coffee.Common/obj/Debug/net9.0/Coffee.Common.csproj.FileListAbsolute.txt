@@ -1,0 +1,11 @@
+D:\Assignment - Coffee\Coffee\Coffee.Common\bin\Debug\net9.0\Coffee.Common.deps.json
+D:\Assignment - Coffee\Coffee\Coffee.Common\bin\Debug\net9.0\Coffee.Common.dll
+D:\Assignment - Coffee\Coffee\Coffee.Common\bin\Debug\net9.0\Coffee.Common.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.AssemblyInfoInputs.cache
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.AssemblyInfo.cs
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.csproj.CoreCompileInputs.cache
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.dll
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\refint\Coffee.Common.dll
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\Coffee.Common.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Common\obj\Debug\net9.0\ref\Coffee.Common.dll

@@ -1,0 +1,120 @@
+@model List<FastFood.Models.Comment.CommentModel>
+
+@{
+    ViewData["Title"] = "Đánh Giá Của Tôi";
+}
+
+<div class="container py-5">
+    <h2 class="section-title-premium mb-5">Đánh Giá <span class="text-gradient">Của Tôi</span></h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var comment in Model)
+            {
+                <div class="col-12">
+                    <div class="comment-card-user">
+                        <div class="comment-product">
+                            <h5>@comment.ProductName</h5>
+                            <div class="comment-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <i class="fas fa-star @(i <= comment.Rating ? "filled" : "empty")"></i>
+                                }
+                            </div>
+                        </div>
+
+                        <p class="comment-content">@comment.Content</p>
+
+                        <div class="comment-footer-user">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i>
+                                @comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+                            </small>
+                            <button class="btn btn-outline-danger btn-sm" onclick="deleteComment(@comment.Id)">
+                                <i class="fas fa-trash me-1"></i>Xóa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <i class="fas fa-comment-slash fa-5x text-muted mb-4"></i>
+            <h4>Chưa có đánh giá</h4>
+            <p class="text-muted mb-4">Hãy mua hàng và đánh giá sản phẩm!</p>
+            <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg">
+                <i class="fas fa-shopping-bag me-2"></i>Mua Sắm Ngay
+            </a>
+        </div>
+    }
+</div>
+
+<style>
+.comment-card-user {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    border: 2px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.comment-card-user:hover {
+    border-color: var(--primary-red);
+}
+
+.comment-product h5 {
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.comment-rating {
+    margin-bottom: 1rem;
+}
+
+.comment-rating i.filled {
+    color: #F59E0B;
+}
+
+.comment-rating i.empty {
+    color: var(--gray-300);
+}
+
+.comment-content {
+    color: var(--gray-700);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.comment-footer-user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--gray-200);
+}
+</style>
+
+<script>
+async function deleteComment(id) {
+    if (!confirm('Bạn có chắc muốn xóa đánh giá này?')) return;
+
+    try {
+        const response = await fetch('/User/Comment/Delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ commentId: id })
+        });
+
+        if (response.ok) {
+            location.reload();
+        }
+    } catch (error) {
+        alert('Có lỗi xảy ra!');
+    }
+}
+</script>

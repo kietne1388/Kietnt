@@ -1,0 +1,15 @@
+[
+  {
+    "Name": "New Profile",
+    "Projects": [
+      {
+        "Path": "FastFood.API\\FastFood.API.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "FastFood\\FastFood.csproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

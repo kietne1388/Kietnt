@@ -1,0 +1,241 @@
+@model FastFood.Models.User.UserProfileModel
+
+@{
+    ViewData["Title"] = "Tài Khoản Của Tôi";
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <partial name="_UserSidebar" />
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <div class="profile-main-card">
+                <div class="profile-card-header">
+                    <h3 class="m-0">Thông Tin Tài Khoản</h3>
+                    <a asp-area="User" asp-controller="Profile" asp-action="Edit" class="btn btn-premium-sm">
+                        <i class="fas fa-edit me-2"></i>Chỉnh sửa
+                    </a>
+                </div>
+
+                <div class="profile-info-grid">
+                    <div class="info-group">
+                        <div class="info-icon"><i class="fas fa-user-circle"></i></div>
+                        <div class="info-content">
+                            <label>Họ và tên</label>
+                            <p>@Model.FullName</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-group">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-content">
+                            <label>Địa chỉ Email</label>
+                            <p>@Model.Email</p>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div class="info-content">
+                            <label>Số điện thoại</label>
+                            <p>@Model.Phone</p>
+                        </div>
+                    </div>
+
+                    <div class="info-group">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-content">
+                            <label>Địa chỉ giao hàng</label>
+                            <p>@(string.IsNullOrEmpty(Model.Address) ? "Chưa thiết lập" : Model.Address)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="row g-4 mt-2">
+                <div class="col-md-4">
+                    <div class="stat-card-user">
+                        <div class="stat-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                        </div>
+                        <div>
+                            <h4>@Model.TotalOrders</h4>
+                            <p>Đơn hàng</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card-user">
+                        <div class="stat-icon">
+                            <i class="fas fa-ticket-alt"></i>
+                        </div>
+                        <div>
+                            <h4>@Model.VoucherCount</h4>
+                            <p>Voucher</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card-user">
+                        <div class="stat-icon">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div>
+                            <h4>@Model.Points</h4>
+                            <p>Điểm tích lũy</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* Profile Main Card */
+.profile-main-card {
+    background: white;
+    border-radius: 30px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.profile-card-header {
+    background: #F9FAFB;
+    padding: 2rem 2.5rem;
+    border-bottom: 1px solid #F3F4F6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-card-header h3 {
+    font-weight: 800;
+    color: var(--gray-900);
+    font-size: 1.5rem;
+}
+
+.profile-info-grid {
+    padding: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+}
+
+.info-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+}
+
+.info-icon {
+    width: 48px;
+    height: 48px;
+    background: #FDF6EE;
+    color: #6F4E37;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.info-content label {
+    display: block;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gray-500);
+    margin-bottom: 0.4rem;
+    font-weight: 700;
+}
+
+.info-content p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0;
+}
+
+.btn-premium-sm {
+    padding: 0.6rem 1.2rem;
+    background: white;
+    border: 2px solid #6F4E37;
+    color: #6F4E37;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-premium-sm:hover {
+    background: #6F4E37;
+    color: white;
+    box-shadow: 0 5px 15px rgba(111, 78, 55, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Stat Cards */
+.stat-card-user {
+    background: white;
+    border-radius: 20px;
+    padding: 1.75rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0,0,0,0.02);
+}
+
+.stat-card-user:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(111, 78, 55, 0.1);
+    border-color: #FDF6EE;
+}
+
+.stat-icon {
+    width: 64px;
+    height: 64px;
+    background: #FDF6EE;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-icon i {
+    font-size: 1.75rem;
+    color: #6F4E37;
+}
+
+.stat-card-user h4 {
+    font-size: 2.25rem;
+    font-weight: 900;
+    margin-bottom: 0;
+    color: var(--gray-900);
+    line-height: 1;
+}
+
+.stat-card-user p {
+    color: var(--gray-500);
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+@@media (max-width: 992px) {
+    .profile-info-grid {
+        grid-template-columns: 1fr;
+        padding: 1.5rem;
+    }
+}
+</style>

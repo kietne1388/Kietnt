@@ -1,0 +1,20 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  FastFood.Common -> D:\Assignment\FastFoodNew\FastFood.Common\bin\Debug\net10.0\FastFood.Common.dll
+  FastFood.Domain -> D:\Assignment\FastFoodNew\FastFood.Domain\bin\Debug\net10.0\FastFood.Domain.dll
+  FastFood.Infrastructure -> D:\Assignment\FastFoodNew\FastFood.Infrastructure\bin\Debug\net10.0\FastFood.Infrastructure.dll
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(14,26): error CS0246: The type or namespace name 'IVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(15,26): error CS0246: The type or namespace name 'IUserVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(17,31): error CS0246: The type or namespace name 'IVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(17,69): error CS0246: The type or namespace name 'IUserVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+
+Build FAILED.
+
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(14,26): error CS0246: The type or namespace name 'IVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(15,26): error CS0246: The type or namespace name 'IUserVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(17,31): error CS0246: The type or namespace name 'IVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+D:\Assignment\FastFoodNew\FastFood.Application\Services\VoucherService.cs(17,69): error CS0246: The type or namespace name 'IUserVoucherRepository' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment\FastFoodNew\FastFood.Application\FastFood.Application.csproj]
+    0 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:04.13

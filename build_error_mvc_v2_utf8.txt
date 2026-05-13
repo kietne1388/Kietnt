@@ -1,0 +1,27 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Application\FastFood.Application.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Common\FastFood.Common.csproj]
+  FastFood.Common -> D:\Assignment - Coffee\Coffee\FastFood.Common\bin\Debug\net9.0\FastFood.Common.dll
+  FastFood.Domain -> D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.dll
+  FastFood.Infrastructure -> D:\Assignment - Coffee\Coffee\FastFood.Infrastructure\bin\Debug\net9.0\FastFood.Infrastructure.dll
+  FastFood.Application -> D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Debug\net9.0\FastFood.Application.dll
+D:\Assignment - Coffee\Coffee\FastFood\Models\POSViewModels.cs(49,63): error CS0019: Operator '*' cannot be applied to operands of type 'decimal' and 'double' [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(216,23): error CS0103: The name 'InMemoryDataStore' does not exist in the current context [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(241,22): error CS0103: The name 'InMemoryDataStore' does not exist in the current context [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Guest\Views\Product\Index.cshtml(48,57): warning CS8602: Dereference of a possibly null reference. [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\EmployeeController.cs(132,51): error CS1503: Argument 1: cannot convert from 'int' to 'FastFood.Domain.Entities.User' [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+
+Build FAILED.
+
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Guest\Views\Product\Index.cshtml(48,57): warning CS8602: Dereference of a possibly null reference. [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Models\POSViewModels.cs(49,63): error CS0019: Operator '*' cannot be applied to operands of type 'decimal' and 'double' [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(216,23): error CS0103: The name 'InMemoryDataStore' does not exist in the current context [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(241,22): error CS0103: The name 'InMemoryDataStore' does not exist in the current context [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\EmployeeController.cs(132,51): error CS1503: Argument 1: cannot convert from 'int' to 'FastFood.Domain.Entities.User' [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+    1 Warning(s)
+    4 Error(s)
+
+Time Elapsed 00:00:09.12

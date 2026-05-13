@@ -1,0 +1,393 @@
+@model List<FastFood.Models.Cart.CartItem>
+@{
+    ViewData["Title"] = "Giỏ Hàng";
+    var cartItems = Model ?? new List<FastFood.Models.Cart.CartItem>();
+    var total = cartItems.Sum(x => x.Price * x.Quantity);
+}
+<section class="py-5">
+    <div class="container">
+        @if (cartItems.Any())
+        {
+            <form asp-area="Guest" asp-controller="Checkout" asp-action="Index" method="post" id="checkoutForm">
+                <div class="row g-4">
+                    <!-- Cart Items -->
+                    <div class="col-lg-8">
+                        <div class="cart-container">
+                            <div class="cart-header">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="selectAll" checked>
+                                    <label class="form-check-label" for="selectAll">
+                                        <strong>Chọn tất cả (@cartItems.Count đồ uống)</strong>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            @foreach (var item in cartItems)
+                            {
+                                var uniqueId = item.ComboId.HasValue && item.ComboId > 0 
+                                    ? $"combo-{item.ComboId}" 
+                                    : $"product-{item.ProductId}";
+                                var itemType = item.ComboId.HasValue && item.ComboId > 0 ? "combo" : "product";
+                                
+                                <div class="cart-item" 
+                                     data-unique-id="@uniqueId"
+                                     data-product-id="@item.ProductId" 
+                                     data-combo-id="@(item.ComboId ?? 0)"
+                                     data-item-type="@itemType">
+                                    <div class="form-check">
+                                        <input class="form-check-input item-checkbox" type="checkbox" 
+                                               name="SelectedItems" value="@uniqueId" checked>
+                                    </div>
+                                    @{
+                                        var cartImg = item.ImageUrl;
+                                        if (!string.IsNullOrEmpty(cartImg) && !cartImg.StartsWith("/") && !cartImg.StartsWith("http"))
+                                        {
+                                            cartImg = "/images/" + cartImg;
+                                        }
+                                    }
+                                    <img src="@cartImg" alt="@item.ProductName" class="cart-item-image" onerror="this.src='/images/placeholder-coffee.jpg'">
+                                    <div class="cart-item-info">
+                                        <h5 class="cart-item-name">
+                                            @if (item.ComboId.HasValue && item.ComboId > 0)
+                                            {
+                                                <span class="badge bg-success me-2" style="font-size: 0.7rem;">COMBO</span>
+                                            }
+                                            @item.ProductName
+                                        </h5>
+                                        <div class="cart-item-price">@item.Price.ToString("N0")đ</div>
+                                        @if (item.ComboItemNotes != null && item.ComboItemNotes.Any())
+                                        {
+                                            <div class="mt-2 text-muted small">
+                                                <i class="fas fa-edit me-1"></i>Ghi chú:
+                                                <ul class="mb-0 ps-3">
+                                                    @foreach (var note in item.ComboItemNotes)
+                                                    {
+                                                        if (!string.IsNullOrEmpty(note.Value))
+                                                        {
+                                                            <li>@note.Value</li> 
+                                                        }
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                    </div>
+                                    <div class="cart-item-quantity">
+                                        <button type="button" class="btn-qty" onclick="updateQuantity('@uniqueId', @item.ProductId, @(item.ComboId ?? 0), -1)">-</button>
+                                        <span class="qty-value" id="qty-@uniqueId">@item.Quantity</span>
+                                        <button type="button" class="btn-qty" onclick="updateQuantity('@uniqueId', @item.ProductId, @(item.ComboId ?? 0), 1)">+</button>
+                                    </div>
+                                    <div class="cart-item-total" id="total-@uniqueId">
+                                        @((item.Price * item.Quantity).ToString("N0"))đ
+                                    </div>
+                                    <button type="button" class="btn-remove" onclick="removeItem('@uniqueId', @item.ProductId, @(item.ComboId ?? 0))">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Order Summary -->
+                    <div class="col-lg-4">
+                        <div class="order-summary">
+                            <h4 class="summary-title">Tóm Tắt Đơn Hàng</h4>
+                            
+                            <div class="summary-row">
+                                <span>Tạm tính</span>
+                                <span id="subtotal">@total.ToString("N0")đ</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Phí vận chuyển</span>
+                                <span>20,000đ</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span><strong>Tổng cộng</strong></span>
+                                <span id="grandTotal"><strong>@((total + 20000).ToString("N0"))đ</strong></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-checkout">
+                                <i class="fas fa-credit-card me-2"></i>Tiến Hành Thanh Toán
+                            </button>
+                            
+                            <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary w-100 mt-3">
+                                <i class="fas fa-arrow-left me-2"></i>Tiếp Tục Mua Sắm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3>Giỏ hàng trống</h3>
+                <p class="text-muted">Bạn chưa có đồ uống nào trong giỏ hàng</p>
+                <a asp-area="Guest" asp-controller="Product" asp-action="Index" class="btn btn-primary mt-3">
+                    <i class="fas fa-shopping-bag me-2"></i>Mua Sắm Ngay
+                </a>
+            </div>
+        }
+    </div>
+</section>
+
+<style>
+.cart-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+.cart-header {
+    background: var(--gray-100);
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+    transition: all 0.3s ease;
+}
+
+.cart-item:hover {
+    background: var(--gray-50);
+}
+
+.cart-item-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    border-radius: 10px;
+    background-color: #FAF7F2;
+    border: 1px solid #E8D5C0;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    color: var(--gray-900);
+}
+
+.cart-item-price {
+    color: var(--primary-red);
+    font-weight: 600;
+}
+
+.cart-item-quantity {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-qty {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--gray-300);
+    background: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-qty:hover {
+    background: var(--primary-red);
+    color: white;
+    border-color: var(--primary-red);
+}
+
+.qty-value {
+    min-width: 40px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.cart-item-total {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--primary-red);
+    min-width: 120px;
+    text-align: right;
+}
+
+.btn-remove {
+    background: none;
+    border: none;
+    color: var(--gray-400);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.btn-remove:hover {
+    color: var(--primary-red);
+}
+
+.order-summary {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.summary-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.summary-row.total {
+    border-top: 2px solid var(--gray-200);
+    border-bottom: none;
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    color: var(--primary-red);
+}
+
+.btn-checkout {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 5rem 2rem;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+@@media (max-width: 768px) {
+    .cart-item {
+        flex-wrap: wrap;
+    }
+    
+    .cart-item-info {
+        width: 100%;
+        margin: 1rem 0;
+    }
+}
+</style>
+
+<script>
+function updateQuantity(uniqueId, productId, comboId, change) {
+    var qtyElement = document.getElementById('qty-' + uniqueId);
+    
+    if(!qtyElement) {
+        console.error('Element not found:', 'qty-' + uniqueId);
+        return;
+    }
+    
+    var currentQty = parseInt(qtyElement.textContent);
+    var newQty = currentQty + change;
+    
+    if (newQty < 1) return;
+    
+    // Construct payload. ComboId should be null if 0 (backend logic)
+    var payload = { 
+        productId: productId, 
+        quantity: newQty,
+        comboId: comboId > 0 ? comboId : null
+    };
+    
+    fetch('/Guest/Cart/UpdateQuantity', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            qtyElement.textContent = newQty;
+            updateTotals();
+            updateCartBadge(data.cartCount);
+        }
+    });
+}
+
+function removeItem(uniqueId, productId, comboId) {
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
+    
+    var payload = { 
+        productId: productId, 
+        comboId: comboId > 0 ? comboId : null
+    };
+
+    fetch('/Guest/Cart/RemoveItem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+function updateTotals() {
+    // Recalculate based on visible items
+    var items = document.querySelectorAll('.cart-item');
+    var subtotal = 0;
+    
+    items.forEach(function(item) {
+        var checkbox = item.querySelector('.item-checkbox');
+        if (checkbox && checkbox.checked) {
+            var priceText = item.querySelector('.cart-item-price').textContent;
+            var price = parseInt(priceText.replace(/[^\d]/g, ''));
+            var qty = parseInt(item.querySelector('.qty-value').textContent);
+            subtotal += price * qty;
+            
+            // Update item total
+            var itemTotal = item.querySelector('.cart-item-total');
+            itemTotal.textContent = (price * qty).toLocaleString('vi-VN') + 'đ';
+        }
+    });
+    
+    document.getElementById('subtotal').textContent = subtotal.toLocaleString('vi-VN') + 'đ';
+    document.getElementById('grandTotal').innerHTML = '<strong>' + (subtotal + 20000).toLocaleString('vi-VN') + 'đ</strong>';
+}
+
+function updateCartBadge(count) {
+    var badge = document.querySelector('.cart-badge');
+    if (badge) {
+        badge.textContent = count;
+    }
+}
+
+// Select all checkbox
+document.getElementById('selectAll')?.addEventListener('change', function() {
+    var checkboxes = document.querySelectorAll('.item-checkbox');
+    checkboxes.forEach(function(cb) { cb.checked = this.checked; }.bind(this));
+    updateTotals();
+});
+
+// Individual checkbox change
+document.querySelectorAll('.item-checkbox').forEach(function(cb) {
+    cb.addEventListener('change', updateTotals);
+});
+</script>

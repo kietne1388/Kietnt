@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CaféLux Admin</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Lato', 'Segoe UI', sans-serif !important; }
+        h1, h2, h3, h4, h5, h6 { font-family: 'Playfair Display', Georgia, serif !important; }
+    </style>
+    <link rel="stylesheet" href="~/css/premium-design.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="/Coffee.ico">
+    
+    <!-- Hotwire Turbo SPA -->
+    <script type="module">
+        import hotwiredTurbo from 'https://cdn.skypack.dev/@@hotwired/turbo';
+    </script>
+</head>
+<body class="admin-body">
+    <!-- Admin Sidebar -->
+    <div class="admin-sidebar" id="adminSidebar">
+        <div class="sidebar-header">
+            <h4><i class="fas fa-coffee me-2"></i>CaféLux <span class="badge" style="background:rgba(212,168,83,0.25);color:#D4A853;border:1px solid #D4A853;">Admin</span></h4>
+            <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            <!-- Báo Cáo & Thống Kê -->
+            <a asp-area="Admin" asp-controller="DashBoard" asp-action="Index" class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Dashboard</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Report" asp-action="Index" class="nav-item">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Báo Cáo Thống Kê</span>
+            </a>
+
+            <div class="nav-divider"></div>
+            <!-- Quản Lý Đơn Hàng -->
+            <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="nav-item">
+                <i class="fas fa-receipt"></i>
+                <span>Đơn Hàng</span>
+            </a>
+            <a asp-area="Admin" asp-controller="SalesReceipt" asp-action="Index" class="nav-item">
+                <i class="fas fa-file-invoice"></i>
+                <span>Phiếu Bán Hàng</span>
+            </a>
+
+            <div class="nav-divider"></div>
+            <!-- Quản Lý Cửa Hàng -->
+            <a asp-area="Admin" asp-controller="Product" asp-action="Index" class="nav-item">
+                <i class="fas fa-mug-hot"></i>
+                <span>Đồ Uống</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Category" asp-action="Index" class="nav-item">
+                <i class="fas fa-tags"></i>
+                <span>Danh Mục</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Combo" asp-action="Index" class="nav-item">
+                <i class="fas fa-box-open"></i>
+                <span>Combo</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Ingredient" asp-action="Index" class="nav-item">
+                <i class="fas fa-cube"></i>
+                <span>Nguyên Liệu</span>
+            </a>
+
+            <div class="nav-divider"></div>
+            <!-- Quản Lý Khách / Nhân Sự -->
+            <a asp-area="Admin" asp-controller="User" asp-action="Index" class="nav-item">
+                <i class="fas fa-users"></i>
+                <span>Khách Hàng</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Employee" asp-action="Index" class="nav-item">
+                <i class="fas fa-id-badge"></i>
+                <span>Nhân Viên</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Attendance" asp-action="Index" class="nav-item">
+                <i class="fas fa-user-clock"></i>
+                <span>Chấm Công</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Contact" asp-action="Index" class="nav-item">
+                <i class="fas fa-envelope"></i>
+                <span>Phản Hồi</span>
+            </a>
+
+            <div class="nav-divider"></div>
+            <!-- Công Cụ Khác -->
+            <a asp-area="Admin" asp-controller="Voucher" asp-action="Index" class="nav-item">
+                <i class="fas fa-ticket-alt"></i>
+                <span>Voucher</span>
+            </a>
+            <a asp-area="Admin" asp-controller="Notification" asp-action="Index" class="nav-item">
+                <i class="fas fa-bell"></i>
+                <span>Thông Báo</span>
+            </a>
+
+            <div class="nav-divider"></div>
+            <a asp-area="Guest" asp-controller="Home" asp-action="Index" class="nav-item text-danger border border-danger rounded mt-2 px-3 align-items-center justify-content-center">
+                <i class="fas fa-home me-2"></i>
+                <span>Về Trang Chủ</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Admin Main Content -->
+    <div class="admin-main">
+        <!-- Admin Topbar -->
+        <div class="admin-topbar">
+            <button class="sidebar-toggle d-lg-none" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="topbar-title">
+                <h5>@ViewData["Title"]</h5>
+            </div>
+
+            <div class="topbar-actions">
+                <div class="user-menu-admin">
+                    <div class="user-avatar-topbar">A</div>
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Admin
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" asp-area="Guest" asp-controller="Home" asp-action="Index"><i class="fas fa-home me-2"></i>Về Trang Chủ</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" asp-area="Guest" asp-controller="Auth" asp-action="Logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng Xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page Content -->
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+
+        <!-- Toast Containers -->
+        <div id="toastContainerCenter" class="toast-container center"></div>
+        <div id="toastContainerTopRight" class="toast-container top-right"></div>
+        <div id="toastContainerBottomRight" class="toast-container bottom-right"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('adminSidebar').classList.toggle('active');
+        }
+
+        // Modern Notification System
+        function showToast(message, type = 'success', position = 'top-right') {
+            const containerMap = {
+                'center': 'toastContainerCenter',
+                'top-right': 'toastContainerTopRight',
+                'bottom-right': 'toastContainerBottomRight'
+            };
+            
+            const containerId = containerMap[position] || 'toastContainerTopRight';
+            const container = document.getElementById(containerId);
+            
+            const toast = document.createElement('div');
+            toast.className = `custom-toast toast-${type}`;
+            
+            const iconMap = {
+                'success': 'fa-check-circle',
+                'error': 'fa-exclamation-circle',
+                'warning': 'fa-exclamation-triangle',
+                'info': 'fa-info-circle'
+            };
+            
+            const icon = iconMap[type] || 'fa-info-circle';
+            
+            toast.innerHTML = `
+                <i class="fas ${icon} me-3"></i>
+                <div class="toast-content">${message}</div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto remove
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                if (position === 'center') {
+                    toast.style.transform = 'translateY(-20px)';
+                } else {
+                    toast.style.transform = 'translateX(20px)';
+                }
+                setTimeout(() => toast.remove(), 500);
+            }, 4000);
+        }
+
+        // Override default alert - use center for compatibility
+        window.alert = function(message) {
+            showToast(message, 'warning', 'center');
+        };
+
+        // Active nav item
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.sidebar-nav .nav-item').forEach(item => {
+            if (item.getAttribute('href') === currentPath) {
+                item.classList.add('active');
+            }
+        });
+        
+        // Auto-show TempData messages
+        document.addEventListener("DOMContentLoaded", function() {
+            var successMsg = '@(TempData["Success"]?.ToString())';
+            var errorMsg = '@(TempData["Error"]?.ToString())';
+            
+            if (successMsg && successMsg !== '') {
+                showToast(successMsg, 'success');
+            }
+            if (errorMsg && errorMsg !== '') {
+                showToast(errorMsg, 'error');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Infrastructure\FastFood.Infrastructure.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Common\FastFood.Common.csproj]
+C:\Program Files\dotnet\sdk\10.0.200-preview.0.26103.119\Sdks\Microsoft.NET.Sdk\targets\Microsoft.NET.RuntimeIdentifierInference.targets(383,5): message NETSDK1057: You are using a preview version of .NET. See: https://aka.ms/dotnet-support-policy [D:\Assignment - Coffee\Coffee\FastFood.Application\FastFood.Application.csproj]
+  FastFood.Domain -> D:\Assignment - Coffee\Coffee\FastFood.Domain\bin\Debug\net9.0\FastFood.Domain.dll
+  FastFood.Common -> D:\Assignment - Coffee\Coffee\FastFood.Common\bin\Debug\net9.0\FastFood.Common.dll
+  FastFood.Infrastructure -> D:\Assignment - Coffee\Coffee\FastFood.Infrastructure\bin\Debug\net9.0\FastFood.Infrastructure.dll
+  FastFood.Application -> D:\Assignment - Coffee\Coffee\FastFood.Application\bin\Debug\net9.0\FastFood.Application.dll
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\AttendanceController.cs(11,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\AttendanceController.cs(13,37): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Views\_ViewImports.cshtml(4,8): warning CS0105: The using directive for 'FastFood.Models' appeared previously in this namespace [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Views\POS\Index.cshtml(1,17): error CS0234: The type or namespace name 'Services' does not exist in the namespace 'FastFood' (are you missing an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Views\_ViewImports.cshtml(4,8): warning CS0105: The using directive for 'FastFood.Models' appeared previously in this namespace [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\SalesReceiptController.cs(11,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\SalesReceiptController.cs(13,39): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(18,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(24,30): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+
+Build FAILED.
+
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Views\_ViewImports.cshtml(4,8): warning CS0105: The using directive for 'FastFood.Models' appeared previously in this namespace [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Views\_ViewImports.cshtml(4,8): warning CS0105: The using directive for 'FastFood.Models' appeared previously in this namespace [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\AttendanceController.cs(11,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\AttendanceController.cs(13,37): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Views\POS\Index.cshtml(1,17): error CS0234: The type or namespace name 'Services' does not exist in the namespace 'FastFood' (are you missing an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\SalesReceiptController.cs(11,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Admin\Controllers\SalesReceiptController.cs(13,39): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(18,26): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+D:\Assignment - Coffee\Coffee\FastFood\Areas\Staff\Controllers\POSController.cs(24,30): error CS0246: The type or namespace name 'AppDbContext' could not be found (are you missing a using directive or an assembly reference?) [D:\Assignment - Coffee\Coffee\FastFood\FastFood.csproj]
+    2 Warning(s)
+    7 Error(s)
+
+Time Elapsed 00:00:07.63

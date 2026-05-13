@@ -1,0 +1,17 @@
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Application.deps.json
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Application.dll
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Application.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Domain.dll
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Infrastructure.dll
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Domain.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Application\bin\Debug\net9.0\Coffee.Infrastructure.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.csproj.AssemblyReference.cache
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.AssemblyInfoInputs.cache
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.AssemblyInfo.cs
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.csproj.CoreCompileInputs.cache
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.A.9AA09E30.Up2Date
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.dll
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\refint\Coffee.Application.dll
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\Coffee.Application.pdb
+D:\Assignment - Coffee\Coffee\Coffee.Application\obj\Debug\net9.0\ref\Coffee.Application.dll

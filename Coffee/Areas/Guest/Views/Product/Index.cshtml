@@ -1,0 +1,522 @@
+@model List<FastFood.Models.Product.ProductModel>
+
+@{
+    ViewData["Title"] = "Sản Phẩm";
+    Layout = "~/Areas/Guest/Views/Shared/_Layout.cshtml";
+}
+
+<!--Page Header -->
+<section class="page-header-compact">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="page-title-compact">Thực Đơn <span class="text-gradient"style="background:none; -webkit-text-fill-color:white; color:white;">CaféLux</span></h1>
+                <p class="mb-0 text-white-50">@(Model?.Count ?? 0) đồ uống có sẵn</p>
+            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-custom mb-0">
+                    <li class="breadcrumb-item"><a asp-area="Guest" asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                    <li class="breadcrumb-item active">Thực đơn</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+
+<!-- Products Section -->
+<section class="products-listing-section py-5">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Filter Sidebar -->
+            <div class="col-lg-3">
+                <div class="filter-sidebar">
+                    <div class="filter-header">
+                        <h5><i class="fas fa-sliders-h me-2"></i>Bộ Lọc</h5>
+                    </div>
+                    <form method="get" id="filterForm" asp-area="Guest" asp-controller="Product" asp-action="Index">
+                        <!-- Category Filter -->
+                        <div class="filter-group">
+                            <h6>Danh Mục</h6>
+                            <div class="filter-options">
+                                <label class="filter-option">
+                                    <input type="radio" name="categoryId" value="" @(ViewBag.CurrentCategory == null ? "checked" : "")>
+                                    <span>Tất cả</span>
+                                    <i class="fas fa-check"></i>
+                                </label>
+                                @if (ViewBag.Categories != null)
+                                {
+                                    foreach (var cat in ViewBag.Categories as List<FastFood.Models.Category.CategoryModel>)
+                                    {
+                                        if (cat == null) continue;
+                                        <label class="filter-option">
+                                            <input type="radio" name="categoryId" value="@cat.Id" @(ViewBag.CurrentCategory == cat.Id ? "checked" : "")>
+                                            <span>
+                                                @if (cat.Name.ToLower().Contains("trà")) { <text>🍵</text> }
+                                                else if (cat.Name.ToLower().Contains("bánh")) { <text>🍰</text> }
+                                                else { <text>☕</text> }
+                                                @cat.Name
+                                            </span>
+                                            <i class="fas fa-check"></i>
+                                        </label>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="filter-group">
+                            <h6>Khoảng Giá</h6>
+                            <div class="price-inputs">
+                                <input type="number" class="form-control" name="minPrice" placeholder="Từ" min="0" value="@(ViewBag.MinPrice != null ? ViewBag.MinPrice.ToString() : "")">
+                                <span>-</span>
+                                <input type="number" class="form-control" name="maxPrice" placeholder="Đến" min="0" value="@ViewBag.MaxPrice">
+                            </div>
+                        </div>
+
+                        <!-- Sort -->
+                        <div class="filter-group">
+                            <h6>Sắp Xếp</h6>
+                            <select class="form-select" name="sort">
+                                <option value="" selected="@(ViewBag.Sort == "")">Mặc định</option>
+                                <option value="price-asc" selected="@(ViewBag.Sort == "price-asc")">Giá: Thấp → Cao</option>
+                                <option value="price-desc" selected="@(ViewBag.Sort == "price-desc")">Giá: Cao → Thấp</option>
+                                <option value="name" selected="@(ViewBag.Sort == "name")">Tên A-Z</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" onclick="document.getElementById('hfPage').value=1;">
+                            <i class="fas fa-filter me-2"></i>Áp Dụng
+                        </button>
+                        <input type="hidden" name="page" id="hfPage" value="@(ViewBag.CurrentPage ?? 1)" />
+                    </form>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="col-lg-9">
+                @if (Model != null && Model.Any())
+                {
+                    <div class="row g-4">
+                        @foreach (var product in Model)
+                        {
+                            <div class="col-lg-4 col-md-6 product-item">
+                                <div class="product-card-premium h-100 d-flex flex-column">
+                                    @if (product.AverageRating >= 4.5)
+                                    {
+                                        <div class="product-badge-premium hot">
+                                            <i class="fas fa-fire"></i> Hot
+                                        </div>
+                                    }
+
+                                    <div class="premium-image-container">
+                                        @{
+                                            var guestImgUrl = product.ImageUrl;
+                                            if (!string.IsNullOrEmpty(guestImgUrl) && !guestImgUrl.StartsWith("/") && !guestImgUrl.StartsWith("http"))
+                                            {
+                                                guestImgUrl = "/images/" + guestImgUrl;
+                                            }
+                                        }
+                                        <img src="@(string.IsNullOrEmpty(guestImgUrl) ? "/images/placeholder-food.jpg" : guestImgUrl)"
+                                             class="premium-image-square"
+                                             alt="@product.Name"
+                                             onerror="this.src='/images/placeholder-food.jpg'" />
+                                    </div>
+
+                                    <div class="product-content flex-grow-1 d-flex flex-column">
+                                        <div class="product-category">@product.CategoryName</div>
+                                        <h5 class="product-name" title="@product.Name">@product.Name</h5>
+                                        <p class="product-description">
+                                            @(product.Description?.Length > 60 ? product.Description.Substring(0, 60) + "..." : product.Description)
+                                        </p>
+
+                                        <div class="product-footer mt-auto">
+                                            <div class="product-price-wrapper">
+                                                <span class="product-price">@product.Price.ToString("N0")đ</span>
+                                                @if (product.AverageRating > 0)
+                                                {
+                                                    <div class="product-rating">
+                                                        <i class="fas fa-star"></i>
+                                                        <span>@product.AverageRating.ToString("0.0")</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                            <div class="product-actions-row">
+                                                <a asp-area="Guest" asp-controller="Product" asp-action="Detail" asp-route-id="@product.Id"
+                                                   class="btn btn-act-detail btn-sm flex-fill">
+                                                    <i class="fas fa-eye me-1"></i>Chi tiết
+                                                </a>
+                                                <button onclick="addToCart(@product.Id, 1)" class="btn btn-act-cart btn-sm flex-fill">
+                                                    <i class="fas fa-cart-plus me-1"></i>Giỏ hàng
+                                                </button>
+                                                <button onclick="buyNow(@product.Id, 1, 'product')" class="btn btn-act-buy btn-sm flex-fill">
+                                                    <i class="fas fa-bolt me-1"></i>Mua ngay
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <!-- Pagination -->
+                    @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+                    {
+                        <div class="pagination-wrapper mt-5 d-flex justify-content-center">
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination pagination-rounded mb-0">
+                                    <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                                        <a class="page-link" href="javascript:void(0)" onclick="goToPage(@(ViewBag.CurrentPage - 1))">
+                                            <i class="fas fa-chevron-left"></i>
+                                        </a>
+                                    </li>
+                                    @{
+                                        var totalPages = ViewBag.TotalPages ?? 1;
+                                        var currentPage = ViewBag.CurrentPage ?? 1;
+                                        var startPage = Math.Max(1, currentPage - 2);
+                                        var endPage = Math.Min(totalPages, currentPage + 2);
+
+                                        if (startPage > 1)
+                                        {
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage(1)">1</a></li>
+                                            if (startPage > 2)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link bg-transparent border-0 text-muted">...</span></li>
+                                            }
+                                        }
+
+                                        for (int i = startPage; i <= endPage; i++)
+                                        {
+                                            <li class="page-item @(i == currentPage ? "active" : "")">
+                                                <a class="page-link" href="javascript:void(0)" onclick="goToPage(@i)">@i</a>
+                                            </li>
+                                        }
+
+                                        if (endPage < totalPages)
+                                        {
+                                            if (endPage < totalPages - 1)
+                                            {
+                                                <li class="page-item disabled"><span class="page-link bg-transparent border-0 text-muted">...</span></li>
+                                            }
+                                            <li class="page-item"><a class="page-link" href="javascript:void(0)" onclick="goToPage(@totalPages)">@totalPages</a></li>
+                                        }
+                                    }
+                                    <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                                        <a class="page-link" href="javascript:void(0)" onclick="goToPage(@(ViewBag.CurrentPage + 1))">
+                                            <i class="fas fa-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    }
+
+                }
+                else
+                {
+                    <div class="empty-state-full">
+                        <i class="fas fa-search fa-5x text-muted mb-4"></i>
+                        <h4>Không tìm thấy đồ uống</h4>
+                        <p class="text-muted">Thử điều chỉnh bộ lọc của bạn</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Page Header Compact */
+.page-header-compact {
+    background: linear-gradient(135deg, #4A2E1A 0%, #6F4E37 100%);
+    padding: 2rem 0;
+    color: white;
+}
+
+.page-title-compact {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+}
+
+.breadcrumb-custom {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+}
+
+.breadcrumb-custom .breadcrumb-item a {
+    color: white;
+    text-decoration: none;
+}
+
+.breadcrumb-custom .breadcrumb-item.active {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Filter Sidebar */
+.filter-sidebar {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.filter-header {
+    background: linear-gradient(135deg, #6F4E37, #C4956A);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 20px 20px 0 0;
+}
+
+.filter-header h5 {
+    margin: 0;
+    font-weight: 700;
+}
+
+.filter-group {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.filter-group:last-of-type {
+    border-bottom: none;
+}
+
+.filter-group h6 {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--gray-900);
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.filter-option:hover {
+    background: var(--gray-100);
+}
+
+.filter-option input[type="radio"] {
+    display: none;
+}
+
+.filter-option i.fa-check {
+    margin-left: auto;
+    color: var(--coffee-brown);
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.filter-option input:checked ~ i.fa-check {
+    opacity: 1;
+}
+
+.filter-option input:checked ~ span {
+    color: var(--coffee-brown);
+    font-weight: 600;
+}
+
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.price-inputs input {
+    width: 100%;
+}
+
+.empty-state-full {
+    text-align: center;
+    padding: 5rem 2rem;
+}
+
+@@media (max-width: 992px) {
+    .filter-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+}
+
+/* Product Card Premium Styles */
+.product-card-premium {
+    background: white;
+    border-radius: 25px; /* Matched Combo */
+    padding: 2rem;       /* Matched Combo */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: all 0.4s ease;
+    border: 2px solid #f3f4f6;
+}
+
+.product-card-premium:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(249, 115, 22, 0.2);
+    border-color: #f97316; /* Orange hover border */
+}
+
+.product-actions-row {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.75rem;
+}
+
+.product-actions-row .btn {
+    flex: 1;
+    font-size: 0.75rem;
+    padding: 0.4rem 0.25rem;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-actions-row .btn i {
+    font-size: 0.7rem;
+}
+
+/* Button styles */
+.btn-act-detail {
+    background: white;
+    color: #6b7280;
+    border: 1.5px solid #d1d5db;
+    transition: all 0.25s ease;
+}
+.btn-act-detail:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.btn-act-cart {
+    background: white;
+    color: #f97316;
+    border: 1.5px solid #f97316;
+    transition: all 0.25s ease;
+}
+.btn-act-cart:hover {
+    background: #fff7ed;
+    border-color: #ea580c;
+    color: #ea580c;
+}
+
+.btn-act-buy {
+    background: #f97316;
+    color: white;
+    border: 1.5px solid white;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+.btn-act-buy:hover {
+    background: #ea580c;
+    color: white;
+    border-color: white;
+}
+
+@@media (max-width: 576px) {
+    .product-actions-row {
+        flex-direction: column;
+    }
+}
+
+/* Pagination */
+.pagination-rounded .page-link {
+    border-radius: 50%;
+    margin: 0 4px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    color: var(--gray-700);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.pagination-rounded .page-item.active .page-link {
+    background: linear-gradient(135deg, #D4A853, #C4956A);
+    color: white;
+    box-shadow: 0 5px 15px rgba(212, 168, 83, 0.3);
+}
+
+.pagination-rounded .page-link:hover:not(.active) {
+    background: var(--gray-200);
+}
+</style>
+
+<script>
+// Prevent form submission and use AJAX
+document.getElementById('filterForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    updateProducts();
+});
+
+// Auto-submit on filter change
+document.querySelectorAll('#filterForm input[type="radio"], #filterForm select, #filterForm input[type="number"]').forEach(element => {
+    element.addEventListener('change', function() {
+        document.getElementById('hfPage').value = 1;
+        updateProducts();
+    });
+});
+
+function goToPage(page) {
+    document.getElementById('hfPage').value = page;
+    updateProducts();
+}
+
+function updateProducts() {
+    const form = document.getElementById('filterForm');
+    const url = new URL(form.action || window.location.href);
+    const formData = new FormData(form);
+    const searchParams = new URLSearchParams(formData);
+    url.search = searchParams.toString();
+    
+    // Add loading state
+    const gridContainer = document.querySelector('.col-lg-9');
+    if(gridContainer) {
+        gridContainer.style.opacity = '0.5';
+        gridContainer.style.pointerEvents = 'none';
+        gridContainer.style.transition = 'opacity 0.2s';
+    }
+
+    fetch(url)
+        .then(res => res.text())
+        .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newGrid = doc.querySelector('.col-lg-9');
+            
+            if (newGrid && gridContainer) {
+                gridContainer.innerHTML = newGrid.innerHTML;
+                gridContainer.style.opacity = '1';
+                gridContainer.style.pointerEvents = 'auto';
+                
+                // Update URL without reloading
+                window.history.pushState({}, '', url);
+            }
+        })
+        .catch(err => {
+            console.error('Lỗi khi tải dữ liệu lọc:', err);
+            if(gridContainer) {
+                gridContainer.style.opacity = '1';
+                gridContainer.style.pointerEvents = 'auto';
+            }
+        });
+}
+</script>

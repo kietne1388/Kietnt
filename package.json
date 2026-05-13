@@ -1,0 +1,20 @@
+{
+  "name": "coffee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "export:xlsx": "node export-testcases.mjs",
+    "test:export": "playwright test & node export-testcases.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.5.2",
+    "exceljs": "^4.4.0"
+  }
+}

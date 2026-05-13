@@ -1,0 +1,194 @@
+[
+  {
+    "title": "TC-ADM-001: Dashboard load không lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-002: Dashboard hiển thị các thẻ thống kê",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CAT-001: Trang danh sách danh mục load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CAT-002: Trang tạo danh mục load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CAT-003: Tạo danh mục tên rỗng → validation error",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CAT-004: CreateJson API - Tên rỗng → success=false",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CAT-005: Trang Edit danh mục ID=1",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-001: Trang danh sách sản phẩm load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-002: Tìm kiếm sản phẩm",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-003: Trang tạo sản phẩm load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-004: Tạo sản phẩm thiếu thông tin → validation",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-005: Trang Edit sản phẩm ID=1",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-PRD-006: Trang Comments của sản phẩm",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CMB-001: Danh sách combo load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CMB-002: Trang tạo combo load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-CMB-003: Trang chi tiết combo ID=1",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-VCH-001: Danh sách voucher load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-VCH-002: Trang tạo voucher load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-VCH-003: Tạo voucher thiếu code → validation",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-EMP-001: Danh sách nhân viên load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-EMP-002: Trang thêm nhân viên load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-EMP-003: Trang sửa nhân viên ID=1",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-RPT-001: Trang báo cáo load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-ORD-001: Trang đơn hàng load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-ADM-NOTIF-001: Trang thông báo load",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-001: Đăng nhập Admin hợp lệ → redirect Dashboard",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-002: Đăng nhập Staff (username=staff) → redirect POS",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-003: Đăng nhập Customer → redirect Home",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-004: Sai mật khẩu → ở lại Login, hiện lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-005: Username không tồn tại → ở lại Login, hiện lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-006: Để trống Username → validation error",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-007: Để trống Password → validation error",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-008: Trang Login load không lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-009: Trang Register load không lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Register\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Register\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-010: Đăng ký bỏ trống form → validation errors",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Register\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Register\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-011: Đăng ký với email đã tồn tại → hiện lỗi",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Register\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Register\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-AUTH-012: Đăng xuất → redirect Home, không còn admin access",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Auth/Login\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Auth/Login\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-001: Trang giỏ hàng load khi trống",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Cart/Index\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Cart/Index\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-002: AddToCart - Sản phẩm hợp lệ trả về success=true",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-003: AddToCart - Sản phẩm không tồn tại trả về success=false",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-004: AddToCart - Thêm cùng SP 2 lần → số lượng tăng",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Cart/Index\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Cart/Index\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-005: GetCart endpoint trả về count và total",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-006: RemoveItem - Xóa sản phẩm khỏi giỏ",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-007: UpdateQuantity - Cập nhật số lượng sản phẩm",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-008: AddComboToCart - Trả về JSON hợp lệ",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CART-009: Trang giỏ hàng sau khi thêm SP",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CHK-001: Checkout khi chưa login → redirect Login",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/Guest/Checkout/Index\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/Guest/Checkout/Index\", waiting until \"load\"\u001b[22m\n"
+  },
+  {
+    "title": "TC-CHK-002: ApplyVoucher - Mã không hợp lệ → success=false",
+    "error": "Error: page.goto: net::ERR_CONNECTION_REFUSED at https://localhost:7129/\nCall log:\n\u001b[2m  - navigating to \"https://localhost:7129/\", waiting until \"load\"\u001b[22m\n"
+  }
+]

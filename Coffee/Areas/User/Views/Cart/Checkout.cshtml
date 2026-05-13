@@ -1,0 +1,387 @@
+@model FastFood.Models.Cart.CheckoutModel
+
+@{
+    ViewData["Title"] = "Thanh Toán";
+}
+
+<div class="container py-5">
+    <h2 class="section-title-premium mb-5">Thanh <span class="text-gradient">Toán</span></h2>
+
+    <form asp-area="User" asp-controller="Cart" asp-action="Checkout" method="post">
+        <div class="row g-4">
+            <!-- Checkout Form -->
+            <div class="col-lg-7">
+                <div class="checkout-card">
+                    <h5 class="section-title-small">Thông Tin Giao Hàng</h5>
+
+                    <div class="form-group-premium">
+                        <label class="form-label">Họ và tên *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input name="FullName" type="text" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Số điện thoại *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input name="Phone" type="tel" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group-premium">
+                                <label class="form-label">Email</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-envelope"></i>
+                                    <input name="Email" type="email" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group-premium">
+                        <label class="form-label">Địa chỉ giao hàng *</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <textarea asp-for="Address" class="form-control" rows="3" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group-premium">
+                        <label class="form-label">Ghi chú</label>
+                        <textarea asp-for="Notes" class="form-control" rows="2" placeholder="Ghi chú cho người giao hàng..."></textarea>
+                    </div>
+
+                    <h5 class="section-title-small mt-4">Phương Thức Thanh Toán</h5>
+
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="PaymentMethod" value="COD" checked>
+                            <div class="payment-card">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>
+                                    <strong>Tiền mặt</strong>
+                                    <small>Thanh toán khi nhận hàng</small>
+                                </div>
+                                <i class="fas fa-check-circle check-icon"></i>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="PaymentMethod" value="Banking">
+                            <div class="payment-card">
+                                <i class="fas fa-credit-card"></i>
+                                <div>
+                                    <strong>Thẻ ATM/Visa</strong>
+                                    <small>Thanh toán qua cổng thanh toán</small>
+                                </div>
+                                <i class="fas fa-check-circle check-icon"></i>
+                            </div>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="PaymentMethod" value="Momo">
+                            <div class="payment-card">
+                                <i class="fas fa-wallet"></i>
+                                <div>
+                                    <strong>Ví điện tử</strong>
+                                    <small>Momo, ZaloPay, VNPay</small>
+                                </div>
+                                <i class="fas fa-check-circle check-icon"></i>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-5">
+                <div class="checkout-summary">
+                    <h5 class="section-title-small">Đơn Hàng Của Bạn</h5>
+
+                    <div class="order-items-summary">
+                        @if (Model.Items != null && Model.Items.Any())
+                        {
+                            @foreach (var item in Model.Items)
+                            {
+                                <div class="summary-item">
+                                    <div class="item-name-qty">
+                                        <span>@item.ProductName</span>
+                                        <small>x@item.Quantity</small>
+                                    </div>
+                                    <strong>@((item.Price * item.Quantity).ToString("N0"))đ</strong>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="summary-calculations">
+                        @{
+                            var subtotal = Model.Items?.Sum(i => i.Price * i.Quantity) ?? 0;
+                            var shippingFee = 20000m;
+                        }
+
+                        <!-- Voucher Input -->
+                        <div class="voucher-section mb-3">
+                            <label class="form-label small fw-bold" style="color:var(--gray-700)"><i class="fas fa-ticket-alt me-1"></i>Mã giảm giá</label>
+                            <div class="d-flex gap-2">
+                                <input type="text" id="voucherCodeInput" placeholder="Nhập mã voucher..." class="form-control" style="border-radius:12px;">
+                                <input type="hidden" name="VoucherCode" id="voucherCodeHidden">
+                                <button type="button" onclick="applyVoucher()" class="btn btn-outline-danger" style="white-space:nowrap;border-radius:12px;font-weight:600;">Áp dụng</button>
+                            </div>
+                            <div id="voucherMsg" class="mt-2 small"></div>
+                        </div>
+
+                        <div class="calc-row">
+                            <span>Tạm tính:</span>
+                            <strong id="subtotalDisplay">@subtotal.ToString("N0")đ</strong>
+                        </div>
+                        <div class="calc-row">
+                            <span>Phí giao hàng:</span>
+                            <strong id="shippingDisplay">@shippingFee.ToString("N0")đ</strong>
+                        </div>
+                        <div class="calc-row discount" id="discountRow" style="display:none;color:green;">
+                            <span>Giảm giá:</span>
+                            <strong id="discountDisplay">-0đ</strong>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="calc-row total">
+                            <span>Tổng cộng:</span>
+                            <strong class="text-red" id="totalDisplay">@((subtotal + shippingFee).ToString("N0"))đ</strong>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 mt-4">
+                        <i class="fas fa-check-circle me-2"></i>Đặt Hàng
+                    </button>
+
+                    <div class="checkout-guarantee mt-4">
+                        <div class="guarantee-item">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Thanh toán an toàn</span>
+                        </div>
+                        <div class="guarantee-item">
+                            <i class="fas fa-shipping-fast"></i>
+                            <span>Giao hàng trong 30 phút</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+.checkout-card {
+    background: white;
+    border-radius: 25px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    cursor: pointer;
+}
+
+.payment-option input[type="radio"] {
+    display: none;
+}
+
+.payment-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border: 2px solid var(--gray-300);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.payment-card i:first-child {
+    font-size: 2rem;
+    color: var(--gray-600);
+}
+
+.payment-card > div {
+    flex-grow: 1;
+}
+
+.payment-card strong {
+    display: block;
+    margin-bottom: 0.25rem;
+    color: var(--gray-900);
+}
+
+.payment-card small {
+    color: var(--gray-600);
+}
+
+.payment-card .check-icon {
+    font-size: 1.5rem;
+    color: var(--gray-300);
+    transition: all 0.3s ease;
+}
+
+.payment-option input:checked ~ .payment-card {
+    border-color: var(--primary-red);
+    background: var(--primary-red-lightest);
+}
+
+.payment-option input:checked ~ .payment-card .check-icon {
+    color: var(--primary-red);
+}
+
+.checkout-summary {
+    background: white;
+    border-radius: 25px;
+    padding: 2.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.order-items-summary {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.item-name-qty {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.item-name-qty small {
+    color: var(--gray-500);
+}
+
+.summary-calculations {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 15px;
+}
+
+.calc-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.calc-row:last-child {
+    margin-bottom: 0;
+}
+
+.calc-row.discount strong {
+    color: var(--success);
+}
+
+.calc-row.total {
+    font-size: 1.5rem;
+    padding-top: 1rem;
+    border-top: 2px solid var(--gray-400);
+}
+
+.checkout-guarantee {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+}
+
+.guarantee-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--gray-700);
+}
+
+.guarantee-item i {
+    color: var(--primary-red);
+    font-size: 1.25rem;
+}
+
+.voucher-section {
+    background: #FFF7ED;
+    border: 1.5px dashed #F59E0B;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+@@media (max-width: 992px) {
+    .checkout-summary {
+        position: static;
+        margin-top: 2rem;
+    }
+}
+</style>
+
+<script>
+    const SHIPPING_FEE = 20000;
+    const SUBTOTAL = @(Model.Items?.Sum(i => i.Price * i.Quantity) ?? 0);
+    let currentDiscount = 0;
+
+    function formatMoney(n) {
+        return n.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function updateTotals(discount) {
+        currentDiscount = discount;
+        const total = SUBTOTAL + SHIPPING_FEE - discount;
+        document.getElementById('discountDisplay').textContent = '-' + formatMoney(discount);
+        document.getElementById('totalDisplay').textContent = formatMoney(total);
+        document.getElementById('discountRow').style.display = discount > 0 ? 'flex' : 'none';
+    }
+
+    async function applyVoucher() {
+        const code = document.getElementById('voucherCodeInput').value.trim();
+        const msgEl = document.getElementById('voucherMsg');
+        if (!code) {
+            msgEl.innerHTML = '<span class="text-danger">Vui lòng nhập mã voucher.</span>';
+            return;
+        }
+
+        try {
+            const apiBase = '@(ViewBag.ApiBaseUrl ?? "http://localhost:5257")';
+            const res = await fetch(`${apiBase}/api/voucher/calculate-discount`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: code, orderAmount: SUBTOTAL })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                const discount = data.discountAmount || 0;
+                updateTotals(discount);
+                document.getElementById('voucherCodeHidden').value = code;
+                msgEl.innerHTML = `<span class="text-success"><i class="fas fa-check-circle me-1"></i>Áp dụng thành công! Giảm ${formatMoney(discount)}</span>`;
+            } else {
+                const err = await res.json().catch(() => ({}));
+                msgEl.innerHTML = `<span class="text-danger"><i class="fas fa-times-circle me-1"></i>${err.message || 'Mã voucher không hợp lệ.'}</span>`;
+                document.getElementById('voucherCodeHidden').value = '';
+                updateTotals(0);
+            }
+        } catch(e) {
+            msgEl.innerHTML = '<span class="text-danger">Không thể kết nối. Vui lòng thử lại.</span>';
+        }
+    }
+</script>

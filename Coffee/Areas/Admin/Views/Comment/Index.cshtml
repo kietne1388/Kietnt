@@ -1,0 +1,85 @@
+@using FastFood.Models.Comment
+@model List<CommentModel>
+@{
+    ViewData["Title"] = "Quản Lý Đánh Giá";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Đánh Giá</span></h1>
+            <p class="text-muted mb-0">Xem và quản lý phản hồi từ khách hàng</p>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table table-premium align-middle">
+                <thead>
+                    <tr>
+                        <th>Người dùng</th>
+                        <th>Sản phẩm</th>
+                        <th>Đánh giá</th>
+                        <th>Nội dung</th>
+                        <th>Ngày gửi</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var comment in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="fw-bold">@comment.UserName</div>
+                                <small class="text-muted">ID: @comment.UserId</small>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @if (!string.IsNullOrEmpty(comment.ProductImageUrl))
+                                    {
+                                        <img src="@comment.ProductImageUrl" class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                    }
+                                    <span>@comment.ProductName</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-warning">
+                                    @for (int i = 0; i < 5; i++)
+                                    {
+                                        <i class="fas fa-star @(i < comment.Rating ? "" : "text-muted opacity-25")"></i>
+                                    }
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-truncate" style="max-width: 250px;" title="@comment.Content">
+                                    @comment.Content
+                                </div>
+                            </td>
+                            <td>@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>
+                                @if (comment.IsHidden)
+                                {
+                                    <span class="badge bg-danger-light text-danger">Đã ẩn</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success-light text-success">Hiển thị</span>
+                                }
+                            </td>
+                            <td>
+                                <form asp-action="ToggleHide" asp-route-id="@comment.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm @(comment.IsHidden ? "btn-outline-success" : "btn-outline-danger")">
+                                        <i class="fas @(comment.IsHidden ? "fa-eye" : "fa-eye-slash") me-1"></i>
+                                        @(comment.IsHidden ? "Hiện" : "Ẩn")
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

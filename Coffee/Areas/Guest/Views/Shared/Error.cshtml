@@ -1,0 +1,44 @@
+@{
+    ViewData["Title"] = "Lỗi";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - CoffeeLux</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/premium-design.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="error-page">
+        <div class="error-container">
+            <div class="error-code">404</div>
+            <h1 class="error-title">Rất Tiếc!</h1>
+            <p class="error-message">
+                Trang bạn đang tìm kiếm không tồn tại hoặc đã được di chuyển.
+            </p>
+
+            <div class="error-actions">
+                <a href="/" class="btn btn-primary btn-lg">
+                    <i class="fas fa-home me-2"></i>Về Trang Chủ
+                </a>
+                <button onclick="history.back()" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Quay Lại
+                </button>
+            </div>
+
+            <div class="mt-5">
+                <i class="fas fa-hamburger" style="font-size: 5rem; color: var(--primary-red); opacity: 0.2;"></i>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,182 @@
+﻿@model List<FastFood.Models.Voucher.VoucherModel>
+
+@{
+    ViewData["Title"] = "Voucher Khả Dụng";
+}
+
+<div class="container py-5">
+    <h2 class="section-title-premium mb-5">Voucher <span class="text-gradient">Khả Dụng</span></h2>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+            @foreach (var voucher in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="voucher-card-premium">
+                        <div class="voucher-ribbon">
+                            @if (voucher.DiscountPercent > 0)
+                            {
+                                <span>-@voucher.DiscountPercent%</span>
+                            }
+                            else
+                            {
+                                <span>-@voucher.DiscountAmount.ToString("N0")đ</span>
+                            }
+                        </div>
+
+                        <div class="voucher-header">
+                            <div class="voucher-icon">
+                                <i class="fas fa-ticket-alt"></i>
+                            </div>
+                            <h5 class="voucher-code">@voucher.Code</h5>
+                        </div>
+
+                        <div class="voucher-body">
+                            <p class="voucher-description">@voucher.Description</p>
+
+                            <div class="voucher-info">
+                                    <span>HSD: @voucher.ExpiredAt.ToString("dd/MM/yyyy")</span>
+                            </div>
+                        </div>
+
+                        <div class="voucher-footer">
+                            <button class="btn btn-primary w-100" onclick="copyCode('@voucher.Code')">
+                                <i class="fas fa-copy me-2"></i>Sao Chép Mã
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="empty-cart">
+            <i class="fas fa-ticket-alt fa-5x text-muted mb-4"></i>
+            <h4>Chưa có voucher nào</h4>
+            <p class="text-muted">Hãy quay lại sau để nhận ưu đãi!</p>
+        </div>
+    }
+</div>
+
+<style>
+.voucher-card-premium {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: relative;
+    transition: all 0.4s ease;
+    border: 2px solid var(--gray-200);
+}
+
+.voucher-card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(220, 38, 38, 0.2);
+    border-color: var(--primary-red);
+}
+
+.voucher-ribbon {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background: var(--gradient-red);
+    color: white;
+    padding: 0.5rem 3rem;
+    transform: rotate(45deg);
+    font-weight: 800;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(220, 38, 38, 0.4);
+}
+
+.voucher-header {
+    background: linear-gradient(135deg, #FEE2E2 0%, #FCA5A5 100%);
+    padding: 2rem;
+    text-align: center;
+}
+
+.voucher-icon {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.voucher-icon i {
+    font-size: 2rem;
+    color: var(--primary-red);
+}
+
+.voucher-code {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--gray-900);
+    margin: 0;
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+}
+
+.voucher-body {
+    padding: 2rem;
+}
+
+.voucher-description {
+    color: var(--gray-700);
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+
+.voucher-conditions {
+    background: var(--gray-50);
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.condition-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    color: var(--gray-700);
+    font-size: 0.9rem;
+}
+
+.condition-item:last-child {
+    margin-bottom: 0;
+}
+
+.condition-item i {
+    color: var(--primary-red);
+    width: 20px;
+}
+
+.voucher-footer {
+    padding: 1.5rem;
+    border-top: 1px dashed var(--gray-300);
+}
+</style>
+
+<script>
+function copyCode(code) {
+    navigator.clipboard.writeText(code).then(() => {
+        const btn = event.target.closest('button');
+        const originalHTML = btn.innerHTML;
+
+        btn.innerHTML = '<i class="fas fa-check me-2"></i>Đã Sao Chép!';
+        btn.classList.add('btn-success');
+        btn.classList.remove('btn-primary');
+
+        setTimeout(() => {
+            btn.innerHTML = originalHTML;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-primary');
+        }, 2000);
+    });
+}
+</script>

@@ -1,0 +1,178 @@
+@model List<FastFood.Models.Order.OrderModel>
+
+@{
+    ViewData["Title"] = "Quản Lý Đơn Hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="admin-page">
+    <div class="page-header-admin mb-4">
+        <div>
+            <h1 class="page-title">Quản Lý <span class="text-gradient">Đơn Hàng</span></h1>
+            <p class="text-muted mb-0">Theo dõi và xử lý đơn hàng của CaféLux</p>
+        </div>
+    </div>
+
+    <!-- Status Filter -->
+    <div class="admin-filter-tabs mb-4">
+        <a href="@Url.Action("Index")" class="filter-tab-admin active">
+            Tất cả
+        </a>
+        <a href="@Url.Action("Index", new { status = "Pending" })" class="filter-tab-admin">
+            Chờ xác nhận
+        </a>
+        <a href="@Url.Action("Index", new { status = "Confirmed" })" class="filter-tab-admin">
+            Đã xác nhận
+        </a>
+        <a href="@Url.Action("Index", new { status = "Shipping" })" class="filter-tab-admin">
+            Đang giao
+        </a>
+        <a href="@Url.Action("Index", new { status = "Completed" })" class="filter-tab-admin">
+            Hoàn thành
+        </a>
+        <a href="@Url.Action("Index", new { status = "Cancelled" })" class="filter-tab-admin">
+            Đã hủy
+        </a>
+    </div>
+
+    <div class="admin-card">
+        <div class="table-responsive">
+            <table class="table-premium">
+                <thead>
+                    <tr>
+                        <th>Mã ĐH</th>
+                        <th>Khách hàng</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td><strong>#@order.Id</strong></td>
+                                <td>@order.UserName</td>
+                                <td>@order.CreatedAt.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td><strong class="text-red">@order.TotalAmount.ToString("N0")đ</strong></td>
+                                <td>
+                                    <select class="status-select status-@order.Status.ToLower()" onchange="updateOrderStatus(@order.Id, this.value, this)">
+                                        <option value="Pending" selected="@(order.Status == "Pending")">Chờ xác nhận</option>
+                                        <option value="Confirmed" selected="@(order.Status == "Confirmed")">Đã xác nhận</option>
+                                        <option value="Shipping" selected="@(order.Status == "Shipping")">Đang giao</option>
+                                        <option value="Completed" selected="@(order.Status == "Completed")">Hoàn thành</option>
+                                        <option value="Cancelled" selected="@(order.Status == "Cancelled")">Đã hủy</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="Order" asp-action="Detail" asp-route-id="@order.Id" 
+                                       class="btn-action edit">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-4 text-muted">Chưa có đơn hàng</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-filter-tabs {
+    background: white;
+    padding: 1rem;
+    border-radius: 15px;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.filter-tab-admin {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--gray-700);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.filter-tab-admin:hover,
+.filter-tab-admin.active {
+    background: var(--primary-red);
+    color: white;
+}
+
+.status-select {
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.status-select.status-pending { background: #FEF3C7; color: #92400E; }
+.status-select.status-confirmed { background: #DBEAFE; color: #1E40AF; }
+.status-select.status-shipping { background: #E0E7FF; color: #3730A3; }
+.status-select.status-completed { background: #D1FAE5; color: #065F46; }
+.status-select.status-cancelled { background: var(--primary-red-lightest); color: var(--primary-red-dark); }
+</style>
+
+<script>
+async function updateOrderStatus(orderId, newStatus, selectElement) {
+    try {
+        const response = await fetch('/Admin/Order/UpdateStatus', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: new URLSearchParams({ orderId: orderId, status: newStatus })
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // Update select styling
+            selectElement.className = 'status-select status-' + newStatus.toLowerCase();
+            showToast(data.message, 'success');
+        } else {
+            showToast(data.message, 'error');
+            location.reload();
+        }
+    } catch (error) {
+        showToast('Có lỗi xảy ra!', 'error');
+    }
+}
+
+function showToast(message, type) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;bottom:20px;right:20px;padding:1rem 2rem;border-radius:12px;color:white;font-weight:600;z-index:9999;box-shadow:0 5px 20px rgba(0,0,0,0.2);animation:slideIn 0.3s ease;background:${type === 'success' ? '#22c55e' : '#ef4444'}`;
+    toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'} me-2"></i>${message}`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+
+// Mark active filter tab
+const urlParams = new URLSearchParams(window.location.search);
+const currentStatus = urlParams.get('status') || '';
+document.querySelectorAll('.filter-tab-admin').forEach(tab => {
+    tab.classList.remove('active');
+    const href = new URL(tab.href);
+    const tabStatus = href.searchParams.get('status') || '';
+    if (tabStatus === currentStatus) {
+        tab.classList.add('active');
+    }
+});
+</script>

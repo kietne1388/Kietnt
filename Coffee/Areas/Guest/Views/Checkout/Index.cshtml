@@ -1,0 +1,348 @@
+@model FastFood.Models.Checkout.CheckoutViewModel
+@{
+    ViewData["Title"] = "Thanh Toán";
+}
+
+<section class="py-5">
+    <div class="container">
+        <form asp-action="PlaceOrder" method="post" id="checkoutForm">
+            <div class="row g-4">
+                <!-- Customer Info & Payment -->
+                <div class="col-lg-8">
+                    <!-- Customer Information -->
+                    <div class="checkout-section">
+                        <h4 class="section-title">
+                            <i class="fas fa-user me-2"></i>Thông Tin Giao Hàng
+                        </h4>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Họ và tên <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="CustomerName" required 
+                                       placeholder="Nhập họ và tên" value="@ViewBag.UserName">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" name="Phone" required 
+                                       placeholder="Nhập số điện thoại">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Địa chỉ giao hàng <span class="text-danger">*</span></label>
+                                <textarea class="form-control" name="Address" rows="2" required 
+                                          placeholder="Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Ghi chú</label>
+                                <textarea class="form-control" name="Note" rows="2" 
+                                          placeholder="Ghi chú cho đơn hàng (không bắt buộc)"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Methods -->
+                    <div class="checkout-section mt-4">
+                        <h4 class="section-title">
+                            <i class="fas fa-wallet me-2"></i>Phương Thức Thanh Toán
+                        </h4>
+                        <div class="payment-methods">
+                            <label class="payment-option">
+                                <input type="radio" name="PaymentMethod" value="COD" checked>
+                                <div class="payment-content">
+                                    <i class="fas fa-truck"></i>
+                                    <div>
+                                        <strong>Thanh Toán Khi Nhận Hàng (COD)</strong>
+                                        <p>Thanh toán bằng tiền mặt khi nhận hàng</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="PaymentMethod" value="Bank">
+                                <div class="payment-content">
+                                    <i class="fas fa-university"></i>
+                                    <div>
+                                        <strong>Thanh Toán Qua Ngân Hàng</strong>
+                                        <p>Chuyển khoản ngân hàng nội địa</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-option">
+                                <input type="radio" name="PaymentMethod" value="MoMo">
+                                <div class="payment-content">
+                                    <i class="fas fa-mobile-alt" style="color: #a50064;"></i>
+                                    <div>
+                                        <strong>Thanh Toán Qua Ví MoMo</strong>
+                                        <p>Quét mã QR hoặc chuyển tiền qua MoMo</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="col-lg-4">
+                    <div class="order-summary-checkout">
+                        <h4 class="summary-title">Đơn Hàng Của Bạn</h4>
+                        
+                        <div class="order-items">
+                            @foreach (var item in Model.Items)
+                            {
+                                <input type="hidden" name="SelectedProductIds" value="@item.ProductId" />
+                                <div class="order-item">
+                                    @{
+                                        var chkImg = item.ImageUrl;
+                                        if (!string.IsNullOrEmpty(chkImg) && !chkImg.StartsWith("/") && !chkImg.StartsWith("http"))
+                                        {
+                                            chkImg = "/images/" + chkImg;
+                                        }
+                                    }
+                                    <img src="@chkImg" alt="@item.ProductName" onerror="this.src='/images/placeholder-coffee.jpg'">
+                                    <div class="order-item-info">
+                                        <span class="item-name">@item.ProductName</span>
+                                        <span class="item-qty">x@item.Quantity</span>
+                                    </div>
+                                    <span class="item-price">@((item.Price * item.Quantity).ToString("N0"))đ</span>
+                                </div>
+                            }
+                        </div>
+
+                        <!-- Voucher -->
+                        <div class="voucher-section">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="voucherCode" 
+                                       placeholder="Nhập mã giảm giá">
+                                <input type="hidden" name="VoucherCode" id="hiddenVoucherCode" value="">
+                                <button type="button" class="btn btn-outline-primary" onclick="applyVoucher()">
+                                    Áp dụng
+                                </button>
+                            </div>
+                            <div id="voucherMessage" class="voucher-message"></div>
+                        </div>
+
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span>Tạm tính</span>
+                                <span id="subtotal">@Model.SubTotal.ToString("N0")đ</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Phí vận chuyển</span>
+                                <span>@Model.ShippingFee.ToString("N0")đ</span>
+                            </div>
+                            <div class="summary-row discount" id="discountRow" style="display: none;">
+                                <span>Giảm giá</span>
+                                <span id="discountAmount">-0đ</span>
+                            </div>
+                            <div class="summary-row total">
+                                <span>Tổng cộng</span>
+                                <span id="grandTotal">@Model.Total.ToString("N0")đ</span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-place-order">
+                            <i class="fas fa-check-circle me-2"></i>Đặt Hàng
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+<style>
+.checkout-section {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-200);
+    color: var(--gray-900);
+}
+
+.payment-methods {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-option {
+    display: block;
+    cursor: pointer;
+}
+
+.payment-option input {
+    display: none;
+}
+
+.payment-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem;
+    border: 2px solid var(--gray-200);
+    border-radius: 15px;
+    transition: all 0.3s ease;
+}
+
+.payment-option input:checked + .payment-content {
+    border-color: var(--primary-red);
+    background: var(--primary-red-lightest);
+}
+
+.payment-content i {
+    font-size: 2rem;
+    color: var(--primary-red);
+    width: 50px;
+    text-align: center;
+}
+
+.payment-content p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--gray-600);
+}
+
+.order-summary-checkout {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 100px;
+}
+
+.summary-title {
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--gray-200);
+}
+
+.order-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.order-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 8px;
+    background-color: #FAF7F2;
+    border: 1px solid #E8D5C0;
+}
+
+.order-item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.item-name {
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.item-qty {
+    font-size: 0.8rem;
+    color: var(--gray-500);
+}
+
+.item-price {
+    font-weight: 600;
+    color: var(--primary-red);
+}
+
+.voucher-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--gray-50);
+    border-radius: 10px;
+}
+
+.voucher-message {
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.voucher-message.success { color: var(--success); }
+.voucher-message.error { color: var(--error); }
+
+.summary-details {
+    border-top: 1px solid var(--gray-200);
+    padding-top: 1rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+}
+
+.summary-row.discount {
+    color: var(--success);
+}
+
+.summary-row.total {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary-red);
+    border-top: 2px solid var(--gray-200);
+    padding-top: 1rem;
+    margin-top: 0.5rem;
+}
+
+.btn-place-order {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-top: 1.5rem;
+}
+</style>
+
+<script>
+var subtotal = @Model.SubTotal;
+var shipping = @Model.ShippingFee;
+var discount = 0;
+
+function applyVoucher() {
+    var code = document.getElementById('voucherCode').value;
+    if (!code) return;
+
+    fetch('/Guest/Checkout/ApplyVoucher', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: code, orderAmount: subtotal })
+    })
+    .then(response => response.json())
+    .then(data => {
+        var msgEl = document.getElementById('voucherMessage');
+        if (data.success) {
+            discount = data.discount;
+            document.getElementById('discountRow').style.display = 'flex';
+            document.getElementById('discountAmount').textContent = '-' + discount.toLocaleString('vi-VN') + 'đ';
+            document.getElementById('grandTotal').textContent = (subtotal + shipping - discount).toLocaleString('vi-VN') + 'đ';
+            document.getElementById('hiddenVoucherCode').value = code;
+            msgEl.className = 'voucher-message success';
+            msgEl.textContent = data.message;
+        } else {
+            msgEl.className = 'voucher-message error';
+            msgEl.textContent = data.message;
+        }
+    });
+}
+</script>

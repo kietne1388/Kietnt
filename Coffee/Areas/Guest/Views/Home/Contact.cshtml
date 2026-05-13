@@ -1,0 +1,383 @@
+@{
+    ViewData["Title"] = "Liên Hệ";
+    Layout = "~/Areas/Guest/Views/Shared/_Layout.cshtml";
+}
+<!-- Contact Section -->
+<section class="contact-section py-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="contact-form-card">
+                    <span class="section-label">Gửi Tin Nhắn</span>
+                    <h2 class="section-title-premium mb-4">Để Lại <span class="text-gradient">Lời Nhắn</span></h2>
+                    <form id="contactForm">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Họ và tên *</label>
+                                <input type="text" class="form-control" placeholder="Nguyễn Văn A" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-control" placeholder="email@example.com" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Số điện thoại</label>
+                                <input type="tel" class="form-control" placeholder="0123 456 789">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Chủ đề</label>
+                                <select class="form-select">
+                                    <option selected>Chọn chủ đề</option>
+                                    <option>Đặt hàng</option>
+                                    <option>Góp ý</option>
+                                    <option>Khiếu nại</option>
+                                    <option>Hợp tác</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Tin nhắn *</label>
+                                <textarea class="form-control" rows="6" placeholder="Nhập nội dung tin nhắn..." required></textarea>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Gửi Tin Nhắn
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Contact Info -->
+            <div class="col-lg-5">
+                <div class="contact-info-wrapper">
+                    <span class="section-label">Thông Tin</span>
+                    <h2 class="section-title-premium mb-4">Thông Tin <span class="text-gradient">Liên Hệ</span></h2>
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <h5>Địa chỉ</h5>
+                            <p>123 Đường ABC, Quận XYZ<br/>TP. Hồ Chí Minh, Việt Nam</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div>
+                            <h5>Hotline</h5>
+                            <p>1900 1234 (8:00 - 22:00)<br/>028 1234 5678</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div>
+                            <h5>Email</h5>
+                            <p>support@coffeelux.vn<br/>sales@coffeelux.vn</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-info-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div>
+                            <h5>Giờ làm việc</h5>
+                            <p>Thứ 2 - Chủ nhật: 8:00 - 22:00</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-connect mt-4">
+                        <h5 class="mb-3">Kết nối với chúng tôi</h5>
+                        <div class="social-links-large">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-youtube"></i></a>
+                            <a href="#"><i class="fab fa-tiktok"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="map-section">
+    <div class="container">
+        <div class="map-card">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3919.3193500461916!2d106.67591631471912!3d10.787436092308946!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752f38f9ed887b%3A0x14aded5703768989!2zMTIzIE5ndXnhu4VuIFbEg24gxJDhuq1uLCBQaMaw4budbmcgMywgUXXhuq1uIDUsIFRow6BuaCBwaOG7kSBI4buTIENow60gTWluaA!5e0!3m2!1svi!2s!4v1234567890123"
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-label">Câu Hỏi Thường Gặp</span>
+            <h2 class="section-title-premium">Có Thể Bạn <span class="text-gradient">Muốn Biết</span></h2>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item-custom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button-custom" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                Thời gian giao hàng là bao lâu?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body-custom">
+                                Chúng tôi cam kết giao hàng trong vòng 30 phút kể từ khi xác nhận đơn hàng. Nếu giao muộn, bạn sẽ được tặng một mã giảm giá!
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item-custom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Làm thế nào để sử dụng mã giảm giá?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body-custom">
+                                Khi thanh toán, nhập mã giảm giá vào ô "Mã giảm giá" và bấm "Áp dụng". Hệ thống sẽ tự động tính toán số tiền được giảm.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item-custom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Tôi có thể đổi trả hàng không?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body-custom">
+                                Bạn có thể yêu cầu đổi/trả trong vòng 15 phút sau khi nhận hàng nếu thức uống không đúng yêu cầu hoặc có vấn đề về chất lượng.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item-custom">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button-custom collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Có những hình thức thanh toán nào?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body-custom">
+                                Chúng tôi chấp nhận: Tiền mặt, thẻ ATM/Visa/Mastercard, ví điện tử (Momo, ZaloPay, VNPay), chuyển khoản ngân hàng.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* ===== CONTACT FORM ===== */
+.contact-form-card {
+    background: white;
+    padding: 3rem;
+    border-radius: 25px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
+
+.contact-info-wrapper {
+    background: linear-gradient(135deg, #D7CCC8 0%, #A1887F 50%, #8D6E63 100%);
+    padding: 3rem;
+    border-radius: 25px;
+    height: 100%;
+    color: var(--white);
+}
+
+.contact-info-wrapper h2,
+.contact-info-wrapper h5 {
+    color: var(--gray-900);
+}
+
+.contact-info-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.contact-icon {
+    width: 60px;
+    height: 60px;
+    background: white;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-icon i {
+    font-size: 1.5rem;
+    color: #5D4037;
+}
+
+.contact-info-item h5 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.contact-info-item p {
+    color: var(--gray-700);
+    margin: 0;
+    line-height: 1.8;
+}
+
+.social-links-large {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.social-links-large a {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #5D4037;
+    transition: all 0.3s ease;
+}
+
+.social-links-large a:hover {
+    background: #5D4037;
+    color: white;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(93, 64, 55, 0.3);
+}
+
+/* ===== MAP SECTION ===== */
+.map-section {
+    padding: 4rem 0;
+}
+
+.map-card {
+    border-radius: 25px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== FAQ ACCORDION ===== */
+.accordion-item-custom {
+    background: white;
+    border-radius: 15px;
+    margin-bottom: 1rem;
+    border: 2px solid var(--gray-200);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.accordion-item-custom:hover {
+    border-color: #5D4037;
+    box-shadow: 0 5px 15px rgba(93, 64, 55, 0.1);
+}
+
+.accordion-button-custom {
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    padding: 1.5rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.accordion-button-custom::after {
+    content: '\f107';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: #5D4037;
+    transition: transform 0.3s ease;
+}
+
+.accordion-button-custom:not(.collapsed)::after {
+    transform: rotate(180deg);
+}
+
+.accordion-button-custom:hover {
+    color: #5D4037;
+}
+
+.accordion-body-custom {
+    padding: 0 2rem 1.5rem 2rem;
+    color: var(--gray-600);
+    line-height: 1.8;
+}
+
+@@media (max-width: 992px) {
+    .contact-form-card,
+    .contact-info-wrapper {
+        padding: 2rem;
+    }
+    
+    .contact-info-wrapper {
+        margin-top: 2rem;
+    }
+}
+</style>
+
+<script>
+// Form submission handling
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Show success message
+    const form = this;
+    const btn = form.querySelector('button[type="submit"]');
+    const originalText = btn.innerHTML;
+    
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang gửi...';
+    btn.disabled = true;
+    
+    setTimeout(function() {
+        btn.innerHTML = '<i class="fas fa-check me-2"></i>Gửi Thành Công!';
+        btn.classList.remove('btn-primary');
+        btn.classList.add('btn-success');
+        
+        setTimeout(function() {
+            form.reset();
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success');
+            btn.classList.add('btn-primary');
+            btn.disabled = false;
+        }, 2000);
+    }, 1500);
+});
+</script>
